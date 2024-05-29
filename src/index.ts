@@ -98,7 +98,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       caption: 'Onyx s3',
       icon: chatIcon,
       execute: () => {
-        requestAPI<any>('s3?s3location="s3://mscape-published-reports/C-B01922D432_scylla_report.html"',{},
+        requestAPI<any>('s3',{},
         ['s3location','s3://mscape-published-reports/C-B01922D432_scylla_report.html'])
       .then(data => {
         console.log(data);
