@@ -5,6 +5,8 @@ import {
 
 import { ICommandPalette, MainAreaWidget, WidgetTracker } from '@jupyterlab/apputils';
 
+import { IDocumentManager } from '@jupyterlab/docmanager';
+
 
 import { ILauncher } from '@jupyterlab/launcher';
 
@@ -21,10 +23,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
     'Onyx-extension.',
   autoStart: true,
   optional: [ILauncher],
-  requires: [ICommandPalette],
+  requires: [ICommandPalette, IDocumentManager],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
+    documentManager: IDocumentManager,
     launcher: ILauncher | null
   ) => {
     console.log(
@@ -33,6 +36,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     
     const command = 'onyx_extension';
+    const s3_command = 's3_onyx_extension';
     const category = 'Onyx';
     
   
@@ -87,6 +91,34 @@ const plugin: JupyterFrontEndPlugin<void> = {
         category: category
       });
     }
+
+
+    app.commands.addCommand(s3_command, {
+      label: 'Onyx s3',
+      caption: 'Onyx s3',
+      icon: chatIcon,
+      execute: () => {
+        requestAPI<any>('s3?s3location="s3://mscape-published-reports/C-B01922D432_scylla_report.html"',{},
+        ['s3location','s3://mscape-published-reports/C-B01922D432_scylla_report.html'])
+      .then(data => {
+        console.log(data);
+        documentManager.open('a.tmp')
+      })
+      .catch(reason => {
+        console.error(
+          `The onyx_extension server extension appears to be missing.\n${reason}`
+        );
+      });
+
+        
+        
+        
+      },
+    });
+
+    palette.addItem({ command:s3_command, category: category });
+
+
   }
 };
 
