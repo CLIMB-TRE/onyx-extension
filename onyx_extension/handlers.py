@@ -7,6 +7,7 @@ from pathlib import Path
 from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 import tornado
+import boto3
 
 
 class RouteHandler(APIHandler):
@@ -26,11 +27,18 @@ class S3ViewHandler(APIHandler):
         m = re.match(r's3://(.*)/(.*)', s3name)
         b = m.group(1)
         o = m.group(2)
+
+        s3 = boto3.resource(
+            "s3",
+            aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+            aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+            endpoint_url=os.environ["JUPYTERLAB_S3_ENDPOINT"],
+            )
+        s3_object=s3.Object(b,o)
         Path("./tmp").mkdir(parents=True, exist_ok=True)
         with open(f'./tmp/{o}', 'w') as fp:
-            fp.write(f'Contents of bucket {b}, object {o}, are here')
-            fp.close()
-        return f'./tmp/{o}'
+            s3_object.download_fileobj(fp)
+        return f'./tmp/{o}'    
 
     # The following decorator should be present on all verb methods (head, get, post,
     # patch, put, delete, options) to ensure only authorized user can request the
