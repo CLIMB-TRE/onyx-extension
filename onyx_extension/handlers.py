@@ -36,7 +36,7 @@ class S3ViewHandler(APIHandler):
             )
         s3_object=s3.Object(b,o)
         Path("./tmp").mkdir(parents=True, exist_ok=True)
-        with open(f'./tmp/{o}', 'w') as fp:
+        with open(f'./tmp/{o}', 'wb') as fp:
             s3_object.download_fileobj(fp)
         return f'./tmp/{o}'    
 
@@ -45,12 +45,21 @@ class S3ViewHandler(APIHandler):
     # Jupyter server
     @tornado.web.authenticated
     def get(self):
-        s3location = self.get_query_argument("s3location")
-        temp_file = self._copy_s3_file(s3location)
-        self.finish(json.dumps({
-            "location": s3location,
-            "temp_file": temp_file
-        }))
+        try:
+            
+            s3location = self.get_query_argument("s3location")
+            temp_file = self._copy_s3_file(s3location)
+            self.finish(json.dumps({
+                "location": s3location,
+                "temp_file": temp_file
+            }))
+        except Exception as e:
+            self.finish(json.dumps({
+                "exception": e
+            }))
+
+
+
 
 def setup_handlers(web_app):
     tempfile.mkdtemp()
