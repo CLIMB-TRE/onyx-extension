@@ -55,6 +55,7 @@
         "@jupyterlab/application": "^4.0.0",
         "@jupyterlab/apputils": "^4.0.0",
         "@jupyterlab/coreutils": "^6.0.0",
+        "@jupyterlab/htmlviewer": "^4.2.1",
         "@jupyterlab/launcher": "^4.0.0",
         "@jupyterlab/services": "^7.0.0",
         "climb-onyx-ui": "^0.4.0"

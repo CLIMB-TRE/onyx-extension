@@ -10,6 +10,7 @@ import {
 } from '@jupyterlab/apputils';
 
 import { IDocumentManager } from '@jupyterlab/docmanager';
+import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 
 import { ILauncher } from '@jupyterlab/launcher';
 
@@ -24,13 +25,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'onyx_extension:plugin',
   description: 'Onyx-extension.',
   autoStart: true,
-  optional: [ILauncher],
+  optional: [ILauncher, IHTMLViewerTracker],
   requires: [ICommandPalette, IDocumentManager],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     documentManager: IDocumentManager,
-    launcher: ILauncher | null
+    launcher: ILauncher | null,
+    htmlTracker: IHTMLViewerTracker | null
   ) => {
     console.log('JupyterLab extension @onyx_extension is activated!');
 
@@ -115,7 +117,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
     });
 
     palette.addItem({ command: s3_command, category: category });
+
+    
+    if(htmlTracker){
+      htmlTracker.widgetAdded.connect((sender, panel: HTMLViewer) => {
+      panel.trusted = true;
+    });}
   }
+
+
 };
 
 const tracker = new WidgetTracker<MainAreaWidget<ReactAppWidget>>({
