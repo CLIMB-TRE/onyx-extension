@@ -77,7 +77,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       icon: chatIcon,
       execute: () => {
         if (!widget || widget.disposed) {
-          const content = new ReactAppWidget(domain, token);
+          const content = new ReactAppWidget(domain, token, s3_open_function);
           widget = new MainAreaWidget({ content });
           widget.title.label = 'Onyx';
           widget.title.closable = true;

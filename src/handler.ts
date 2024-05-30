@@ -21,10 +21,6 @@ export async function requestAPI<T>(
   let url = new URL(requestUrl);
   if (param[0] != '') url.searchParams.append(param[0], param[1]);
 
-  console.log(url.toString());
-  console.log(settings.baseUrl);
-  console.log(url.toString().indexOf(settings.baseUrl));
-
   let response: Response;
   try {
     response = await ServerConnection.makeRequest(
