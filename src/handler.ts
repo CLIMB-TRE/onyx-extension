@@ -10,17 +10,21 @@ import { ServerConnection } from '@jupyterlab/services';
 export async function requestAPI<T>(
   endPoint = '',
   init: RequestInit = {},
-  param: [string,string] = ['','']
+  param: [string, string] = ['', '']
 ): Promise<T> {
   // Make request to Jupyter API
   const settings = ServerConnection.makeSettings();
 
   let url = new URL('/onyx-extension/' + endPoint, settings.baseUrl);
-  url.searchParams.append(param[0],param[1]);
+  url.searchParams.append(param[0], param[1]);
 
   let response: Response;
   try {
-    response = await ServerConnection.makeRequest(url.toString(), init, settings);
+    response = await ServerConnection.makeRequest(
+      url.toString(),
+      init,
+      settings
+    );
   } catch (error) {
     throw new ServerConnection.NetworkError(error as any);
   }
