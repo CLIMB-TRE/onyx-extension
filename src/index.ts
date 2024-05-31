@@ -6,7 +6,9 @@ import {
 import {
   ICommandPalette,
   MainAreaWidget,
-  WidgetTracker
+  WidgetTracker,
+  showDialog,
+  Dialog
 } from '@jupyterlab/apputils';
 
 import { IDocumentManager } from '@jupyterlab/docmanager';
@@ -17,6 +19,33 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { requestAPI } from './handler';
 import { ReactAppWidget } from './App';
 import { chatIcon } from './icon';
+import { Widget } from '@lumino/widgets';
+
+class OpenS3FileWidget extends Widget {
+  constructor() {
+    const body = document.createElement('div');
+    const existingLabel = document.createElement('label');
+    existingLabel.textContent = 'S3 file name:';
+
+    const input = document.createElement('input');
+    input.value = '';
+    input.placeholder =
+      's3://mscape-published-reports/C-B01922D432_scylla_report.html';
+
+    body.appendChild(existingLabel);
+    body.appendChild(input);
+
+    super({ node: body });
+  }
+
+  get inputNode() {
+    return this.node.getElementsByTagName('input')[0];
+  }
+
+  getValue() {
+    return this.inputNode.value;
+  }
+}
 
 /**
  * Initialization data for the onyx_extension extension.
@@ -98,7 +127,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
     palette.addItem({ command, category: category });
 
     if (launcher) {
-      // Add launcher
       launcher.add({
         command: command,
         category: category
@@ -106,26 +134,49 @@ const plugin: JupyterFrontEndPlugin<void> = {
     }
 
     app.commands.addCommand(s3_command, {
-      label: 'Onyx s3',
-      caption: 'Onyx s3',
+      label: 'Onyx open s3 document',
+      caption: 'Onyx open s3 document',
       icon: chatIcon,
       execute: () => {
-        s3_open_function(
-          's3://mscape-published-reports/C-B01922D432_scylla_report.html'
-        );
+        showDialog({
+          body: new OpenS3FileWidget(),
+          buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'GO' })],
+          focusNodeSelector: 'input',
+          title: 'Open site'
+        })
+          .then(result => {
+            if (result.button.label === 'Cancel') {
+              return;
+            }
+            if (!result.value) {
+              return;
+            }
+            const s3_link = result.value;
+            s3_open_function(s3_link);
+          })
+          .catch(reason => {
+            console.error(
+              `The onyx_extension server extension appears to be missing.\n${reason}`
+            );
+          });
       }
     });
 
     palette.addItem({ command: s3_command, category: category });
 
-    
-    if(htmlTracker){
+    if (launcher) {
+      launcher.add({
+        command: s3_command,
+        category: category
+      });
+    }
+
+    if (htmlTracker) {
       htmlTracker.widgetAdded.connect((sender, panel: HTMLViewer) => {
-      panel.trusted = true;
-    });}
+        panel.trusted = true;
+      });
+    }
   }
-
-
 };
 
 const tracker = new WidgetTracker<MainAreaWidget<ReactAppWidget>>({
