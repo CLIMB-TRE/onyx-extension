@@ -1,6 +1,5 @@
-import { URLExt } from '@jupyterlab/coreutils';
-
 import { ServerConnection } from '@jupyterlab/services';
+import { URLExt } from '@jupyterlab/coreutils';
 
 /**
  * Call the API extension
@@ -11,19 +10,24 @@ import { ServerConnection } from '@jupyterlab/services';
  */
 export async function requestAPI<T>(
   endPoint = '',
-  init: RequestInit = {}
+  init: RequestInit = {},
+  param: [string, string] = ['', '']
 ): Promise<T> {
   // Make request to Jupyter API
   const settings = ServerConnection.makeSettings();
-  const requestUrl = URLExt.join(
-    settings.baseUrl,
-    'onyx-extension', // API Namespace
-    endPoint
-  );
+
+  const requestUrl = URLExt.join(settings.baseUrl, 'onyx-extension', endPoint);
+
+  let url = new URL(requestUrl);
+  if (param[0] != '') url.searchParams.append(param[0], param[1]);
 
   let response: Response;
   try {
-    response = await ServerConnection.makeRequest(requestUrl, init, settings);
+    response = await ServerConnection.makeRequest(
+      url.toString(),
+      init,
+      settings
+    );
   } catch (error) {
     throw new ServerConnection.NetworkError(error as any);
   }
