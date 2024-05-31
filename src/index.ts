@@ -29,8 +29,7 @@ class OpenS3FileWidget extends Widget {
 
     const input = document.createElement('input');
     input.value = '';
-    input.placeholder =
-      's3://example-bucket/example-file.html';
+    input.placeholder = 's3://example-bucket/example-file.html';
 
     body.appendChild(existingLabel);
     body.appendChild(input);
@@ -105,6 +104,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       execute: () => {
         if (!widget || widget.disposed) {
           const content = new ReactAppWidget(domain, token, s3_open_function);
+          content.addClass('onyx-Widget');
           widget = new MainAreaWidget({ content });
           widget.title.label = 'Onyx';
           widget.title.closable = true;
