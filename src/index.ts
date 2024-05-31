@@ -30,7 +30,7 @@ class OpenS3FileWidget extends Widget {
     const input = document.createElement('input');
     input.value = '';
     input.placeholder =
-      's3://mscape-published-reports/C-B01922D432_scylla_report.html';
+      's3://example-bucket/example-file.html';
 
     body.appendChild(existingLabel);
     body.appendChild(input);
@@ -75,7 +75,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const s3_open_function = (s3_link: string) => {
       requestAPI<any>('s3', {}, ['s3location', s3_link])
         .then(data => {
-          console.log(data);
           documentManager.open(data['temp_file']);
         })
         .catch(reason => {
@@ -87,7 +86,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     requestAPI<any>('settings')
       .then(data => {
-        console.log(data);
         domain = data['domain'];
         token = data['token'];
       })

@@ -17,7 +17,7 @@ class RouteHandler(APIHandler):
     @tornado.web.authenticated
     def get(self):
         self.finish(json.dumps({
-            "domain": os.environ.get('ONYX_DOMAIN', '*Unknown*'),
+            "domain": os.environ.get('ONYX_DOMAIN', '*Unknown*').strip('/'),
             "token": os.environ.get('ONYX_TOKEN', '*Unknown*')
         }))
 
