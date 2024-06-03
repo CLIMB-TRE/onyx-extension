@@ -1,6 +1,6 @@
 {
     "name": "onyx_extension",
-    "version": "0.4.11",
+    "version": "0.4.12",
     "description": "A minimal JupyterLab extension with backend and frontend parts.",
     "keywords": [
         "jupyter",
@@ -58,7 +58,7 @@
         "@jupyterlab/htmlviewer": "^4.2.1",
         "@jupyterlab/launcher": "^4.0.0",
         "@jupyterlab/services": "^7.0.0",
-        "climb-onyx-ui": "^0.7.0"
+        "climb-onyx-ui": "^0.7.1"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
