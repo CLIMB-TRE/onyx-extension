@@ -56,7 +56,7 @@ class RedirectingRouteHandler(APIHandler):
             route_extension = self.get_query_argument("route")
             route = f"{domain}/{route_extension}"
             r= requests.get(route, headers={"Authorization": f"Token {token}"})
-            self.finish(r.json())
+            self.finish(r.content)
         except Exception as e:
             self.finish(json.dumps({
                 "exception": e

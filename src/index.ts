@@ -16,7 +16,7 @@ import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 
 import { ILauncher } from '@jupyterlab/launcher';
 
-import { requestAPI } from './handler';
+import { requestAPI, requestAPIResponse } from './handler';
 import { ReactAppWidget } from './App';
 import { chatIcon } from './icon';
 import { Widget } from '@lumino/widgets';
@@ -81,11 +81,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
         });
     };
 
-    const routeHandler = async (route: string): Promise<any> => {
-      return requestAPI<any>('reroute', {}, ['route', route]);
+    const routeHandler = async (route: string): Promise<Response> => {
+      return requestAPIResponse('reroute', {}, ['route', route]);
     };
-
-    routeHandler('projects/')
 
     // Create a single widget
     let widget: MainAreaWidget<ReactAppWidget>;

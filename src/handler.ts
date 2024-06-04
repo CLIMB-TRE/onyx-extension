@@ -48,3 +48,30 @@ export async function requestAPI<T>(
 
   return data;
 }
+
+
+export async function requestAPIResponse(
+  endPoint = '',
+  init: RequestInit = {},
+  param: [string, string] = ['', '']
+): Promise<Response> {
+  // Make request to Jupyter API
+  const settings = ServerConnection.makeSettings();
+
+  const requestUrl = URLExt.join(settings.baseUrl, 'onyx-extension', endPoint);
+
+  let url = new URL(requestUrl);
+  if (param[0] != '') url.searchParams.append(param[0], param[1]);
+
+  let response: Response;
+  try {
+    response = await ServerConnection.makeRequest(
+      url.toString(),
+      init,
+      settings
+    );
+  } catch (error) {
+    throw new ServerConnection.NetworkError(error as any);
+  }
+  return response;
+}
