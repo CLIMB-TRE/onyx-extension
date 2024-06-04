@@ -68,8 +68,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const s3_command = 's3_onyx_extension';
     const category = 'Onyx';
 
-    let domain: string;
-    let token: string;
 
     const s3_open_function = (s3_link: string) => {
       requestAPI<any>('s3', {}, ['s3location', s3_link])
@@ -83,16 +81,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
         });
     };
 
-    requestAPI<any>('settings')
-      .then(data => {
-        domain = data['domain'];
-        token = data['token'];
-      })
-      .catch(reason => {
-        console.error(
-          `The onyx_extension server extension appears to be missing.\n${reason}`
-        );
-      });
+    const routeHandler = async (route: string): Promise<any> => {
+      return requestAPI<any>('reroute', {}, ['route', route]);
+    };
+
+    routeHandler('projects/')
 
     // Create a single widget
     let widget: MainAreaWidget<ReactAppWidget>;
@@ -103,7 +96,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       icon: chatIcon,
       execute: () => {
         if (!widget || widget.disposed) {
-          const content = new ReactAppWidget(domain, token, s3_open_function);
+          const content = new ReactAppWidget(routeHandler, s3_open_function);
           content.addClass('onyx-Widget');
           widget = new MainAreaWidget({ content });
           widget.title.label = 'Onyx';
