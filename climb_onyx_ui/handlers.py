@@ -24,10 +24,10 @@ class S3ViewHandler(APIHandler):
             endpoint_url=os.environ["JUPYTERLAB_S3_ENDPOINT"],
             )
         s3_object=s3.Object(b,o)
-        Path("./tmp").mkdir(parents=True, exist_ok=True)
-        with open(f'./tmp/{o}', 'wb') as fp:
+        Path("./s3_downloads").mkdir(parents=True, exist_ok=True)
+        with open(f'./s3_downloads/{o}', 'wb') as fp:
             s3_object.download_fileobj(fp)
-        return f'./tmp/{o}'    
+        return f'./s3_downloads/{o}'    
 
     @tornado.web.authenticated
     def get(self):

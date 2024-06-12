@@ -1,6 +1,6 @@
 {
     "name": "climb_onyx_ui",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "description": "A JupyterLab extension adding increased functionality for climb.",
     "keywords": [
         "jupyter",
