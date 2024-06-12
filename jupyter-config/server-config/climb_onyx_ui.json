@@ -1,7 +1,7 @@
 {
   "ServerApp": {
     "jpserver_extensions": {
-      "onyx_extension": true
+      "climb_onyx_ui": true
     }
   }
 }

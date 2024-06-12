@@ -47,11 +47,11 @@ class OpenS3FileWidget extends Widget {
 }
 
 /**
- * Initialization data for the onyx_extension extension.
+ * Initialization data for the climb-onyx-ui extension.
  */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'onyx_extension:plugin',
-  description: 'Onyx-extension.',
+  id: 'climb-onyx-ui:plugin',
+  description: 'climb-onyx-ui.',
   autoStart: true,
   optional: [ILauncher, IHTMLViewerTracker],
   requires: [ICommandPalette, IDocumentManager],
@@ -62,7 +62,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     launcher: ILauncher | null,
     htmlTracker: IHTMLViewerTracker | null
   ) => {
-    console.log('JupyterLab extension @onyx_extension is activated!');
+    console.log('JupyterLab extension @climb-onyx-ui is activated!');
 
     const command = 'onyx_extension';
     const s3_command = 's3_onyx_extension';
@@ -76,7 +76,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         })
         .catch(reason => {
           console.error(
-            `The onyx_extension server extension appears to be missing.\n${reason}`
+            `The climb-onyx-ui server extension appears to be missing.\n${reason}`
           );
         });
     };
@@ -145,7 +145,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           })
           .catch(reason => {
             console.error(
-              `The onyx_extension server extension appears to be missing.\n${reason}`
+              `The climb-onyx-ui server extension appears to be missing.\n${reason}`
             );
           });
       }
@@ -169,7 +169,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 };
 
 const tracker = new WidgetTracker<MainAreaWidget<ReactAppWidget>>({
-  namespace: 'onyx_extension'
+  namespace: 'climb-onyx-ui'
 });
 
 export default plugin;

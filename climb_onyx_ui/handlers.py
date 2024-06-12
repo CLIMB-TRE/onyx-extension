@@ -69,12 +69,12 @@ def setup_handlers(web_app):
 
     base_url = web_app.settings["base_url"]
 
-    route_pattern = url_path_join(base_url, "onyx-extension", "s3")
+    route_pattern = url_path_join(base_url, "climb-onyx-ui", "s3")
     handlers = [(route_pattern, S3ViewHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
     
-    route_pattern = url_path_join(base_url, "onyx-extension", "reroute")
+    route_pattern = url_path_join(base_url, "climb-onyx-ui", "reroute")
     handlers = [(route_pattern, RedirectingRouteHandler)]
     web_app.add_handlers(host_pattern, handlers)
 

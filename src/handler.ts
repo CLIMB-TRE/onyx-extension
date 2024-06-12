@@ -16,7 +16,7 @@ export async function requestAPI<T>(
   // Make request to Jupyter API
   const settings = ServerConnection.makeSettings();
 
-  const requestUrl = URLExt.join(settings.baseUrl, 'onyx-extension', endPoint);
+  const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-ui', endPoint);
 
   let url = new URL(requestUrl);
   if (param[0] != '') url.searchParams.append(param[0], param[1]);
@@ -58,7 +58,7 @@ export async function requestAPIResponse(
   // Make request to Jupyter API
   const settings = ServerConnection.makeSettings();
 
-  const requestUrl = URLExt.join(settings.baseUrl, 'onyx-extension', endPoint);
+  const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-ui', endPoint);
 
   let url = new URL(requestUrl);
   if (param[0] != '') url.searchParams.append(param[0], param[1]);
