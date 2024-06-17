@@ -20,8 +20,12 @@ export async function requestAPI<T>(
   const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-ui', endPoint);
 
   let url = new URL(requestUrl);
-  if (param[0] != '') url.searchParams.append(param[0], param[1]);
-  if (param2[0] != '') url.searchParams.append(param2[0], param2[1]);
+  if (param[0] !== '') {
+    url.searchParams.append(param[0], param[1]);
+  }
+  if (param2[0] !== '') {
+    url.searchParams.append(param2[0], param2[1]);
+  }
 
   let response: Response;
   try {
@@ -51,7 +55,6 @@ export async function requestAPI<T>(
   return data;
 }
 
-
 export async function requestAPIResponse(
   endPoint = '',
   init: RequestInit = {},
@@ -63,7 +66,9 @@ export async function requestAPIResponse(
   const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-ui', endPoint);
 
   let url = new URL(requestUrl);
-  if (param[0] != '') url.searchParams.append(param[0], param[1]);
+  if (param[0] !== '') {
+    url.searchParams.append(param[0], param[1]);
+  }
 
   let response: Response;
   try {

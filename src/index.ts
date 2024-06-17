@@ -68,15 +68,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const s3_command = 's3_onyx_extension';
     const category = 'Onyx';
 
-    let version ='';
+    let version = '';
 
     requestAPI<any>('version')
-        .then(data => {
-          version = data["version"];
-          console.log(`JupyterLab extension version: ${version}`);
-        })
-        .catch(_ => {});
-
+      .then(data => {
+        version = data['version'];
+        console.log(`JupyterLab extension version: ${version}`);
+      })
+      .catch(_ => {});
 
     const s3_open_function = (s3_link: string) => {
       requestAPI<any>('s3', {}, ['s3location', s3_link])
@@ -90,9 +89,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         });
     };
 
-    
     const write_file_function = (path: string, content: string) => {
-
       requestAPI<any>('file-write', {}, ['path', path], ['content', content])
         .then(data => {
           documentManager.open(data['path']);
@@ -117,7 +114,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
       icon: chatIcon,
       execute: () => {
         if (!widget || widget.disposed) {
-          const content = new ReactAppWidget(routeHandler, s3_open_function, write_file_function, version);
+          const content = new ReactAppWidget(
+            routeHandler,
+            s3_open_function,
+            write_file_function,
+            version
+          );
           content.addClass('onyx-Widget');
           widget = new MainAreaWidget({ content });
           widget.title.label = 'Onyx';
