@@ -49,7 +49,6 @@ export async function requestAPI<T>(
   return data;
 }
 
-
 export async function requestAPIResponse(
   endPoint = '',
   init: RequestInit = {},

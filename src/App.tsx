@@ -4,16 +4,24 @@ import { ReactWidget } from '@jupyterlab/apputils';
 import Onyx from 'climb-onyx-ui';
 
 export class ReactAppWidget extends ReactWidget {
-  constructor(route: (route: string)=> Promise<Response>, s3: (path: string) => void) {
+  constructor(
+    route: (route: string) => Promise<Response>,
+    s3: (path: string) => void
+  ) {
     super();
     this.routeHandler = route;
-    this.s3PathHandler= s3;
+    this.s3PathHandler = s3;
   }
 
-  routeHandler: (route: string)=> Promise<Response>;
+  routeHandler: (route: string) => Promise<Response>;
   s3PathHandler: (path: string) => void;
 
   render(): JSX.Element {
-    return <Onyx httpPathHandler={this.routeHandler} s3PathHandler={this.s3PathHandler} />;
+    return (
+      <Onyx
+        httpPathHandler={this.routeHandler}
+        s3PathHandler={this.s3PathHandler}
+      />
+    );
   }
 }

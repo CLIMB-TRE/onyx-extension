@@ -68,7 +68,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const s3_command = 's3_onyx_extension';
     const category = 'Onyx';
 
-
     const s3_open_function = (s3_link: string) => {
       requestAPI<any>('s3', {}, ['s3location', s3_link])
         .then(data => {
