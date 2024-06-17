@@ -62,7 +62,7 @@ export async function requestAPIResponse(
   const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-ui', endPoint);
 
   const url = new URL(requestUrl);
-  if (param[0] != '') {
+  if (param[0] !== '') {
     url.searchParams.append(param[0], param[1]);
   }
 
