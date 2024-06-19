@@ -1,11 +1,11 @@
-# climb_onyx_gui
+# climb-onyx-gui
 
 [![Github Actions Status](https://github.com/CLIMB-TRE/onyx-extension/workflows/Build/badge.svg)](https://github.com/CLIMB-TRE/onyx-extension/actions/workflows/build.yml)
 
 A JupyterLab extension adding increased functionality for climb.
 
-This extension is composed of a Python package named `climb_onyx_gui`
-for the server extension and a NPM package named `climb_onyx_gui`
+This extension is composed of a Python package named `climb-onyx-gui`
+for the server extension and a NPM package named `climb-onyx-gui-extension`
 for the frontend extension.
 
 ## Requirements
@@ -17,7 +17,7 @@ for the frontend extension.
 To install the extension, execute:
 
 ```bash
-pip install climb_onyx_gui
+pip install climb-onyx-gui
 ```
 
 ## Uninstall
@@ -25,7 +25,7 @@ pip install climb_onyx_gui
 To remove the extension, execute:
 
 ```bash
-pip uninstall climb_onyx_gui
+pip uninstall climb-onyx-gui
 ```
 
 ## Troubleshoot
@@ -56,13 +56,13 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the climb_onyx_gui directory
+# Change directory to the extension directory
 # Install package in development mode
 pip install -e "."
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
-jupyter server extension enable climb_onyx_gui
+jupyter server extension enable climb-onyx-gui
 # Rebuild extension Typescript source after making changes
 jlpm build
 ```
@@ -88,13 +88,9 @@ jupyter lab build --minimize=False
 
 ```bash
 # Server extension must be manually disabled in develop mode
-jupyter server extension disable climb_onyx_gui
-pip uninstall climb_onyx_gui
+jupyter server extension disable climb-onyx-gui
+pip uninstall climb-onyx-gui
 ```
-
-In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
-command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `climb_onyx_gui` within that folder.
 
 ### Packaging the extension
 

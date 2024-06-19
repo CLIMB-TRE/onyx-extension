@@ -13,7 +13,7 @@ from .handlers import setup_handlers
 def _jupyter_labextension_paths():
     return [{
         "src": "labextension",
-        "dest": "climb_onyx_gui"
+        "dest": "climb-onyx-gui-extension"
     }]
 
 

@@ -50,8 +50,8 @@ class OpenS3FileWidget extends Widget {
  * Initialization data for the climb-onyx-gui extension.
  */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'climb-onyx-gui:plugin',
-  description: 'climb-onyx-gui.',
+  id: 'climb-onyx-gui-extension:plugin',
+  description: 'JupyterLab extension for the Onyx Graphical User Interface',
   autoStart: true,
   optional: [ILauncher, IHTMLViewerTracker],
   requires: [ICommandPalette, IDocumentManager],
