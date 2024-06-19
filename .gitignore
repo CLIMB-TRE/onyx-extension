@@ -7,9 +7,9 @@ node_modules/
 *.egg-info/
 .ipynb_checkpoints
 *.tsbuildinfo
-climb_onyx_ui/labextension
+climb_onyx_gui/labextension
 # Version file is handled by hatchling
-climb_onyx_ui/_version.py
+climb_onyx_gui/_version.py
 
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python

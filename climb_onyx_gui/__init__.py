@@ -5,7 +5,7 @@ except ImportError:
     # in editable mode with pip. It is highly recommended to install
     # the package from a stable release or in editable mode: https://pip.pypa.io/en/stable/topics/local-project-installs/#editable-installs
     import warnings
-    warnings.warn("Importing 'climb_onyx_ui' outside a proper installation.")
+    warnings.warn("Importing 'climb_onyx_gui' outside a proper installation.")
     __version__ = "dev"
 from .handlers import setup_handlers
 
@@ -13,13 +13,13 @@ from .handlers import setup_handlers
 def _jupyter_labextension_paths():
     return [{
         "src": "labextension",
-        "dest": "climb_onyx_ui"
+        "dest": "climb_onyx_gui"
     }]
 
 
 def _jupyter_server_extension_points():
     return [{
-        "module": "climb_onyx_ui"
+        "module": "climb_onyx_gui"
     }]
 
 
@@ -32,5 +32,5 @@ def _load_jupyter_server_extension(server_app):
         JupyterLab application instance
     """
     setup_handlers(server_app.web_app)
-    name = "climb_onyx_ui"
+    name = "climb_onyx_gui"
     server_app.log.info(f"Registered {name} server extension")

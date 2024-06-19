@@ -1,4 +1,4 @@
-# Making a new release of climb_onyx_ui
+# Making a new release of climb_onyx_gui
 
 The extension can be published to `PyPI` and `npm` manually or using the [Jupyter Releaser](https://github.com/jupyter-server/jupyter_releaser).
 

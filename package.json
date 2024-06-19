@@ -1,7 +1,7 @@
 {
-    "name": "climb_onyx_ui",
-    "version": "0.6.1",
-    "description": "A JupyterLab extension adding increased functionality for climb.",
+    "name": "climb_onyx_gui",
+    "version": "0.7.0",
+    "description": "JupyterLab extension for the Onyx Graphical User Interface",
     "keywords": [
         "jupyter",
         "jupyterlab",
@@ -35,7 +35,7 @@
         "clean": "jlpm clean:lib",
         "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
         "clean:lintcache": "rimraf .eslintcache .stylelintcache",
-        "clean:labextension": "rimraf climb_onyx_ui/labextension climb_onyx_ui/_version.py",
+        "clean:labextension": "rimraf climb_onyx_gui/labextension climb_onyx_gui/_version.py",
         "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
         "eslint": "jlpm eslint:check --fix",
         "eslint:check": "eslint . --cache --ext .ts,.tsx",
@@ -104,12 +104,12 @@
                     "pip"
                 ],
                 "base": {
-                    "name": "climb_onyx_ui"
+                    "name": "climb_onyx_gui"
                 }
             }
         },
         "extension": true,
-        "outputDir": "climb_onyx_ui/labextension"
+        "outputDir": "climb_onyx_gui/labextension"
     },
     "eslintIgnore": [
         "node_modules",
