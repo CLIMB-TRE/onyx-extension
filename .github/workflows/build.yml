@@ -36,7 +36,7 @@ jobs:
         python -m pip install .[test]
 
         jupyter server extension list
-        jupyter server extension list 2>&1 | grep -ie "climb-onyx-gui.*OK"
+        jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
 
         jupyter labextension list
         jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
@@ -81,10 +81,10 @@ jobs:
 
 
         jupyter server extension list
-        jupyter server extension list 2>&1 | grep -ie "climb-onyx-gui.*OK"
+        jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
 
         jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
+        jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui.*OK"
         python -m jupyterlab.browser_check --no-browser-test
 
 
