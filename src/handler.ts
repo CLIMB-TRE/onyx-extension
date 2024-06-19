@@ -19,7 +19,7 @@ export async function requestAPI<T>(
 
   const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-gui', endPoint);
 
-  let url = new URL(requestUrl);
+  const url = new URL(requestUrl);
   if (param[0] !== '') {
     url.searchParams.append(param[0], param[1]);
   }
@@ -65,7 +65,7 @@ export async function requestAPIResponse(
 
   const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-gui', endPoint);
 
-  let url = new URL(requestUrl);
+  const url = new URL(requestUrl);
   if (param[0] !== '') {
     url.searchParams.append(param[0], param[1]);
   }
