@@ -68,10 +68,35 @@ const plugin: JupyterFrontEndPlugin<void> = {
     const s3_command = 's3_onyx_extension';
     const category = 'Onyx';
 
+    let version = '';
+
+    requestAPI<any>('version')
+      .then(data => {
+        version = data['version'];
+        console.log(`JupyterLab extension version: ${version}`);
+      })
+      .catch(_ => {});
+
     const s3_open_function = (s3_link: string) => {
       requestAPI<any>('s3', {}, ['s3location', s3_link])
         .then(data => {
           documentManager.open(data['temp_file']);
+        })
+        .catch(reason => {
+          console.error(
+            `The climb-onyx-ui server extension appears to be missing.\n${reason}`
+          );
+        });
+    };
+
+    const write_file_function = (path: string, content: string) => {
+      const dataToSend = { content: content };
+      requestAPI<any>('file-write',  {
+        body: JSON.stringify(dataToSend),
+        method: 'POST'
+      }, ['path', path])
+        .then(data => {
+          documentManager.open(data['path']);
         })
         .catch(reason => {
           console.error(
@@ -93,7 +118,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
       icon: chatIcon,
       execute: () => {
         if (!widget || widget.disposed) {
-          const content = new ReactAppWidget(routeHandler, s3_open_function);
+          const content = new ReactAppWidget(
+            routeHandler,
+            s3_open_function,
+            write_file_function,
+            version
+          );
           content.addClass('onyx-Widget');
           widget = new MainAreaWidget({ content });
           widget.title.label = 'Onyx';

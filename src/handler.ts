@@ -11,16 +11,20 @@ import { URLExt } from '@jupyterlab/coreutils';
 export async function requestAPI<T>(
   endPoint = '',
   init: RequestInit = {},
-  param: [string, string] = ['', '']
+  param: [string, string] = ['', ''],
+  param2: [string, string] = ['', '']
 ): Promise<T> {
   // Make request to Jupyter API
   const settings = ServerConnection.makeSettings();
 
   const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-ui', endPoint);
 
-  const url = new URL(requestUrl);
+  let url = new URL(requestUrl);
   if (param[0] !== '') {
     url.searchParams.append(param[0], param[1]);
+  }
+  if (param2[0] !== '') {
+    url.searchParams.append(param2[0], param2[1]);
   }
 
   let response: Response;
@@ -61,7 +65,7 @@ export async function requestAPIResponse(
 
   const requestUrl = URLExt.join(settings.baseUrl, 'climb-onyx-ui', endPoint);
 
-  const url = new URL(requestUrl);
+  let url = new URL(requestUrl);
   if (param[0] !== '') {
     url.searchParams.append(param[0], param[1]);
   }

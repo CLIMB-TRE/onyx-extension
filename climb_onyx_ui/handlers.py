@@ -9,6 +9,7 @@ from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 import tornado
 import boto3
+from ._version import __version__
 
 class S3ViewHandler(APIHandler):
 
@@ -24,10 +25,10 @@ class S3ViewHandler(APIHandler):
             endpoint_url=os.environ["JUPYTERLAB_S3_ENDPOINT"],
             )
         s3_object=s3.Object(b,o)
-        Path("./tmp").mkdir(parents=True, exist_ok=True)
-        with open(f'./tmp/{o}', 'wb') as fp:
+        Path("./s3_downloads").mkdir(parents=True, exist_ok=True)
+        with open(f'./s3_downloads/{o}', 'wb') as fp:
             s3_object.download_fileobj(fp)
-        return f'./tmp/{o}'    
+        return f'./s3_downloads/{o}'    
 
     @tornado.web.authenticated
     def get(self):
@@ -63,6 +64,39 @@ class RedirectingRouteHandler(APIHandler):
             }))
 
 
+class VersionHandler(APIHandler):
+    @tornado.web.authenticated
+    def get(self):
+        try:
+            self.finish(json.dumps({
+                "version": __version__,
+            }))
+        except Exception as e:
+            self.finish(json.dumps({
+                "exception": e
+            }))
+
+
+class FileWriteHandler(APIHandler):
+    @tornado.web.authenticated
+    def post(self):
+        try:
+            path = self.get_query_argument("path")
+            input_data = self.get_json_body()
+            content = input_data["content"]
+            Path(path).parent.mkdir(parents=True, exist_ok=True)
+            with open(path, 'w', encoding="utf-8") as fp:
+                fp.write(content)
+            self.finish(json.dumps({
+                "path": path,
+            }))
+            
+        except Exception as e:
+            self.finish(json.dumps({
+                "exception": e
+            }))
+
+
 def setup_handlers(web_app):
     tempfile.mkdtemp()
     host_pattern = ".*$"
@@ -76,5 +110,15 @@ def setup_handlers(web_app):
     
     route_pattern = url_path_join(base_url, "climb-onyx-ui", "reroute")
     handlers = [(route_pattern, RedirectingRouteHandler)]
+    web_app.add_handlers(host_pattern, handlers)
+
+    
+    route_pattern = url_path_join(base_url, "climb-onyx-ui", "version")
+    handlers = [(route_pattern, VersionHandler)]
+    web_app.add_handlers(host_pattern, handlers)
+
+    
+    route_pattern = url_path_join(base_url, "climb-onyx-ui", "file-write")
+    handlers = [(route_pattern, FileWriteHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
