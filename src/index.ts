@@ -91,10 +91,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     const write_file_function = (path: string, content: string) => {
       const dataToSend = { content: content };
-      requestAPI<any>('file-write',  {
-        body: JSON.stringify(dataToSend),
-        method: 'POST'
-      }, ['path', path])
+      requestAPI<any>(
+        'file-write',
+        {
+          body: JSON.stringify(dataToSend),
+          method: 'POST'
+        },
+        ['path', path]
+      )
         .then(data => {
           documentManager.open(data['path']);
         })
