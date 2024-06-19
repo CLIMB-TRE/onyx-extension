@@ -79,12 +79,14 @@ class VersionHandler(APIHandler):
 
 class FileWriteHandler(APIHandler):
     @tornado.web.authenticated
-    def get(self):
+    def post(self):
         try:
             path = self.get_query_argument("path")
-            content = self.get_query_argument("content")
+            input_data = self.get_json_body()
+            content = input_data["content"]
+            print(content)
             Path(path).parent.mkdir(parents=True, exist_ok=True)
-            with open(path, 'w') as fp:
+            with open(path, 'w', encoding="utf-8") as fp:
                 fp.write(content)
             self.finish(json.dumps({
                 "path": path,

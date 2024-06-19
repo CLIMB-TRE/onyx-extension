@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/apputils';
 //import App from '../../react-prototype/src/App'
-import Onyx from 'climb-onyx-ui';
+import Onyx from 'climb-onyx-gui';
 
 export class ReactAppWidget extends ReactWidget {
   constructor(
@@ -27,6 +27,8 @@ export class ReactAppWidget extends ReactWidget {
       <Onyx
         httpPathHandler={this.routeHandler}
         s3PathHandler={this.s3PathHandler}
+        fileWriter={this.fileWriter}
+        extVersion={this.version}
       />
     );
   }
