@@ -84,7 +84,6 @@ class FileWriteHandler(APIHandler):
             path = self.get_query_argument("path")
             input_data = self.get_json_body()
             content = input_data["content"]
-            print(content)
             Path(path).parent.mkdir(parents=True, exist_ok=True)
             with open(path, 'w', encoding="utf-8") as fp:
                 fp.write(content)
