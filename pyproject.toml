@@ -3,7 +3,7 @@ requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version>=0
 build-backend = "hatchling.build"
 
 [project]
-name = "climb_onyx_ui"
+name = "climb-onyx-gui"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
@@ -34,25 +34,25 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["climb_onyx_ui/labextension"]
+artifacts = ["climb_onyx_gui/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"climb_onyx_ui/labextension" = "share/jupyter/labextensions/climb_onyx_ui"
-"install.json" = "share/jupyter/labextensions/climb_onyx_ui/install.json"
+"climb_onyx_gui/labextension" = "share/jupyter/labextensions/climb-onyx-gui-extension"
+"install.json" = "share/jupyter/labextensions/climb-onyx-gui-extension/install.json"
 "jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
 
 [tool.hatch.build.hooks.version]
-path = "climb_onyx_ui/_version.py"
+path = "climb_onyx_gui/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "climb_onyx_ui/labextension/static/style.js",
-    "climb_onyx_ui/labextension/package.json",
+    "climb_onyx_gui/labextension/static/style.js",
+    "climb_onyx_gui/labextension/package.json",
 ]
-skip-if-exists = ["climb_onyx_ui/labextension/static/style.js"]
+skip-if-exists = ["climb_onyx_gui/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -62,7 +62,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "climb_onyx_ui/labextension"
+build_dir = "climb_onyx_gui/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"

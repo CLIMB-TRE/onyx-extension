@@ -103,22 +103,22 @@ def setup_handlers(web_app):
 
     base_url = web_app.settings["base_url"]
 
-    route_pattern = url_path_join(base_url, "climb-onyx-ui", "s3")
+    route_pattern = url_path_join(base_url, "climb-onyx-gui", "s3")
     handlers = [(route_pattern, S3ViewHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
     
-    route_pattern = url_path_join(base_url, "climb-onyx-ui", "reroute")
+    route_pattern = url_path_join(base_url, "climb-onyx-gui", "reroute")
     handlers = [(route_pattern, RedirectingRouteHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
     
-    route_pattern = url_path_join(base_url, "climb-onyx-ui", "version")
+    route_pattern = url_path_join(base_url, "climb-onyx-gui", "version")
     handlers = [(route_pattern, VersionHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
     
-    route_pattern = url_path_join(base_url, "climb-onyx-ui", "file-write")
+    route_pattern = url_path_join(base_url, "climb-onyx-gui", "file-write")
     handlers = [(route_pattern, FileWriteHandler)]
     web_app.add_handlers(host_pattern, handlers)
 

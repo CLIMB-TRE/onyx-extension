@@ -26,5 +26,5 @@ jobs:
       - name: Upload Distributions
         uses: actions/upload-artifact@v4
         with:
-          name: climb_onyx_ui-releaser-dist-${{ github.run_number }}
+          name: climb_onyx_gui-releaser-dist-${{ github.run_number }}
           path: .jupyter_releaser_checkout/dist

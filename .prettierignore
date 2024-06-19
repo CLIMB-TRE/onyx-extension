@@ -3,4 +3,4 @@ node_modules
 **/lib
 **/package.json
 !/package.json
-climb_onyx_ui
+climb_onyx_gui

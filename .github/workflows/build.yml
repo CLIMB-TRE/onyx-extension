@@ -36,10 +36,10 @@ jobs:
         python -m pip install .[test]
 
         jupyter server extension list
-        jupyter server extension list 2>&1 | grep -ie "climb_onyx_ui.*OK"
+        jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
 
         jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "climb_onyx_ui.*OK"
+        jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
         python -m jupyterlab.browser_check
 
     - name: Package the extension
@@ -48,13 +48,13 @@ jobs:
 
         pip install build
         python -m build
-        pip uninstall -y "climb_onyx_ui" jupyterlab
+        pip uninstall -y "climb-onyx-gui" jupyterlab
 
     - name: Upload extension packages
       uses: actions/upload-artifact@v4
       with:
         name: extension-artifacts
-        path: dist/climb_onyx_ui*
+        path: dist/climb_onyx_gui*
         if-no-files-found: error
 
   test_isolated:
@@ -77,14 +77,14 @@ jobs:
         sudo rm -rf $(which node)
         sudo rm -rf $(which node)
 
-        pip install "jupyterlab>=4.0.0,<5" climb_onyx_ui*.whl
+        pip install "jupyterlab>=4.0.0,<5" climb-onyx-gui*.whl
 
 
         jupyter server extension list
-        jupyter server extension list 2>&1 | grep -ie "climb_onyx_ui.*OK"
+        jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
 
         jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "climb_onyx_ui.*OK"
+        jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui.*OK"
         python -m jupyterlab.browser_check --no-browser-test
 
 
