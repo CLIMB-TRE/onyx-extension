@@ -1,9 +1,8 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/apputils';
-//import App from '../../react-prototype/src/App'
 import Onyx from 'climb-onyx-gui';
 
-export class ReactAppWidget extends ReactWidget {
+export class OnyxWidget extends ReactWidget {
   constructor(
     route: (route: string) => Promise<Response>,
     s3: (path: string) => void,

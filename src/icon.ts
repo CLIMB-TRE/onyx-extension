@@ -1,7 +1,7 @@
 import { LabIcon } from '@jupyterlab/ui-components';
-import CHAT_ICON from './../style/icons/dna.svg';
+import DNA_ICON from './../style/icons/dna.svg';
 
-export const chatIcon = new LabIcon({
-  name: 'jitsi:chat',
-  svgstr: CHAT_ICON
+export const dnaIcon = new LabIcon({
+  name: 'jitsi:dna',
+  svgstr: DNA_ICON
 });

@@ -17,34 +17,9 @@ import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 import { ILauncher } from '@jupyterlab/launcher';
 
 import { requestAPI, requestAPIResponse } from './handler';
-import { ReactAppWidget } from './App';
-import { chatIcon } from './icon';
-import { Widget } from '@lumino/widgets';
-
-class OpenS3FileWidget extends Widget {
-  constructor() {
-    const body = document.createElement('div');
-    const existingLabel = document.createElement('label');
-    existingLabel.textContent = 'S3 file name:';
-
-    const input = document.createElement('input');
-    input.value = '';
-    input.placeholder = 's3://example-bucket/example-file.html';
-
-    body.appendChild(existingLabel);
-    body.appendChild(input);
-
-    super({ node: body });
-  }
-
-  get inputNode() {
-    return this.node.getElementsByTagName('input')[0];
-  }
-
-  getValue() {
-    return this.inputNode.value;
-  }
-}
+import { OnyxWidget } from './onyxWidget';
+import { dnaIcon } from './icon';
+import { OpenS3FileWidget } from './openS3FileWidget';
 
 /**
  * Initialization data for the climb-onyx-gui extension.
@@ -66,7 +41,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     const command = 'onyx_extension';
     const s3_command = 's3_onyx_extension';
-    const category = 'Onyx';
+    const category = 'CLIMB-TRE';
 
     let version = '';
 
@@ -114,15 +89,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
     };
 
     // Create a single widget
-    let widget: MainAreaWidget<ReactAppWidget>;
+    let widget: MainAreaWidget<OnyxWidget>;
 
     app.commands.addCommand(command, {
       label: 'Onyx',
       caption: 'Onyx',
-      icon: chatIcon,
+      icon: dnaIcon,
       execute: () => {
         if (!widget || widget.disposed) {
-          const content = new ReactAppWidget(
+          const content = new OnyxWidget(
             routeHandler,
             s3_open_function,
             write_file_function,
@@ -156,15 +131,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
     }
 
     app.commands.addCommand(s3_command, {
-      label: 'Onyx open s3 document',
-      caption: 'Onyx open s3 document',
-      icon: chatIcon,
+      label: 'Open s3 document',
+      caption: 'Open s3 document',
+      icon: dnaIcon,
       execute: () => {
         showDialog({
           body: new OpenS3FileWidget(),
           buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'GO' })],
           focusNodeSelector: 'input',
-          title: 'Open site'
+          title: 'Open S3 Document'
         })
           .then(result => {
             if (result.button.label === 'Cancel') {
@@ -201,7 +176,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   }
 };
 
-const tracker = new WidgetTracker<MainAreaWidget<ReactAppWidget>>({
+const tracker = new WidgetTracker<MainAreaWidget<OnyxWidget>>({
   namespace: 'climb-onyx-gui'
 });
 
