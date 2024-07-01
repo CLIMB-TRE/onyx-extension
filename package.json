@@ -1,6 +1,6 @@
 {
     "name": "climb-onyx-gui-extension",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "description": "JupyterLab extension for the Onyx Graphical User Interface",
     "keywords": [
         "jupyter",
@@ -59,9 +59,9 @@
         "@jupyterlab/htmlviewer": "^4.2.1",
         "@jupyterlab/launcher": "^4.0.0",
         "@jupyterlab/services": "^7.0.0",
-        "climb-onyx-gui": "^0.10.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
+        "climb-onyx-gui": "^0.10.1",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
         "webpack": "^5.92.0"
     },
     "devDependencies": {
