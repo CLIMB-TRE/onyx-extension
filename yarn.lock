@@ -1237,6 +1237,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.49.1":
+  version: 5.49.1
+  resolution: "@tanstack/query-core@npm:5.49.1"
+  checksum: 244ce65d0e47388073adaebac72feba6032b51458f35469941bddfe5cc5eb9d354a89c43e1e37c655d16c869effbd5edf05952810b64e39deede18560d4bac55
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.45.1":
+  version: 5.49.2
+  resolution: "@tanstack/react-query@npm:5.49.2"
+  dependencies:
+    "@tanstack/query-core": 5.49.1
+  peerDependencies:
+    react: ^18.0.0
+  checksum: 8f96a1292a3ec1fb249a2606acb0a7dbbeb6c4f4c9f424b69997df8b7bcf506b62ce1b93bc57ca9154534f98e538166cc8822e3eaaccac4bb2393c9f17839fdd
+  languageName: node
+  linkType: hard
+
 "@types/create-react-class@npm:*":
   version: 15.6.8
   resolution: "@types/create-react-class@npm:15.6.8"
@@ -2080,7 +2098,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-onyx-gui: ^0.9.1
+    climb-onyx-gui: ^0.10.0
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -2104,17 +2122,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.9.1":
-  version: 0.9.1
-  resolution: "climb-onyx-gui@npm:0.9.1"
+"climb-onyx-gui@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "climb-onyx-gui@npm:0.10.0"
   dependencies:
+    "@tanstack/react-query": ^5.45.1
     export-to-csv: ^1.3.0
     react-bootstrap: ^2.10.2
     react-select: ^5.8.0
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: ea35e4e4995eaa5e414b9a867c3b5ff0d5f3f448a867ef861d9e1caa7c09671a3ed00b3021a84aab17a63028058b5680bfdae6f952c4c4d7a626c0a5b14f978a
+  checksum: 5e0e5aaf017656254488d5b3c1619e820b198c5259080ee9975e49cf76e2be2e1b0553dd7e113c4ca9a5e06309c2f4e929429480a1ff8ac466d8d86263a723ed
   languageName: node
   linkType: hard
 
