@@ -18,6 +18,7 @@ import { ILauncher } from '@jupyterlab/launcher';
 
 import { requestAPI, requestAPIResponse } from './handler';
 import { OnyxWidget } from './onyxWidget';
+import { AgateWidget } from './agateWidget';
 import { dnaIcon } from './icon';
 import { OpenS3FileWidget } from './openS3FileWidget';
 
@@ -40,6 +41,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     console.log('JupyterLab extension @climb-onyx-gui is activated!');
 
     const command = 'onyx_extension';
+    const commanda = 'agate_extension';
     const s3_command = 's3_onyx_extension';
     const category = 'CLIMB-TRE';
 
@@ -130,6 +132,49 @@ const plugin: JupyterFrontEndPlugin<void> = {
       });
     }
 
+    
+    // Create a single widget
+    let widgeta: MainAreaWidget<AgateWidget>;
+
+    app.commands.addCommand(commanda, {
+      label: 'Agate',
+      caption: 'Agate',
+      icon: dnaIcon,
+      execute: () => {
+        if (!widgeta || widgeta.disposed) {
+          const content = new AgateWidget(
+            routeHandler,
+            s3_open_function,
+            write_file_function,
+            version
+          );
+          content.addClass('agate-Widget');
+          widgeta = new MainAreaWidget({ content });
+          widgeta.title.label = 'Agate';
+          widgeta.title.closable = true;
+        }
+        if (!trackera.has(widgeta)) {
+          trackera.add(widgeta);
+        }
+        if (!widgeta.isAttached) {
+          // Attach the widget to the main work area if it's not there
+          app.shell.add(widgeta, 'main');
+        }
+
+        // Activate the widget
+        app.shell.activateById(widgeta.id);
+      }
+    });
+
+    palette.addItem({ command: commanda, category: category });
+
+    if (launcher) {
+      launcher.add({
+        command: commanda,
+        category: category
+      });
+    }
+
     app.commands.addCommand(s3_command, {
       label: 'Open s3 document',
       caption: 'Open s3 document',
@@ -178,6 +223,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
 const tracker = new WidgetTracker<MainAreaWidget<OnyxWidget>>({
   namespace: 'climb-onyx-gui'
+});
+
+const trackera = new WidgetTracker<MainAreaWidget<AgateWidget>>({
+  namespace: 'climb-agate-gui'
 });
 
 export default plugin;
