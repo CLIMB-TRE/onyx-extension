@@ -55,6 +55,9 @@ class RedirectingRouteHandler(APIHandler):
             domain = os.environ.get('ONYX_DOMAIN', '*Unknown*').strip('/')
             token = os.environ.get('ONYX_TOKEN', '*Unknown*')
             route_extension = self.get_query_argument("route")
+            agate_domain = self.get_query_argument("agate", "false")
+            if (agate_domain=="true"): 
+                domain="https://127.0.0.1:8001"
             route = f"{domain}/{route_extension}"
             r= requests.get(route, headers={"Authorization": f"Token {token}"})
             self.finish(r.content)

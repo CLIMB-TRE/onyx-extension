@@ -86,8 +86,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
         });
     };
 
-    const routeHandler = async (route: string): Promise<Response> => {
-      return requestAPIResponse('reroute', {}, ['route', route]);
+    const routeHandler = async (route: string
+    ): Promise<Response> => {
+      return requestAPIResponse('reroute', {}, ['route', route], false);
+    };
+    
+    const routeHandlerAgate = async (route: string): Promise<Response> => {
+      return requestAPIResponse('reroute', {}, ['route', route], true);
     };
 
     // Create a single widget
@@ -143,7 +148,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       execute: () => {
         if (!widgeta || widgeta.disposed) {
           const content = new AgateWidget(
-            routeHandler,
+            routeHandlerAgate,
             s3_open_function,
             write_file_function,
             version

@@ -58,7 +58,8 @@ export async function requestAPI<T>(
 export async function requestAPIResponse(
   endPoint = '',
   init: RequestInit = {},
-  param: [string, string] = ['', '']
+  param: [string, string] = ['', ''],
+  agate:boolean=false
 ): Promise<Response> {
   // Make request to Jupyter API
   const settings = ServerConnection.makeSettings();
@@ -69,6 +70,7 @@ export async function requestAPIResponse(
   if (param[0] !== '') {
     url.searchParams.append(param[0], param[1]);
   }
+  if(agate) url.searchParams.append("agate", "true");
 
   let response: Response;
   try {
