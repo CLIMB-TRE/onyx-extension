@@ -10,7 +10,6 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
-import { Spinner } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -163,16 +162,6 @@ const ResultsTable = function ResultsTable({
   );
 };
 
-function LoadingAlert() {
-  return (
-    <Alert variant="light">
-      <Stack direction="horizontal" gap={2}>
-        <Spinner />
-        <span>Loading...</span>
-      </Stack>
-    </Alert>
-  );
-}
 
 //type ResultData = {
 //  data?: Record<string, string | number | boolean | null>[];
@@ -195,7 +184,6 @@ interface SearchProps extends DataProps {
 }
 
 interface ResultsProps extends SearchProps {
-  resultPending: boolean;
   resultError: Error | null;
   resultData?: Record<string, Record<string, string | number | boolean | null>>[];
   titles: Map<string,string>
@@ -231,9 +219,7 @@ function Results(props: ResultsProps) {
         </Button>
       </Card.Header>
       <Container fluid className="table-panel p-2">
-        {props.resultPending ? (
-          <LoadingAlert />
-        ) : props.resultError ? (
+        {props.resultError ? (
           <Alert variant="danger">Error: {props.resultError.message}</Alert>
         ) : (
           <ResultsTable
@@ -257,7 +243,6 @@ function Data(props: DataProps) {
 
   // Fetch data, depending on project and search parameters
   const {
-    isFetching: resultPending,
     error: resultError,
     data: resultData,
     refetch: refetchResults,
@@ -284,7 +269,6 @@ function Data(props: DataProps) {
         <Results
           {...props}
           handleSearch={handleSearch}
-          resultPending={resultPending}
           resultError={resultError instanceof Error ? resultError : null}
           resultData={resultData}
           titles= {titles}
