@@ -105,56 +105,82 @@ function Header(props: HeaderProps) {
   );
 }
 
+function status(s: string):string {
+  switch (s) {
+    case 'US': {
+      return "unstarted";
+    }
+    case 'PD': {
+      return "Pending";
+    }
+    case 'PR': {
+      return "in progress";
+    }
+    case 'CL': {
+      return "cancelled";
+    }
+    case 'SU': {
+      return "success";
+    }
+    case 'FL': {
+      return "failure";
+    }
+    default: {
+      return "e";
+    }
+  }
+} 
+
+function status_icon(s: string):string {
+  switch (s) {
+    case 'US': {
+      return "unstarted";
+    }
+    case 'PD': {
+      return "pending.png";
+    }
+    case 'PR': {
+      return "in progress";
+    }
+    case 'CL': {
+      return "cancelled";
+    }
+    case 'SU': {
+      return "success";
+    }
+    case 'FL': {
+      return "failure";
+    }
+    default: {
+      return "e";
+    }
+  }
+} 
 
 const ResultsTable = function ResultsTable({
   data,
   titles,
   s3PathHandler,
 }: {
-  data: Record<string, Record<string, string | number | boolean | null>>[];
+  data: IngestionItem[];
   titles?: Map<string, string>;
   s3PathHandler?: (path: string) => void;
 }) {
 
-  const headers = () => {
-    if (data.length > 0) {
-      return Object.keys(data[0].fields);
-    } else {
-      return [];
-    }
-  };
-
-  const rows = data.map((item) =>
-    Object.values(item.fields).map((value) => value?.toString().trim() || "")
-  );
 
   return (
     <Table striped bordered hover responsive size="sm">
       <thead>
         <tr>
-          {headers().map((header) => (
-            <th key={header} title={titles?.get(header)}>
-              {header}
-            </th>
-          ))}
+          <th key={"location"} title={"location"}> location</th>
+          <th key={"status"} title={"status"}>status </th>
         </tr>
       </thead>
       <tbody>
-        {rows.map((row, index) => (
+        {data.map((row, index) => (
           <tr key={index}>
-            {row.map((cell, index) =>
-              s3PathHandler &&
-              cell.startsWith("s3://") &&
-              cell.endsWith(".html") ? (
-                <td key={index}>
-                  <Button variant="link" onClick={() => s3PathHandler(cell)}>
-                    {cell}
-                  </Button>
-                </td>
-              ) : (
-                <td key={index}>{cell}</td>
-              )
-            )}
+              <td key={"location"}>{row.fields.location}</td>
+              <td key={"status"}>{status(row.fields.status)}</td>
           </tr>
         ))}
       </tbody>
@@ -185,9 +211,20 @@ interface SearchProps extends DataProps {
 
 interface ResultsProps extends SearchProps {
   resultError: Error | null;
-  resultData?: Record<string, Record<string, string | number | boolean | null>>[];
+  resultData?: IngestionItem[];
   titles: Map<string,string>
 }
+
+
+interface IngestionItem {
+  fields: IngestionFields
+}
+
+interface IngestionFields {
+  location:string;
+  status:string;
+}
+
 
 function Results(props: ResultsProps) {
 
@@ -208,7 +245,7 @@ function Results(props: ResultsProps) {
   return (
     <Card>
       <Card.Header>
-        <span>Ingestions</span>
+        <span>Ingestion</span>
         <Button
           className="float-end"
           size="sm"
