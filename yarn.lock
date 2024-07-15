@@ -2106,7 +2106,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-onyx-gui: ^0.10.3
+    climb-onyx-gui: ^0.11.1
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -2130,18 +2130,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.10.3":
-  version: 0.10.3
-  resolution: "climb-onyx-gui@npm:0.10.3"
+"climb-onyx-gui@npm:^0.11.1":
+  version: 0.11.1
+  resolution: "climb-onyx-gui@npm:0.11.1"
   dependencies:
     "@tanstack/react-query": ^4.36.1
     export-to-csv: ^1.3.0
+    plotly.js-basic-dist: ^2.33.0
     react-bootstrap: ^2.10.2
+    react-plotly.js: ^2.6.0
     react-select: ^5.8.0
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-  checksum: d3de52ba0ebfe9a07ac16628c003cdfe1d02dcad090048ae58196e03367901519247960e73bcac664eea174e0615d4ed81526d01a2d1cc6751106c31651a29be
+  checksum: f191b642fef6f6edbeac5ca3a5670013dceca5818e6f52a2e9e5dba82c5ecfc6ceaeef47f18d687dfefbc20dc3fe45ac836a307c79c1b936e12fbe0223a99f26
   languageName: node
   linkType: hard
 
@@ -4664,6 +4666,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"plotly.js-basic-dist@npm:^2.33.0":
+  version: 2.33.0
+  resolution: "plotly.js-basic-dist@npm:2.33.0"
+  checksum: ca6315a2888f23abaecd0fe8d153af66aa54f16852836ae7f125c84f7211c35959702ac6d34ec83cb9107f89776fe69d5e185c4dd9a4b1f4ae6ab82003e87140
+  languageName: node
+  linkType: hard
+
 "possible-typed-array-names@npm:^1.0.0":
   version: 1.0.0
   resolution: "possible-typed-array-names@npm:1.0.0"
@@ -4921,6 +4930,18 @@ __metadata:
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
+  languageName: node
+  linkType: hard
+
+"react-plotly.js@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "react-plotly.js@npm:2.6.0"
+  dependencies:
+    prop-types: ^15.8.1
+  peerDependencies:
+    plotly.js: ">1.34.0"
+    react: ">0.13.0"
+  checksum: e826a3c94ec831c9d8fd92fa73aeece35d8ac04e0828d8362b28139d5b2923b83530356fb39c690debce20c47ba5d0a809f458a8c741d94edf88211e4ea4439f
   languageName: node
   linkType: hard
 
