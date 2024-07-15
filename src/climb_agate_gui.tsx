@@ -59,9 +59,9 @@ function Header(props: HeaderProps) {
     queryKey: ["profile"],
     queryFn: async () => {
       return props
-        .httpPathHandler("profile")
+        .httpPathHandler("profile/")
         .then((response) => response.json())
-        .then((data) => {
+        .then((data) => {console.log(data);
           return { username: data.data.username, site: data.data.site };
         });
     },
@@ -108,54 +108,35 @@ function Header(props: HeaderProps) {
 function status(s: string):string {
   switch (s) {
     case 'US': {
-      return "unstarted";
+      return "Unstarted";
     }
-    case 'PD': {
-      return "Pending";
+    case 'MD': {
+      return "Awaiting metadata checks";
     }
-    case 'PR': {
-      return "in progress";
+    case 'VD': {
+      return "Awaiting validation Checks";
     }
-    case 'CL': {
-      return "cancelled";
+    case 'FM': {
+      return "Metadata checks failed";
+    }
+    case 'FV': {
+      return "Validation checks fail";
     }
     case 'SU': {
-      return "success";
-    }
-    case 'FL': {
-      return "failure";
+      return "Success";
     }
     default: {
-      return "e";
+      return "Unknown";
     }
   }
 } 
 
-function status_icon(s: string):string {
-  switch (s) {
-    case 'US': {
-      return "unstarted";
-    }
-    case 'PD': {
-      return "pending.png";
-    }
-    case 'PR': {
-      return "in progress";
-    }
-    case 'CL': {
-      return "cancelled";
-    }
-    case 'SU': {
-      return "success";
-    }
-    case 'FL': {
-      return "failure";
-    }
-    default: {
-      return "e";
-    }
-  }
-} 
+
+function bool_icon(b: boolean):string {
+  if(b) {return '\u2713';}
+  else {return '\u2717'};
+}
+
 
 const ResultsTable = function ResultsTable({
   data,
@@ -172,15 +153,23 @@ const ResultsTable = function ResultsTable({
     <Table striped bordered hover responsive size="sm">
       <thead>
         <tr>
-          <th key={"location"} title={"location"}> location</th>
-          <th key={"status"} title={"status"}>status </th>
+          <th key={"project"} title={"project"}> Project</th>
+          <th key={"platform"} title={"platform"}> Platform</th>
+          <th key={"site"} title={"site"}>Site </th>
+          <th key={"status"} title={"status"}>Status </th>
+          <th key={"is_published"} title={"is_published"}>Published </th>
+          <th key={"is_test_attempt"} title={"is_test_attempt"}>Test Attempt</th>
         </tr>
       </thead>
       <tbody>
         {data.map((row, index) => (
           <tr key={index}>
-              <td key={"location"}>{row.fields.location}</td>
+              <td key={"project"}>{row.fields.project}</td>
+              <td key={"platform"}>{row.fields.platform}</td>
+              <td key={"site"}>{row.fields.site}</td>
               <td key={"status"}>{status(row.fields.status)}</td>
+              <td key={"is_published"}>{bool_icon(row.fields.is_published)}</td>
+              <td key={"is_test_attempt"}>{bool_icon(row.fields.is_test_attempt)}</td>
           </tr>
         ))}
       </tbody>
@@ -221,7 +210,16 @@ interface IngestionItem {
 }
 
 interface IngestionFields {
-  location:string;
+  uuid:string;
+  project:string;
+  platform:string;
+  site:string;
+  run_index:string;
+  run_id:string;
+  is_published:boolean;
+  is_test_attempt:boolean;
+  climb_id:string;
+  error_message:string;
   status:string;
 }
 
@@ -236,7 +234,7 @@ function Results(props: ResultsProps) {
         //Implementing the setInterval method
         const interval = setInterval(() => {
           props.handleSearch();
-        }, 1000);
+        }, 10000);
  
         //Clearing the interval
         return () => clearInterval(interval);
@@ -287,7 +285,7 @@ function Data(props: DataProps) {
     queryKey: ["results", props.project],
     queryFn: async () => {
       return props
-        .httpPathHandler(`ingestion/${props.project}`)
+        .httpPathHandler(`ingestion/${props.project}/`)
         .then((response) => response.json())
         .then((string) => JSON.parse(string));
     },
@@ -324,9 +322,10 @@ function App(props: AgateProps) {
     queryKey: ["projects"],
     queryFn: async () => {
       return props
-        .httpPathHandler("projects")
+        .httpPathHandler("projects/")
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           return [
             ...new Set(
               data.data.map(
