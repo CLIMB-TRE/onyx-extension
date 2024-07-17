@@ -131,7 +131,6 @@ function status(s: string):string {
   }
 } 
 
-
 function bool_icon(b: boolean):string {
   if(b) {return '\u2713';}
   else {return '\u2717'};
@@ -167,7 +166,9 @@ const ResultsTable = function ResultsTable({
               <td key={"project"}>{row.fields.project}</td>
               <td key={"platform"}>{row.fields.platform}</td>
               <td key={"site"}>{row.fields.site}</td>
-              <td key={"status"}>{status(row.fields.status)}</td>
+              <td key={"status"}>{status(row.fields.status)}<div id="myProgress">
+                <div id="myBar" className={row.fields.status}></div>
+                </div></td>
               <td key={"is_published"}>{bool_icon(row.fields.is_published)}</td>
               <td key={"is_test_attempt"}>{bool_icon(row.fields.is_test_attempt)}</td>
           </tr>
