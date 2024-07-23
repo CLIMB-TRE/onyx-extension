@@ -8,7 +8,8 @@ import {
   MainAreaWidget,
   WidgetTracker,
   showDialog,
-  Dialog
+  Dialog,
+  IThemeManager
 } from '@jupyterlab/apputils';
 
 import { IDocumentManager } from '@jupyterlab/docmanager';
@@ -29,11 +30,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
   description: 'JupyterLab extension for the Onyx Graphical User Interface',
   autoStart: true,
   optional: [ILauncher, IHTMLViewerTracker],
-  requires: [ICommandPalette, IDocumentManager],
+  requires: [ICommandPalette, IDocumentManager, IThemeManager],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     documentManager: IDocumentManager,
+    themeManager: IThemeManager,
     launcher: ILauncher | null,
     htmlTracker: IHTMLViewerTracker | null
   ) => {
@@ -96,12 +98,17 @@ const plugin: JupyterFrontEndPlugin<void> = {
       caption: 'Onyx',
       icon: dnaIcon,
       execute: () => {
+        console.log(themeManager.theme);
+        themeManager.themeChanged.connect((sender, args) => {
+          console.log(args);
+        });
+
         if (!widget || widget.disposed) {
           const content = new OnyxWidget(
             routeHandler,
             s3_open_function,
             write_file_function,
-            version
+            themeManager.theme || ''
           );
           content.addClass('onyx-Widget');
           widget = new MainAreaWidget({ content });
