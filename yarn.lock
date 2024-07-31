@@ -2106,7 +2106,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-onyx-gui: ^0.11.1
+    climb-onyx-gui: ^0.12.3
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -2130,9 +2130,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.11.1":
-  version: 0.11.1
-  resolution: "climb-onyx-gui@npm:0.11.1"
+"climb-onyx-gui@npm:^0.12.3":
+  version: 0.12.3
+  resolution: "climb-onyx-gui@npm:0.12.3"
   dependencies:
     "@tanstack/react-query": ^4.36.1
     export-to-csv: ^1.3.0
@@ -2143,7 +2143,7 @@ __metadata:
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-  checksum: f191b642fef6f6edbeac5ca3a5670013dceca5818e6f52a2e9e5dba82c5ecfc6ceaeef47f18d687dfefbc20dc3fe45ac836a307c79c1b936e12fbe0223a99f26
+  checksum: 3eda2dec05b53940c65d3303ac2eceba15590e29c0c85405de655659ff15675a1776fcd53c8cbf4d16c2117e4aa508468bca1356abb7c1ebe64848a3f914c6ad
   languageName: node
   linkType: hard
 
