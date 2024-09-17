@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/apputils';
-import Agate from './climb_agate_gui';
+import Agate from 'climb-agate-gui';
 
 export class AgateWidget extends ReactWidget {
   constructor(
