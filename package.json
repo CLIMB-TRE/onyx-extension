@@ -59,7 +59,7 @@
         "@jupyterlab/htmlviewer": "^4.2.1",
         "@jupyterlab/launcher": "^4.0.0",
         "@jupyterlab/services": "^7.0.0",
-        "climb-agate-gui": "0.1.3",
+        "climb-agate-gui": "0.1.5",
         "climb-onyx-gui": "^0.12.4",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",

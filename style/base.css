@@ -8,44 +8,6 @@
   overflow: auto;
 }
 
-#myProgress {
-  width: 100%;
-  background-color: lightgrey;
-}
-
-#myBar {
-  width: 0%;
-  height: 10px;
-  background-color: green;
-}
-
-
-#myBar.US {
-  width: 0%;
-  background-color: green;
-}
-
-#myBar.MD {
-  width: 30%;
-  background-color: green;
-}
-
-#myBar.VD {
-  width: 60%;
-  background-color: green;
-}
-
-#myBar.FM {
-  width: 100%;
-  background-color: red;
-}
-
-#myBar.FV {
-  width: 100%;
-  background-color: red;
-}
-
-#myBar.SU {
-  width: 100%;
-  background-color: green;
+.table {
+  font-family: unset;
 }
