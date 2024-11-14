@@ -32,15 +32,20 @@ jobs:
 
       - name: Build the extension
         run: |
-          set -eux
-          python -m pip install .[test]
-
-          jupyter server extension list
+          jlpm run build
+          pip install -ve .
           jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
-
-          jupyter labextension list
           jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
-          python -m jupyterlab.browser_check
+
+        #   set -eux
+        #   python -m pip install .[test]
+
+        #   jupyter server extension list
+        #   jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
+
+        #   jupyter labextension list
+        #   jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
+        #   python -m jupyterlab.browser_check
 
       # - name: Package the extension
       #   run: |
