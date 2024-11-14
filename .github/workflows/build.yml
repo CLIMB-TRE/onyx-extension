@@ -35,3 +35,4 @@ jobs:
         run: |
           jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
           jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
+          python -m jupyterlab.browser_check
