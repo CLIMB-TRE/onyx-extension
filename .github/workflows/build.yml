@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: '*'
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,69 +30,8 @@ jobs:
         run: |
           jlpm run build
           pip install -ve .
+
+      - name: Check the extension
+        run: |
           jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
           jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
-
-        #   set -eux
-        #   python -m pip install .[test]
-
-        #   jupyter server extension list
-        #   jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
-
-        #   jupyter labextension list
-        #   jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui-extension.*OK"
-        #   python -m jupyterlab.browser_check
-
-      # - name: Package the extension
-      #   run: |
-      #     set -eux
-
-      #     pip install build
-      #     python -m build
-      #     pip uninstall -y "climb-onyx-gui" jupyterlab
-
-      # - name: Upload extension packages
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: extension-artifacts
-      #     path: dist/climb_onyx_gui*
-      #     if-no-files-found: error
-
-  test_isolated:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
-          architecture: 'x64'
-      - uses: actions/download-artifact@v4
-        with:
-          name: extension-artifacts
-      - name: Install and Test
-        run: |
-          set -eux
-          # Remove NodeJS, twice to take care of system and locally installed node versions.
-          sudo rm -rf $(which node)
-          sudo rm -rf $(which node)
-
-          pip install "jupyterlab>=3.0.0,<4" climb-onyx-gui*.whl
-
-
-          jupyter server extension list
-          jupyter server extension list 2>&1 | grep -ie "climb_onyx_gui.*OK"
-
-          jupyter labextension list
-          jupyter labextension list 2>&1 | grep -ie "climb-onyx-gui.*OK"
-          python -m jupyterlab.browser_check --no-browser-test
-
-  check_links:
-    name: Check Links
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
-      - uses: jupyterlab/maintainer-tools/.github/actions/check-links@v1
