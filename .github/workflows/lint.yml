@@ -17,4 +17,5 @@ jobs:
 
       - name: Lint the extension
         run: |
+          jlpm install
           jlpm run lint:check
