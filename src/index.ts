@@ -2,7 +2,6 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-
 import {
   ICommandPalette,
   MainAreaWidget,
@@ -10,15 +9,12 @@ import {
   showDialog,
   Dialog
 } from '@jupyterlab/apputils';
-
 import { IDocumentManager } from '@jupyterlab/docmanager';
 import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
-
 import { ILauncher } from '@jupyterlab/launcher';
-
 import { requestAPI, requestAPIResponse } from './handler';
 import { OnyxWidget } from './onyxWidget';
-import { dnaIcon } from './icon';
+import { dnaIcon, innerJoinIcon, openFileIcon } from './icon';
 import { OpenS3FileWidget } from './openS3FileWidget';
 
 /**
@@ -39,7 +35,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
   ) => {
     console.log('JupyterLab extension @climb-onyx-gui is activated!');
 
-    const command = 'onyx_extension';
+    const docs_command = 'docs_extension';
+    const onyx_command = 'onyx_extension';
     const s3_command = 's3_onyx_extension';
     const category = 'CLIMB-TRE';
 
@@ -52,55 +49,55 @@ const plugin: JupyterFrontEndPlugin<void> = {
       })
       .catch(_ => {});
 
-    const s3_open_function = (s3_link: string) => {
-      requestAPI<any>('s3', {}, ['s3location', s3_link])
-        .then(data => {
-          documentManager.open(data['temp_file']);
-        })
-        .catch(reason => {
-          console.error(
-            `The climb-onyx-gui server extension appears to be missing.\n${reason}`
-          );
-        });
+    const httpPathHandler = async (route: string): Promise<Response> => {
+      return requestAPIResponse('reroute', {}, ['route', route]);
     };
 
-    const write_file_function = (path: string, content: string) => {
-      const dataToSend = { content: content };
-      requestAPI<any>(
+    const s3PathHandler = async (path: string): Promise<void> => {
+      return requestAPI<any>('s3', {}, ['s3location', path]).then(data => {
+        documentManager.open(data['temp_file']);
+      });
+    };
+
+    const fileWriteHandler = async (
+      path: string,
+      content: string
+    ): Promise<void> => {
+      return requestAPI<any>(
         'file-write',
         {
-          body: JSON.stringify(dataToSend),
+          body: JSON.stringify({ content: content }),
           method: 'POST'
         },
         ['path', path]
-      )
-        .then(data => {
-          documentManager.open(data['path']);
-        })
-        .catch(reason => {
-          console.error(
-            `The climb-onyx-gui server extension appears to be missing.\n${reason}`
-          );
-        });
+      ).then(data => {
+        documentManager.open(data['path']);
+      });
     };
 
-    const routeHandler = async (route: string): Promise<Response> => {
-      return requestAPIResponse('reroute', {}, ['route', route]);
-    };
+    app.commands.addCommand(docs_command, {
+      label: 'CLIMB-TRE Documentation',
+      caption: 'CLIMB-TRE Documentation',
+      icon: dnaIcon,
+      execute: () => {
+        // Open link in new tab
+        window.open('https://climb-tre.github.io/');
+      }
+    });
 
     // Create a single widget
     let widget: MainAreaWidget<OnyxWidget>;
 
-    app.commands.addCommand(command, {
+    app.commands.addCommand(onyx_command, {
       label: 'Onyx',
       caption: 'Onyx',
-      icon: dnaIcon,
+      icon: innerJoinIcon,
       execute: () => {
         if (!widget || widget.disposed) {
           const content = new OnyxWidget(
-            routeHandler,
-            s3_open_function,
-            write_file_function,
+            httpPathHandler,
+            s3PathHandler,
+            fileWriteHandler,
             version
           );
           content.addClass('onyx-Widget');
@@ -121,19 +118,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    palette.addItem({ command, category: category });
-
-    if (launcher) {
-      launcher.add({
-        command: command,
-        category: category
-      });
-    }
-
     app.commands.addCommand(s3_command, {
-      label: 'Open s3 document',
-      caption: 'Open s3 document',
-      icon: dnaIcon,
+      label: 'Open S3 Document',
+      caption: 'Open S3 Document',
+      icon: openFileIcon,
       execute: () => {
         showDialog({
           body: new OpenS3FileWidget(),
@@ -149,7 +137,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
               return;
             }
             const s3_link = result.value;
-            s3_open_function(s3_link);
+            s3PathHandler(s3_link).catch(reason => {
+              console.error(
+                `The climb-onyx-gui server extension appears to be missing.\n${reason}`
+              );
+            });
           })
           .catch(reason => {
             console.error(
@@ -159,9 +151,21 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
+    palette.addItem({ command: docs_command, category: category });
+    palette.addItem({ command: onyx_command, category: category });
     palette.addItem({ command: s3_command, category: category });
 
     if (launcher) {
+      launcher.add({
+        command: docs_command,
+        category: category
+      });
+
+      launcher.add({
+        command: onyx_command,
+        category: category
+      });
+
       launcher.add({
         command: s3_command,
         category: category
