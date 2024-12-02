@@ -14,6 +14,7 @@ import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 import { ILauncher } from '@jupyterlab/launcher';
 import { requestAPI, requestAPIResponse } from './handler';
 import { OnyxWidget } from './onyxWidget';
+import { AgateWidget } from './agateWidget';
 import { dnaIcon, innerJoinIcon, openFileIcon } from './icon';
 import { OpenS3FileWidget } from './openS3FileWidget';
 
@@ -37,6 +38,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     const docs_command = 'docs_extension';
     const onyx_command = 'onyx_extension';
+    const agate_command = 'agate_extension';
     const s3_command = 's3_onyx_extension';
     const category = 'CLIMB-TRE';
 
@@ -51,6 +53,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     const httpPathHandler = async (route: string): Promise<Response> => {
       return requestAPIResponse('reroute', {}, ['route', route]);
+    };
+
+    
+    const httpAgatePathHandler = async (route: string): Promise<Response> => {
+      return requestAPIResponse('reroute', {}, ['route', route], true);
     };
 
     const s3PathHandler = async (path: string): Promise<void> => {
@@ -118,6 +125,39 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
+    // Create a single agate widget
+    let agate_widget: MainAreaWidget<AgateWidget>;
+
+    app.commands.addCommand(agate_command, {
+      label: 'Agate',
+      caption: 'Agate',
+      icon: dnaIcon,
+      execute: () => {
+        if (!agate_widget || agate_widget.disposed) {
+          const content = new AgateWidget(
+            httpAgatePathHandler,
+            s3PathHandler,
+            fileWriteHandler,
+            version
+          );
+          content.addClass('agate-Widget');
+          agate_widget = new MainAreaWidget({ content });
+          agate_widget.title.label = 'Agate';
+          agate_widget.title.closable = true;
+        }
+        if (!agate_tracker.has(agate_widget)) {
+          agate_tracker.add(agate_widget);
+        }
+        if (!agate_widget.isAttached) {
+          // Attach the widget to the main work area if it's not there
+          app.shell.add(agate_widget, 'main');
+        }
+
+        // Activate the widget
+        app.shell.activateById(agate_widget.id);
+      }
+    });
+
     app.commands.addCommand(s3_command, {
       label: 'Open S3 Document',
       caption: 'Open S3 Document',
@@ -153,6 +193,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     palette.addItem({ command: docs_command, category: category });
     palette.addItem({ command: onyx_command, category: category });
+    palette.addItem({ command: agate_command, category: category });
     palette.addItem({ command: s3_command, category: category });
 
     if (launcher) {
@@ -163,6 +204,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
       launcher.add({
         command: onyx_command,
+        category: category
+      });
+
+      
+      launcher.add({
+        command: agate_command,
         category: category
       });
 
@@ -182,6 +229,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
 const tracker = new WidgetTracker<MainAreaWidget<OnyxWidget>>({
   namespace: 'climb-onyx-gui'
+});
+
+const agate_tracker = new WidgetTracker<MainAreaWidget<AgateWidget>>({
+  namespace: 'climb-agate-gui'
 });
 
 export default plugin;
