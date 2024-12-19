@@ -197,26 +197,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
     palette.addItem({ command: s3_command, category: category });
 
     if (launcher) {
-      launcher.add({
-        command: docs_command,
-        category: category
-      });
-
-      launcher.add({
-        command: onyx_command,
-        category: category
-      });
-
-      
-      launcher.add({
-        command: agate_command,
-        category: category
-      });
-
-      launcher.add({
-        command: s3_command,
-        category: category
-      });
+      launcher.add({command: docs_command, category: category});
+      launcher.add({command: onyx_command, category: category});
+      launcher.add({command: s3_command, category: category});
+      launcher.add({command: agate_command,category: category});
     }
 
     if (htmlTracker) {
