@@ -11,9 +11,10 @@ import tornado
 import boto3
 from ._version import __version__
 
+
 class S3ViewHandler(APIHandler):
 
-    def _copy_s3_file(self, s3name:str)->str:
+    def _copy_s3_file(self, s3name: str) -> str:
         m = re.match(r's3://(.*)/(.*)', s3name)
         b = m.group(1)
         o = m.group(2)
@@ -24,16 +25,15 @@ class S3ViewHandler(APIHandler):
             aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
             endpoint_url=os.environ["JUPYTERLAB_S3_ENDPOINT"],
             )
-        s3_object=s3.Object(b,o)
+        s3_object = s3.Object(b, o)
         Path("./s3_downloads").mkdir(parents=True, exist_ok=True)
         with open(f'./s3_downloads/{o}', 'wb') as fp:
             s3_object.download_fileobj(fp)
-        return f'./s3_downloads/{o}'    
+        return f'./s3_downloads/{o}'
 
     @tornado.web.authenticated
     def get(self):
         try:
-            
             s3location = self.get_query_argument("s3location")
             temp_file = self._copy_s3_file(s3location)
             self.finish(json.dumps({
@@ -47,15 +47,21 @@ class S3ViewHandler(APIHandler):
 
 
 class RedirectingRouteHandler(APIHandler):
+
+    def get_domain(self, agate_domain: bool):
+        if agate_domain:
+            domain = os.environ.get('AGATE_DOMAIN', '*Unknown*').strip('/')
+        else:
+            domain = os.environ.get('ONYX_DOMAIN', '*Unknown*').strip('/')
+        return domain
+
     @tornado.web.authenticated
     def get(self):
         try:
-            domain = os.environ.get('ONYX_DOMAIN', '*Unknown*').strip('/')
+            agate_domain = self.get_query_argument("agate", "false") == "true"
+            domain = self.get_domain(agate_domain)
             token = os.environ.get('ONYX_TOKEN', '*Unknown*')
             route_extension = self.get_query_argument("route")
-            agate_domain = self.get_query_argument("agate", "false")
-            if (agate_domain == "true"):
-                domain = os.environ.get('AGATE_DOMAIN', '*Unknown*').strip('/')
             route = f"{domain}/{route_extension}"
             r = requests.get(route, headers={"Authorization": f"Token {token}"})
             self.finish(r.content)
@@ -91,7 +97,7 @@ class FileWriteHandler(APIHandler):
             self.finish(json.dumps({
                 "path": path,
             }))
-            
+
         except Exception as e:
             self.finish(json.dumps({
                 "exception": e
@@ -108,18 +114,14 @@ def setup_handlers(web_app):
     handlers = [(route_pattern, S3ViewHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
-    
     route_pattern = url_path_join(base_url, "climb-onyx-gui", "reroute")
     handlers = [(route_pattern, RedirectingRouteHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
-    
     route_pattern = url_path_join(base_url, "climb-onyx-gui", "version")
     handlers = [(route_pattern, VersionHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
-    
     route_pattern = url_path_join(base_url, "climb-onyx-gui", "file-write")
     handlers = [(route_pattern, FileWriteHandler)]
     web_app.add_handlers(host_pattern, handlers)
-
