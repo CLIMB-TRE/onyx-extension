@@ -47,7 +47,10 @@ class S3ViewHandler(APIHandler):
 class RedirectingRouteHandler(APIHandler):
 
     def get_domain(self, agate_domain: bool):
-        if agate_domain:
+        if agate_domain and os.path.isfile(str(Path.home()) + "/.agate_domain"):
+            with open(str(Path.home()) + "/.agate_domain") as f:
+                domain = f.readline().strip('\n').strip('/')
+        elif agate_domain:
             domain = os.environ.get('AGATE_DOMAIN', '*Unknown*').strip('/')
         else:
             domain = os.environ.get('ONYX_DOMAIN', '*Unknown*').strip('/')
