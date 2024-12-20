@@ -41,9 +41,7 @@ class S3ViewHandler(APIHandler):
                 "temp_file": temp_file
             }))
         except Exception as e:
-            self.finish(json.dumps({
-                "exception": e
-            }))
+            self.send_error(reason=e)
 
 
 class RedirectingRouteHandler(APIHandler):
@@ -64,11 +62,10 @@ class RedirectingRouteHandler(APIHandler):
             route_extension = self.get_query_argument("route")
             route = f"{domain}/{route_extension}"
             r = requests.get(route, headers={"Authorization": f"Token {token}"})
+            self.set_status(r.status_code)
             self.finish(r.content)
         except Exception as e:
-            self.finish(json.dumps({
-                "exception": e
-            }))
+            self.send_error(reason=e)
 
 
 class VersionHandler(APIHandler):
@@ -79,9 +76,7 @@ class VersionHandler(APIHandler):
                 "version": __version__,
             }))
         except Exception as e:
-            self.finish(json.dumps({
-                "exception": e
-            }))
+            self.send_error(reason=e)
 
 
 class FileWriteHandler(APIHandler):
@@ -99,9 +94,7 @@ class FileWriteHandler(APIHandler):
             }))
 
         except Exception as e:
-            self.finish(json.dumps({
-                "exception": e
-            }))
+            self.send_error(reason=e)
 
 
 def setup_handlers(web_app):

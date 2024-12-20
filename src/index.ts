@@ -193,15 +193,22 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     palette.addItem({ command: docs_command, category: category });
     palette.addItem({ command: onyx_command, category: category });
-    palette.addItem({ command: agate_command, category: category });
     palette.addItem({ command: s3_command, category: category });
 
     if (launcher) {
       launcher.add({command: docs_command, category: category});
       launcher.add({command: onyx_command, category: category});
       launcher.add({command: s3_command, category: category});
-      launcher.add({command: agate_command,category: category});
     }
+
+    httpAgatePathHandler("").then(data=>{
+      if (data.status==200) {
+        palette.addItem({ command: agate_command, category: category });
+        if(launcher) launcher.add({command: agate_command,category: category});
+
+      }
+    }
+    )
 
     if (htmlTracker) {
       htmlTracker.widgetAdded.connect((sender, panel: HTMLViewer) => {
