@@ -2177,9 +2177,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"climb-agate-gui@npm:0.1.6":
-  version: 0.1.6
-  resolution: "climb-agate-gui@npm:0.1.6"
+"climb-agate-gui@npm:0.1.7":
+  version: 0.1.7
+  resolution: "climb-agate-gui@npm:0.1.7"
   dependencies:
     "@tanstack/react-query": ^4.36.1
     react-bootstrap: ^2.10.2
@@ -2187,7 +2187,7 @@ __metadata:
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-  checksum: 3ef51099c5f28ed7110214120f69278d3aa1cb5796d44089b313fa77539d3deeab35baa881cbe500bf885d3ca0007c1de284694c2a362775d4178e64fec1456e
+  checksum: 480e65070fddec5c969891b2e4524393bf77bd0ec6a7240f863967b99ac4ea0dd34a86cf3a898319b95a831133037e2f049cd2c5760dea0438fe8b889421e9fb
   languageName: node
   linkType: hard
 
@@ -2208,7 +2208,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-agate-gui: 0.1.6
+    climb-agate-gui: 0.1.7
     climb-onyx-gui: ^0.13.0
     css-loader: ^6.7.1
     eslint: ^8.36.0
