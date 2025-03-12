@@ -39,3 +39,11 @@ Then to upload the package to PyPI, using a pypi token, you upload by setting th
 ```bash
 twine upload dist/* -u=token -p=pypi-YourSpecialToken
 ```
+
+Then it is strongly recommended that you tag the git repository with the version number, so the version being used can be linked to a single commit in git.
+
+```bash
+git tag -a v0.8.0 -m "version 0.8.0, as uploaded to pypi"
+```
+
+Be sure that the name of this tag matches the name in `package.json`.
