@@ -103,6 +103,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           content.addClass('onyx-Widget');
           widget = new MainAreaWidget({ content });
           widget.title.label = 'Onyx';
+          widget.title.icon = innerJoinIcon;
           widget.title.closable = true;
         }
         if (!tracker.has(widget)) {
