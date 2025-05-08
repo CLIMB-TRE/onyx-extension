@@ -35,27 +35,29 @@ const plugin: JupyterFrontEndPlugin<void> = {
   ) => {
     console.log('JupyterLab extension @climb-onyx-gui is activated!');
 
-    const docs_command = 'docs_extension';
-    const onyx_command = 'onyx_extension';
-    const s3_command = 's3_onyx_extension';
+    // Define command IDs and categories
+    const docsCommandID = 'docs_extension';
+    const onyxCommandID = 'onyx_extension';
+    const s3CommandID = 's3_onyx_extension';
     const category = 'CLIMB-TRE';
 
+    // Retrieve extension version and log to the console
     let version = '';
-
     requestAPI<any>('version')
       .then(data => {
         version = data['version'];
-        console.log(`JupyterLab extension version: ${version}`);
+        console.log(`JupyterLab extension @climb-onyx-gui version: ${version}`);
       })
       .catch(_ => {});
 
+    // Define handlers
     const httpPathHandler = async (route: string): Promise<Response> => {
       return requestAPIResponse('reroute', {}, ['route', route]);
     };
 
-    const s3PathHandler = async (path: string): Promise<void> => {
-      return requestAPI<any>('s3', {}, ['s3location', path]).then(data => {
-        documentManager.open(data['temp_file']);
+    const s3PathHandler = async (uri: string): Promise<void> => {
+      return requestAPI<any>('s3', {}, ['uri', uri]).then(data => {
+        documentManager.open(data['path']);
       });
     };
 
@@ -75,7 +77,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
       });
     };
 
-    app.commands.addCommand(docs_command, {
+    // Add commands to the command registry
+    app.commands.addCommand(docsCommandID, {
       label: 'CLIMB-TRE Documentation',
       caption: 'CLIMB-TRE Documentation',
       icon: dnaIcon,
@@ -88,9 +91,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
     // Create a single widget
     let widget: MainAreaWidget<OnyxWidget>;
 
-    app.commands.addCommand(onyx_command, {
+    app.commands.addCommand(onyxCommandID, {
       label: 'Onyx',
-      caption: 'Onyx',
+      caption: 'Onyx | API for Pathogen Metadata',
       icon: innerJoinIcon,
       execute: () => {
         if (!widget || widget.disposed) {
@@ -119,14 +122,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    app.commands.addCommand(s3_command, {
+    app.commands.addCommand(s3CommandID, {
       label: 'Open S3 Document',
       caption: 'Open S3 Document',
       icon: openFileIcon,
       execute: () => {
         showDialog({
           body: new OpenS3FileWidget(),
-          buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'GO' })],
+          buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'Open' })],
           focusNodeSelector: 'input',
           title: 'Open S3 Document'
         })
@@ -138,37 +141,31 @@ const plugin: JupyterFrontEndPlugin<void> = {
               return;
             }
             const s3_link = result.value;
-            s3PathHandler(s3_link).catch(reason => {
-              console.error(
-                `The climb-onyx-gui server extension appears to be missing.\n${reason}`
-              );
-            });
+            s3PathHandler(s3_link).catch(reason => console.error(reason));
           })
-          .catch(reason => {
-            console.error(
-              `The climb-onyx-gui server extension appears to be missing.\n${reason}`
-            );
-          });
+          .catch(reason => console.error(reason));
       }
     });
 
-    palette.addItem({ command: docs_command, category: category });
-    palette.addItem({ command: onyx_command, category: category });
-    palette.addItem({ command: s3_command, category: category });
+    // Add commands to the command palette
+    palette.addItem({ command: docsCommandID, category: category });
+    palette.addItem({ command: onyxCommandID, category: category });
+    palette.addItem({ command: s3CommandID, category: category });
 
+    // Add commands to the launcher
     if (launcher) {
       launcher.add({
-        command: docs_command,
+        command: docsCommandID,
         category: category
       });
 
       launcher.add({
-        command: onyx_command,
+        command: onyxCommandID,
         category: category
       });
 
       launcher.add({
-        command: s3_command,
+        command: s3CommandID,
         category: category
       });
     }
