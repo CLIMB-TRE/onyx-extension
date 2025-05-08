@@ -27,7 +27,7 @@ class S3ViewHandler(APIHandler):
             )
             s3_object = s3.Object(bucket_name=bucket_name, key=key)  # type: ignore
 
-            # Create directory to store object (if it doesn't exist)
+            # Create s3_downloads directory to store objects (if it doesn't exist)
             Path("./s3_downloads").mkdir(parents=True, exist_ok=True)
 
             # Download the object
@@ -47,8 +47,8 @@ class RedirectingRouteHandler(APIHandler):
     def get(self):
         try:
             # Validate credentials
-            domain = os.environ.get("ONYX_DOMAIN", "").removesuffix("/")
-            token = os.environ.get("ONYX_TOKEN")
+            domain = os.environ.get("ONYX_DOMAIN", "").strip().removesuffix("/")
+            token = os.environ.get("ONYX_TOKEN", "").strip()
 
             if not domain or not token:
                 raise AuthenticationError(
