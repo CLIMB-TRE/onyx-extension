@@ -18,12 +18,22 @@ class S3ViewHandler(APIHandler):
             # Validate S3 URI
             bucket_name, key = validate_s3_uri(self.get_query_argument("uri"))
 
+            # Validate credentials
+            aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
+            aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+            endpoint_url = os.environ.get("JUPYTERLAB_S3_ENDPOINT")
+
+            if not aws_access_key_id or not aws_secret_access_key or not endpoint_url:
+                raise AuthenticationError(
+                    "Cannot connect to S3: JupyterLab environment does not have credentials"
+                )
+
             # Retrieve S3 object
             s3 = boto3.resource(
                 "s3",
-                aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
-                aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
-                endpoint_url=os.environ["JUPYTERLAB_S3_ENDPOINT"],
+                aws_access_key_id=aws_access_key_id,
+                aws_secret_access_key=aws_secret_access_key,
+                endpoint_url=endpoint_url,
             )
             s3_object = s3.Object(bucket_name=bucket_name, key=key)  # type: ignore
 
@@ -35,6 +45,7 @@ class S3ViewHandler(APIHandler):
             with open(path, "wb") as fp:
                 s3_object.download_fileobj(fp)
 
+            # Return the path to the file
             self.finish(json.dumps({"path": path}))
 
         except APIError as e:
@@ -47,8 +58,8 @@ class RedirectingRouteHandler(APIHandler):
     def get(self):
         try:
             # Validate credentials
-            domain = os.environ.get("ONYX_DOMAIN", "").strip().removesuffix("/")
-            token = os.environ.get("ONYX_TOKEN", "").strip()
+            domain = os.environ.get("ONYX_DOMAIN")
+            token = os.environ.get("ONYX_TOKEN")
 
             if not domain or not token:
                 raise AuthenticationError(
@@ -57,14 +68,17 @@ class RedirectingRouteHandler(APIHandler):
 
             # Validate route
             route = self.get_query_argument("route")
+
             if not route:
                 raise ValidationError("Route is required")
 
             # Make the request to the Onyx API and return the response
-            endpoint = f"{domain}/{route}"
+            endpoint = f"{domain.removesuffix('/')}/{route}"
             response = requests.get(
                 endpoint, headers={"Authorization": f"Token {token}"}
             )
+
+            # Return the response content
             self.finish(response.content)
 
         except APIError as e:
@@ -76,7 +90,9 @@ class VersionHandler(APIHandler):
     @tornado.web.authenticated
     def get(self):
         try:
+            # Return the version of the package
             self.finish(json.dumps({"version": __version__}))
+
         except APIError as e:
             self.set_status(e.STATUS_CODE)
             self.finish(json.dumps({"message": str(e)}))
@@ -87,14 +103,15 @@ class FileWriteHandler(APIHandler):
     def post(self):
         try:
             # Validate path and content
-            filename = validate_filename(self.get_query_argument("path"))
+            path = validate_filename(self.get_query_argument("path"))
             content = validate_content(self.get_json_body())
 
             # Write content to file
-            with open(filename, "w", encoding="utf-8") as fp:
+            with open(path, "w", encoding="utf-8") as fp:
                 fp.write(content)
 
-            self.finish(json.dumps({"path": filename}))
+            # Return the path to the file
+            self.finish(json.dumps({"path": path}))
 
         except APIError as e:
             self.set_status(e.STATUS_CODE)
