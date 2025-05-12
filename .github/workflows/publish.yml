@@ -28,6 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade setuptools
+          pip install build
           python -m pip install -U "jupyterlab>=3.0.0,<5"
           jlpm install
 
