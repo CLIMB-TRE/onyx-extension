@@ -1,8 +1,13 @@
 {
     "name": "climb-onyx-gui-extension",
-    "version": "0.10.1",
+    "version": "0.11.0",
     "description": "JupyterLab extension for the Onyx Graphical User Interface",
     "keywords": [
+        "gui",
+        "onyx",
+        "climb-tre",
+        "metadata",
+        "bioinformatics",
         "jupyter",
         "jupyterlab",
         "jupyterlab-extension"
@@ -11,8 +16,18 @@
     "bugs": {
         "url": "https://github.com/CLIMB-TRE/onyx-extension/issues"
     },
-    "license": "GPL-3.0-only",
+    "license": "GPL-3.0-or-later",
     "author": "University of Birmingham",
+    "contributors": [
+        {
+            "name": "Neil Butcher",
+            "email": "n.a.butcher@bham.ac.uk"
+        },
+        {
+            "name": "Thomas Brier",
+            "email": "t.o.brier@bham.ac.uk"
+        }
+    ],
     "files": [
         "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
         "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
@@ -59,7 +74,7 @@
         "@jupyterlab/htmlviewer": "^3.6.1 || ^4.2.1",
         "@jupyterlab/launcher": "^3.6.1 || ^4.0.0",
         "@jupyterlab/services": "^6.6.1 || ^7.0.0",
-        "climb-onyx-gui": "^0.13.0",
+        "climb-onyx-gui": "^0.14.1",
         "react": "^17.0.1 || ^18.2.0",
         "react-dom": "^17.0.1 || ^18.2.0",
         "webpack": "^5.92.0"
