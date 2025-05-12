@@ -81,4 +81,6 @@ def validate_content(content: Optional[Dict[str, Any]]) -> str:
     if not content:
         raise ValidationError("Input content is required")
 
+    if "content" not in content:
+        raise ValidationError("The key 'content' is missing in the input content")
     return content["content"]
