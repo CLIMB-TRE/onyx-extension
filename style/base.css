@@ -6,4 +6,5 @@
 
 .onyx-Widget {
   overflow: auto;
+  contain: strict;
 }
