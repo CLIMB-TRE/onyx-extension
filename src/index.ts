@@ -1,4 +1,5 @@
 import {
+  ILayoutRestorer,
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
@@ -24,13 +25,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'climb-onyx-gui-extension:plugin',
   description: 'JupyterLab extension for the Onyx Graphical User Interface',
   autoStart: true,
-  optional: [ILauncher, IHTMLViewerTracker],
   requires: [ICommandPalette, IDocumentManager],
+  optional: [ILauncher, ILayoutRestorer, IHTMLViewerTracker],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     documentManager: IDocumentManager,
     launcher: ILauncher | null,
+    restorer: ILayoutRestorer | null,
     htmlTracker: IHTMLViewerTracker | null
   ) => {
     console.log('JupyterLab extension @climb-onyx-gui is activated!');
@@ -77,6 +79,41 @@ const plugin: JupyterFrontEndPlugin<void> = {
       });
     };
 
+    // Handle state restoration
+    if (restorer) {
+      void restorer.restore(tracker, {
+        command: onyxCommandID,
+        args: widget => ({ sessionID: widget.content.sessionID }),
+        name: widget => widget.content.sessionID
+      });
+    }
+
+    // Function to generate new widgets
+    const createOnyxWidget = (
+      sessionID?: string
+    ): MainAreaWidget<OnyxWidget> => {
+      if (!sessionID) {
+        sessionID = Date.now().toString();
+      }
+
+      const content = new OnyxWidget(
+        httpPathHandler,
+        s3PathHandler,
+        fileWriteHandler,
+        version,
+        sessionID
+      );
+
+      content.addClass('onyx-Widget');
+      const widget = new MainAreaWidget({ content });
+      widget.id = `onyx-widget-${sessionID}`;
+      widget.title.label = 'Onyx';
+      widget.title.icon = innerJoinIcon;
+      widget.title.closable = true;
+
+      return widget;
+    };
+
     // Add commands to the command registry
     app.commands.addCommand(docsCommandID, {
       label: 'CLIMB-TRE Documentation',
@@ -88,27 +125,29 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    // Create a single widget
-    let widget: MainAreaWidget<OnyxWidget>;
-
     app.commands.addCommand(onyxCommandID, {
       label: 'Onyx',
       caption: 'Onyx | API for Pathogen Metadata',
       icon: innerJoinIcon,
-      execute: () => {
-        if (!widget || widget.disposed) {
-          const content = new OnyxWidget(
-            httpPathHandler,
-            s3PathHandler,
-            fileWriteHandler,
-            version
+      execute: args => {
+        const sessionID = args['sessionID'] as string;
+        let widget: MainAreaWidget<OnyxWidget>;
+
+        if (sessionID) {
+          // Restore existing widget
+          const existingWidget = tracker.find(
+            w => w.content.sessionID === sessionID
           );
-          content.addClass('onyx-Widget');
-          widget = new MainAreaWidget({ content });
-          widget.title.label = 'Onyx';
-          widget.title.icon = innerJoinIcon;
-          widget.title.closable = true;
+          if (existingWidget) {
+            widget = existingWidget;
+          } else {
+            widget = createOnyxWidget(sessionID);
+          }
+        } else {
+          // Create new widget
+          widget = createOnyxWidget();
         }
+
         if (!tracker.has(widget)) {
           tracker.add(widget);
         }
