@@ -10,6 +10,7 @@ import {
   showDialog,
   Dialog
 } from '@jupyterlab/apputils';
+import { IStateDB } from '@jupyterlab/statedb';
 import { IDocumentManager } from '@jupyterlab/docmanager';
 import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 import { ILauncher } from '@jupyterlab/launcher';
@@ -18,19 +19,22 @@ import { OnyxWidget } from './onyxWidget';
 import { dnaIcon, innerJoinIcon, openFileIcon } from './icon';
 import { OpenS3FileWidget } from './openS3FileWidget';
 
+export const PLUGIN_ID = '@climb-onyx-gui-extension:plugin';
+
 /**
  * Initialization data for the climb-onyx-gui extension.
  */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'climb-onyx-gui-extension:plugin',
+  id: PLUGIN_ID,
   description: 'JupyterLab extension for the Onyx Graphical User Interface',
   autoStart: true,
-  requires: [ICommandPalette, IDocumentManager],
+  requires: [ICommandPalette, IDocumentManager, IStateDB],
   optional: [ILauncher, ILayoutRestorer, IHTMLViewerTracker],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     documentManager: IDocumentManager,
+    stateDB: IStateDB,
     launcher: ILauncher | null,
     restorer: ILayoutRestorer | null,
     htmlTracker: IHTMLViewerTracker | null
@@ -101,7 +105,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
         s3PathHandler,
         fileWriteHandler,
         version,
-        sessionID
+        sessionID,
+        stateDB
       );
 
       content.addClass('onyx-Widget');
