@@ -6,18 +6,18 @@ import Onyx from 'climb-onyx-gui';
 
 export class OnyxWidget extends ReactWidget {
   constructor(
-    route: (route: string) => Promise<Response>,
-    s3: (path: string) => Promise<void>,
-    fw: (path: string, content: string) => Promise<void>,
-    v: string,
+    httpPathHandler: (route: string) => Promise<Response>,
+    s3PathHandler: (path: string) => Promise<void>,
+    fileWriter: (path: string, content: string) => Promise<void>,
+    version: string,
     sessionID: string,
     stateDB: IStateDB
   ) {
     super();
-    this.httpPathHandler = route;
-    this.s3PathHandler = s3;
-    this.fileWriter = fw;
-    this.version = v;
+    this.httpPathHandler = httpPathHandler;
+    this.s3PathHandler = s3PathHandler;
+    this.fileWriter = fileWriter;
+    this.version = version;
     this.sessionID = sessionID;
     this._stateDB = stateDB;
     this._stateKey = `${PLUGIN_ID}:${sessionID}`;
