@@ -24,7 +24,7 @@ export class OnyxWidget extends ReactWidget {
     this._cache = new Map<string, any>();
     this._loadCache();
 
-    // Cleanup state on disposal
+    // Cleanup stateDB on widget disposal
     this.disposed.connect(this._cleanup, this);
   }
 
@@ -52,37 +52,37 @@ export class OnyxWidget extends ReactWidget {
     this._isLoaded = true;
   }
 
-  // Save cache to IStateDB
-  private async _saveCache(): Promise<void> {
+  // Save cache to stateDB
+  private _saveCache() {
     if (!this._isLoaded) {
       return;
     }
-    const data = Object.fromEntries(this._cache);
-    await this._stateDB.save(this._stateKey, data);
+    this._stateDB
+      .save(this._stateKey, Object.fromEntries(this._cache))
+      .catch(error => {
+        console.error(`Failed saving state for Onyx ${this.sessionID}:`, error);
+      });
   }
 
+  // Cleanup stateDB
   private _cleanup = async (): Promise<void> => {
-    try {
-      await this._stateDB.remove(this._stateKey);
-      console.log(`OnyxWidget: Cleaned up state for session ${this.sessionID}`);
-    } catch (error) {
-      console.error(`Failed to clean up state for ${this.sessionID}:`, error);
-    }
+    this._stateDB.remove(this._stateKey).catch(error => {
+      console.error(`Failed removing state for Onyx ${this.sessionID}:`, error);
+    });
   };
 
-  // Synchronous getItem using cache
+  // Get item from the cache
   getItem = (key: string): any => {
     const value = this._cache.get(key);
     console.log(`OnyxWidget: getItem(${key})`, value);
     return value;
   };
 
-  // Synchronous setItem with async persistence
+  // Set item in the cache and save cache to stateDB
   setItem = (key: string, value: any): void => {
     console.log(`OnyxWidget: setItem(${key}, ${value})`);
     this._cache.set(key, value);
-    // Async save without blocking
-    this._saveCache().catch(console.error);
+    this._saveCache();
   };
 
   render(): JSX.Element {
