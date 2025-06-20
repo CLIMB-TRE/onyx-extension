@@ -54,7 +54,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
         version = data['version'];
         console.log(`JupyterLab extension @climb-onyx-gui version: ${version}`);
       })
-      .catch(_ => {});
+      .catch(error =>
+        console.error(`Failed to fetch @climb-onyx-gui version: ${error}`)
+      );
 
     // Define handlers
     const httpPathHandler = async (route: string): Promise<Response> => {
