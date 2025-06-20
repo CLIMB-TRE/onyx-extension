@@ -16,3 +16,11 @@ class PermissionError(APIError):
 
 class NotFoundError(APIError):
     STATUS_CODE = 404
+
+
+class BadGatewayError(APIError):
+    STATUS_CODE = 502
+
+
+class GatewayTimeoutError(APIError):
+    STATUS_CODE = 504
