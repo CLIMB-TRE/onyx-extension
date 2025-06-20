@@ -19,7 +19,7 @@ import { OnyxWidget } from './onyxWidget';
 import { dnaIcon, innerJoinIcon, openFileIcon } from './icon';
 import { OpenS3FileWidget } from './openS3FileWidget';
 
-export const PLUGIN_ID = '@climb-onyx-gui-extension:plugin';
+const PLUGIN_ID = '@climb-onyx-gui-extension:plugin';
 
 /**
  * Initialization data for the climb-onyx-gui extension.
@@ -93,11 +93,25 @@ const plugin: JupyterFrontEndPlugin<void> = {
     }
 
     // Function to generate new widgets
-    const createOnyxWidget = (
-      sessionID?: string
-    ): MainAreaWidget<OnyxWidget> => {
-      if (!sessionID) {
-        sessionID = Date.now().toString();
+    const createOnyxWidget = async (
+      name?: string
+    ): Promise<MainAreaWidget<OnyxWidget>> => {
+      if (!name) {
+        name = Date.now().toString();
+      }
+
+      const stateKey = `${PLUGIN_ID}:${name}`;
+
+      // Load initial state before widget creation
+      let initialState = new Map<string, any>();
+
+      try {
+        const data = await stateDB.fetch(stateKey);
+        if (data && typeof data === 'object') {
+          initialState = new Map(Object.entries(data));
+        }
+      } catch (error) {
+        console.error(`Failed to load state for ${stateKey}:`, error);
       }
 
       const content = new OnyxWidget(
@@ -105,13 +119,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
         s3PathHandler,
         fileWriteHandler,
         version,
-        sessionID,
-        stateDB
+        name,
+        stateDB,
+        stateKey,
+        initialState
       );
 
       content.addClass('onyx-Widget');
       const widget = new MainAreaWidget({ content });
-      widget.id = `onyx-widget-${sessionID}`;
+      widget.id = `onyx-widget-${name}`;
       widget.title.label = 'Onyx';
       widget.title.icon = innerJoinIcon;
       widget.title.closable = true;
