@@ -7,7 +7,13 @@ import boto3
 from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 from ._version import __version__
-from .exceptions import APIError, ValidationError, AuthenticationError
+from .exceptions import (
+    APIError,
+    ValidationError,
+    AuthenticationError,
+    BadGatewayError,
+    GatewayTimeoutError,
+)
 from .validators import validate_s3_uri, validate_filename, validate_content
 
 
@@ -74,9 +80,20 @@ class RedirectingRouteHandler(APIHandler):
 
             # Make the request to the Onyx API and return the response
             endpoint = f"{domain.removesuffix('/')}/{route}"
-            response = requests.get(
-                endpoint, headers={"Authorization": f"Token {token}"}
-            )
+            try:
+                response = requests.get(
+                    endpoint, headers={"Authorization": f"Token {token}"}
+                )
+            except requests.exceptions.ConnectionError:
+                raise BadGatewayError("Failed to connect to Onyx: Connection error")
+            except requests.exceptions.TooManyRedirects:
+                raise BadGatewayError(
+                    "Failed to connect to Onyx: Exceeded maximum redirects"
+                )
+            except requests.exceptions.Timeout:
+                raise GatewayTimeoutError(
+                    "Failed to connect to Onyx: Request timed out"
+                )
 
             # Return the response content
             self.finish(response.content)
