@@ -22,6 +22,9 @@ export class OnyxWidget extends ReactWidget {
     this._stateDB = stateDB;
     this._stateKey = `${PLUGIN_ID}:${sessionID}`;
     this._cache = new Map<string, any>();
+    this._isLoaded = false;
+
+    // Load initial state from stateDB into cache
     this._loadCache();
 
     // Cleanup stateDB on widget disposal
@@ -37,19 +40,26 @@ export class OnyxWidget extends ReactWidget {
   private _stateDB: IStateDB;
   private _stateKey: string;
   private _cache: Map<string, any>;
-  private _isLoaded = false;
+  private _isLoaded: boolean;
 
   // Load all data into cache on initialisation
-  private async _loadCache(): Promise<void> {
-    try {
-      const data = await this._stateDB.fetch(this._stateKey);
-      if (data && typeof data === 'object') {
-        this._cache = new Map(Object.entries(data));
-      }
-    } catch {
-      // No existing data
-    }
-    this._isLoaded = true;
+  private _loadCache() {
+    this._stateDB
+      .fetch(this._stateKey)
+      .then(data => {
+        if (data && typeof data === 'object') {
+          this._cache = new Map(Object.entries(data));
+        }
+      })
+      .catch(error => {
+        console.error(
+          `Failed to load state for Onyx ${this.sessionID}:`,
+          error
+        );
+      })
+      .finally(() => {
+        this._isLoaded = true;
+      });
   }
 
   // Save cache to stateDB
@@ -60,30 +70,36 @@ export class OnyxWidget extends ReactWidget {
     this._stateDB
       .save(this._stateKey, Object.fromEntries(this._cache))
       .catch(error => {
-        console.error(`Failed saving state for Onyx ${this.sessionID}:`, error);
+        console.error(
+          `Failed to save state for Onyx ${this.sessionID}:`,
+          error
+        );
       });
   }
 
   // Cleanup stateDB
-  private _cleanup = async (): Promise<void> => {
+  private _cleanup() {
     this._stateDB.remove(this._stateKey).catch(error => {
-      console.error(`Failed removing state for Onyx ${this.sessionID}:`, error);
+      console.error(
+        `Failed to remove state for Onyx ${this.sessionID}:`,
+        error
+      );
     });
-  };
+  }
 
   // Get item from the cache
-  getItem = (key: string): any => {
+  getItem(key: string) {
     const value = this._cache.get(key);
     console.log(`OnyxWidget: getItem(${key})`, value);
     return value;
-  };
+  }
 
   // Set item in the cache and save cache to stateDB
-  setItem = (key: string, value: any): void => {
+  setItem(key: string, value: any) {
     console.log(`OnyxWidget: setItem(${key}, ${value})`);
     this._cache.set(key, value);
     this._saveCache();
-  };
+  }
 
   render(): JSX.Element {
     return (
