@@ -19,7 +19,8 @@ import { OnyxWidget } from './onyxWidget';
 import { dnaIcon, innerJoinIcon, openFileIcon } from './icon';
 import { OpenS3FileWidget } from './openS3FileWidget';
 
-const PLUGIN_ID = '@climb-onyx-gui-extension:plugin';
+export const PLUGIN_NAMESPACE = '@climb-onyx-gui-extension';
+const PLUGIN_ID = `${PLUGIN_NAMESPACE}:plugin`;
 
 /**
  * Initialization data for the climb-onyx-gui extension.
@@ -105,20 +106,20 @@ const plugin: JupyterFrontEndPlugin<void> = {
         name = Date.now().toString();
       }
 
-      const stateKey = `${PLUGIN_ID}:${name}`;
+      // Prefix shared by all state keys for this widget
+      const stateKeyPrefix = `${PLUGIN_ID}:${name}`;
 
-      // Load initial state before widget creation
-      let initialState = new Map<string, any>();
+      // Load any initial state before widget creation
+      const initialState = new Map<string, any>();
+      const pluginStateKeys = await stateDB.list(PLUGIN_NAMESPACE);
 
-      try {
-        const data = await stateDB.fetch(stateKey);
-        if (data && typeof data === 'object') {
-          initialState = new Map(Object.entries(data));
+      pluginStateKeys.ids.forEach((stateKey, index) => {
+        if (stateKey.startsWith(stateKeyPrefix)) {
+          initialState.set(stateKey, pluginStateKeys.values[index]);
         }
-      } catch (error) {
-        console.error(`Failed to load state for ${stateKey}:`, error);
-      }
+      });
 
+      // Create the OnyxWidget instance
       const content = new OnyxWidget(
         httpPathHandler,
         s3PathHandler,
@@ -126,12 +127,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
         version,
         name,
         stateDB,
-        stateKey,
+        stateKeyPrefix,
         initialState
       );
 
       // Add class for the widget
       content.addClass('onyx-Widget');
+
+      // Define the MainAreaWidget with the OnyxWidget content
       const widget = new MainAreaWidget({ content });
       widget.id = `onyx-widget-${name}`;
       widget.title.label = 'Onyx';

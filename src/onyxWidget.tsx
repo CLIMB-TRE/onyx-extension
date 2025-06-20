@@ -1,6 +1,7 @@
 import React from 'react';
 import { ReactWidget } from '@jupyterlab/apputils';
 import { IStateDB } from '@jupyterlab/statedb';
+import { PLUGIN_NAMESPACE } from '.';
 import Onyx from 'climb-onyx-gui';
 
 export class OnyxWidget extends ReactWidget {
@@ -11,7 +12,7 @@ export class OnyxWidget extends ReactWidget {
     version: string,
     name: string,
     stateDB: IStateDB,
-    stateKey: string,
+    stateKeyPrefix: string,
     initialState?: Map<string, any>
   ) {
     super();
@@ -21,7 +22,7 @@ export class OnyxWidget extends ReactWidget {
     this.version = version;
     this.name = name;
     this._stateDB = stateDB;
-    this._stateKey = stateKey;
+    this._stateKeyPrefix = stateKeyPrefix;
     this._cache = initialState ?? new Map<string, any>();
 
     // Cleanup stateDB on widget disposal
@@ -35,37 +36,41 @@ export class OnyxWidget extends ReactWidget {
   name: string;
 
   private _stateDB: IStateDB;
-  private _stateKey: string;
+  private _stateKeyPrefix: string;
   private _cache: Map<string, any>;
 
-  // Save cache to stateDB
-  private _saveCache() {
-    this._stateDB
-      .save(this._stateKey, Object.fromEntries(this._cache))
-      .catch(error => {
-        console.error(`Failed to save state for ${this._stateKey}:`, error);
-      });
+  // Save value to stateDB
+  private _save(stateKey: string, value: any) {
+    this._stateDB.save(stateKey, value).catch(error => {
+      console.error(`Failed to save state ${stateKey}:`, error);
+    });
   }
 
   // Cleanup stateDB
-  private _cleanup() {
-    this._stateDB.remove(this._stateKey).catch(error => {
-      console.error(`Failed to remove state for ${this._stateKey}:`, error);
+  private async _cleanup() {
+    const pluginStateKeys = await this._stateDB.list(PLUGIN_NAMESPACE);
+
+    // Remove all keys that start with the stateKeyPrefix
+    pluginStateKeys.ids.forEach(stateKey => {
+      if (stateKey.startsWith(this._stateKeyPrefix)) {
+        this._stateDB.remove(stateKey).catch(error => {
+          console.error(`Failed to remove state ${stateKey}:`, error);
+        });
+      }
     });
   }
 
   // Get item from the cache
   getItem(key: string) {
-    const value = this._cache.get(key);
-    console.log(`${this._stateKey}: getItem(${key})`, value);
-    return value;
+    const stateKey = `${this._stateKeyPrefix}:${key}`;
+    return this._cache.get(stateKey);
   }
 
-  // Set item in the cache and save cache to stateDB
+  // Set item in the cache and save to stateDB
   setItem(key: string, value: any) {
-    console.log(`${this._stateKey}: setItem(${key}, ${value})`);
-    this._cache.set(key, value);
-    this._saveCache();
+    const stateKey = `${this._stateKeyPrefix}:${key}`;
+    this._cache.set(stateKey, value);
+    this._save(stateKey, value);
   }
 
   render(): JSX.Element {
