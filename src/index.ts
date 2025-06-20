@@ -87,8 +87,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     if (restorer) {
       void restorer.restore(tracker, {
         command: onyxCommandID,
-        args: widget => ({ sessionID: widget.content.sessionID }),
-        name: widget => widget.content.sessionID
+        args: widget => ({ name: widget.content.name }),
+        name: widget => widget.content.name
       });
     }
 
@@ -134,30 +134,30 @@ const plugin: JupyterFrontEndPlugin<void> = {
       label: 'Onyx',
       caption: 'Onyx | API for Pathogen Metadata',
       icon: innerJoinIcon,
-      execute: args => {
-        const sessionID = args['sessionID'] as string;
+      execute: async args => {
+        const name = args['name'] as string;
         let widget: MainAreaWidget<OnyxWidget>;
 
-        if (sessionID) {
+        if (name) {
           // Restore existing widget
-          const existingWidget = tracker.find(
-            w => w.content.sessionID === sessionID
-          );
+          const existingWidget = tracker.find(w => w.content.name === name);
           if (existingWidget) {
             widget = existingWidget;
           } else {
-            widget = createOnyxWidget(sessionID);
+            widget = await createOnyxWidget(name);
           }
         } else {
           // Create new widget
-          widget = createOnyxWidget();
+          widget = await createOnyxWidget();
         }
 
+        // Add the widget to the tracker if it's not there
         if (!tracker.has(widget)) {
           tracker.add(widget);
         }
+
+        // Attach the widget to the main work area if it's not there
         if (!widget.isAttached) {
-          // Attach the widget to the main work area if it's not there
           app.shell.add(widget, 'main');
         }
 
