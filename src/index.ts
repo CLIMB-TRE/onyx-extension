@@ -58,17 +58,19 @@ const plugin: JupyterFrontEndPlugin<void> = {
         console.error(`Failed to fetch @climb-onyx-gui version: ${error}`)
       );
 
-    // Define handlers
+    // Handler for rerouting requests to the Onyx API
     const httpPathHandler = async (route: string): Promise<Response> => {
       return requestAPIResponse('reroute', {}, ['route', route]);
     };
 
+    // Handler for opening S3 documents
     const s3PathHandler = async (uri: string): Promise<void> => {
       return requestAPI<any>('s3', {}, ['uri', uri]).then(data => {
         documentManager.open(data['path']);
       });
     };
 
+    // Handler for writing files
     const fileWriteHandler = async (
       path: string,
       content: string
@@ -85,7 +87,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       });
     };
 
-    // Handle state restoration
+    // Handle layout restoration
     if (restorer) {
       void restorer.restore(tracker, {
         command: onyxCommandID,
@@ -94,10 +96,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
       });
     }
 
-    // Function to generate new widgets
+    // Function to create new Onyx widgets
     const createOnyxWidget = async (
       name?: string
     ): Promise<MainAreaWidget<OnyxWidget>> => {
+      // Generate a unique name if not provided
       if (!name) {
         name = Date.now().toString();
       }
@@ -127,6 +130,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         initialState
       );
 
+      // Add class for the widget
       content.addClass('onyx-Widget');
       const widget = new MainAreaWidget({ content });
       widget.id = `onyx-widget-${name}`;
@@ -138,6 +142,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     };
 
     // Add commands to the command registry
+    // Command to open the CLIMB-TRE documentation
     app.commands.addCommand(docsCommandID, {
       label: 'CLIMB-TRE Documentation',
       caption: 'CLIMB-TRE Documentation',
@@ -148,6 +153,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
+    // Command to launch the Onyx GUI
     app.commands.addCommand(onyxCommandID, {
       label: 'Onyx',
       caption: 'Onyx | API for Pathogen Metadata',
@@ -184,6 +190,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
+    // Command to open an S3 document
     app.commands.addCommand(s3CommandID, {
       label: 'Open S3 Document',
       caption: 'Open S3 Document',
