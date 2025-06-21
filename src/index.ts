@@ -188,8 +188,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
           app.shell.add(widget, 'main');
         }
 
-        // Activate the widget
+        // Activate and return the widget
         app.shell.activateById(widget.id);
+        return widget;
       }
     });
 
