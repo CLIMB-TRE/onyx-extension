@@ -73,6 +73,11 @@ export class OnyxWidget extends ReactWidget {
     this._save(stateKey, value);
   }
 
+  // Set the title of the widget
+  setTitle = (title: string): void => {
+    this.title.label = title;
+  };
+
   render(): JSX.Element {
     return (
       <Onyx
@@ -82,6 +87,7 @@ export class OnyxWidget extends ReactWidget {
         extVersion={this.version}
         getItem={this.getItem.bind(this)}
         setItem={this.setItem.bind(this)}
+        setTitle={this.setTitle.bind(this)}
       />
     );
   }
