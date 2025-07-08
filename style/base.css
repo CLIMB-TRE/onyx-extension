@@ -5,6 +5,6 @@
 */
 
 .onyx-Widget {
-  overflow: auto;
+  overflow: hidden;
   contain: strict;
 }
