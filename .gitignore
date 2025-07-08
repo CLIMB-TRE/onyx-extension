@@ -125,3 +125,4 @@ dmypy.json
 *.csv
 *.tsv
 C-*.json
+A-*.json
