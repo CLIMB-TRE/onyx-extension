@@ -79,7 +79,7 @@ class RedirectingRouteHandler(APIHandler):
                 raise ValidationError("Route is required")
 
             # Request for the Onyx API
-            request = f"{domain.removesuffix('/')}/{route}"
+            request = url_path_join(domain, route)
 
             # Usage of the AsyncHTTPClient is necessary to avoid blocking tornado event loop
             # https://www.tornadoweb.org/en/stable/guide/async.html
