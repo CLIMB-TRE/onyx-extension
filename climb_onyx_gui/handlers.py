@@ -1,9 +1,9 @@
 import os
 import json
 from pathlib import Path
-import requests
-import tornado
 import boto3
+import tornado
+from tornado.httpclient import AsyncHTTPClient
 from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 from ._version import __version__
@@ -61,7 +61,7 @@ class S3ViewHandler(APIHandler):
 
 class RedirectingRouteHandler(APIHandler):
     @tornado.web.authenticated
-    def get(self):
+    async def get(self):
         try:
             # Validate credentials
             domain = os.environ.get("ONYX_DOMAIN")
@@ -78,25 +78,24 @@ class RedirectingRouteHandler(APIHandler):
             if not route:
                 raise ValidationError("Route is required")
 
-            # Make the request to the Onyx API and return the response
-            endpoint = f"{domain.removesuffix('/')}/{route}"
-            try:
-                response = requests.get(
-                    endpoint, headers={"Authorization": f"Token {token}"}
-                )
-            except requests.exceptions.ConnectionError:
-                raise BadGatewayError("Failed to connect to Onyx: Connection error")
-            except requests.exceptions.TooManyRedirects:
-                raise BadGatewayError(
-                    "Failed to connect to Onyx: Exceeded maximum redirects"
-                )
-            except requests.exceptions.Timeout:
-                raise GatewayTimeoutError(
-                    "Failed to connect to Onyx: Request timed out"
-                )
+            # Request for the Onyx API
+            request = url_path_join(domain, route)
 
-            # Return the response content
-            self.finish(response.content)
+            # Usage of the AsyncHTTPClient is necessary to avoid blocking tornado event loop
+            # https://www.tornadoweb.org/en/stable/guide/async.html
+            client = AsyncHTTPClient()
+            try:
+                response = await client.fetch(
+                    request,
+                    raise_error=False,
+                    headers={"Authorization": f"Token {token}"},
+                )
+            except ConnectionRefusedError:
+                raise BadGatewayError("Failed to connect to Onyx: Connection refused")
+            except TimeoutError:
+                raise GatewayTimeoutError("Failed to connect to Onyx: Gateway timeout")
+            else:
+                self.finish(response.body)
 
         except APIError as e:
             self.set_status(e.STATUS_CODE)
