@@ -2210,7 +2210,7 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-onyx-gui: ^0.16.1
+    climb-onyx-gui: ^0.16.2
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -2234,9 +2234,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.16.1":
-  version: 0.16.1
-  resolution: "climb-onyx-gui@npm:0.16.1"
+"climb-onyx-gui@npm:^0.16.2":
+  version: 0.16.2
+  resolution: "climb-onyx-gui@npm:0.16.2"
   dependencies:
     "@ag-grid-community/client-side-row-model": ^32.2.0
     "@ag-grid-community/core": ^32.2.0
@@ -2257,7 +2257,7 @@ __metadata:
   peerDependencies:
     react: ^17.0.2
     react-dom: ^17.0.2
-  checksum: dfbbf24fd5fc270a5ecce040840a51083bae87821c61d15918995837b8db363f93559f8d164966002fd6e3bafb09453274accfd765d78e551f3f6faf469d8e79
+  checksum: 37961200fb3e3a15739cccffd57a9daa8eb6daead4ad1da6a1e748c8da250654ef38dc66fbdea2ae7967c2119ce03f4b08431e7cd82e92752ac1516498fa79f2
   languageName: node
   linkType: hard
 
