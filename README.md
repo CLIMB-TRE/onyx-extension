@@ -1,16 +1,20 @@
-# climb-onyx-gui
+# Onyx GUI JupyterLab Extension
 
 [![Github Actions Status](https://github.com/CLIMB-TRE/onyx-extension/workflows/Build/badge.svg)](https://github.com/CLIMB-TRE/onyx-extension/actions/workflows/build.yml)
 
-A JupyterLab extension that provides the Onyx GUI, CLIMB-TRE documentation and an S3 download utility.
+## Overview
 
-This extension is composed of a Python package named `climb-onyx-gui` for the JupyterLab extension logic, that wraps an NPM package (of the same name) which provides the frontend logic.
+A JupyterLab extension for the [Onyx Graphical User Interface](https://github.com/CLIMB-TRE/onyx-gui), additionally with an S3 download utility and links to the [CLIMB-TRE documentation](https://climb-tre.github.io/).
 
-## Requirements
+This extension is composed of a Python package named `climb-onyx-gui` (available on PyPI [here](https://pypi.org/project/climb-onyx-gui/)) that wraps an NPM package (of the same name [here](https://www.npmjs.com/package/climb-onyx-gui)) which provides the frontend logic from the Onyx GUI.
 
-- JupyterLab >= 3.0.0, <5.0.0
+![Records in JupyterLab](images/jupyterlab_records.png)
+![Graphs in JupyterLab](images/jupyterlab_graphs.png)
+![Record in JupyterLab](images/jupyterlab_record.png)
 
-## Install
+## Setup
+
+This extension requires `JupyterLab >= 3.0.0, <5.0.0`.
 
 To install the extension, execute:
 
@@ -18,15 +22,13 @@ To install the extension, execute:
 pip install climb-onyx-gui
 ```
 
-## Uninstall
-
 To remove the extension, execute:
 
 ```bash
 pip uninstall climb-onyx-gui
 ```
 
-## Troubleshoot
+## Troubleshooting
 
 If you are seeing the frontend extension, but it is not working, check that the server extension is enabled:
 
@@ -88,4 +90,4 @@ pip uninstall climb-onyx-gui
 
 ### Packaging the extension
 
-See [RELEASE](RELEASE.md)
+See [RELEASE.md](RELEASE.md)
