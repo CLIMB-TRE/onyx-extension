@@ -2,10 +2,9 @@
 
 [![Github Actions Status](https://github.com/CLIMB-TRE/onyx-extension/workflows/Build/badge.svg)](https://github.com/CLIMB-TRE/onyx-extension/actions/workflows/build.yml)
 
-![Records in JupyterLab](images/jupyterlab_records.png)
-![Graphs in JupyterLab](images/jupyterlab_graphs.png)
-|![Record in JupyterLab](images/jupyterlab_record.png)
-![Record Columns in JupyterLab](images/jupyterlab_records_columns.png)
+|![Records in JupyterLab](images/jupyterlab_records.png)|![Graphs in JupyterLab](images/jupyterlab_graphs.png)|
+|-|-|
+|![Record in JupyterLab](images/jupyterlab_record.png)|![Record Columns in JupyterLab](images/jupyterlab_records_columns.png)|
 
 ## Overview
 
@@ -91,4 +90,4 @@ pip uninstall climb-onyx-gui
 
 ### Packaging the extension
 
-See [RELEASE.md](RELEASE.md).
+See [RELEASE.md](RELEASE.md)
