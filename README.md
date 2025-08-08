@@ -11,7 +11,6 @@ This extension is composed of a Python package named `climb-onyx-gui` (available
 ![Records in JupyterLab](images/jupyterlab_records.png)
 ![Graphs in JupyterLab](images/jupyterlab_graphs.png)
 ![Record in JupyterLab](images/jupyterlab_record.png)
-![Columns in JupyterLab](images/jupyterlab_records_columns.png)
 
 ## Setup
 
