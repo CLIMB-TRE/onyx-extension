@@ -1,3 +1,5 @@
+![Onyx Banner Image](images/onyx.png)
+
 # Onyx GUI JupyterLab Extension
 
 [![Github Actions Status](https://github.com/CLIMB-TRE/onyx-extension/workflows/Build/badge.svg)](https://github.com/CLIMB-TRE/onyx-extension/actions/workflows/build.yml)
