@@ -1,0 +1,66 @@
+site_name: Onyx-extension
+site_url: https://climb-tre.github.io/onyx-extension/
+repo_url: https://github.com/CLIMB-TRE/onyx-extension/
+repo_name: CLIMB-TRE/onyx-extension
+site_author: CLIMB-TRE
+
+theme:
+  name: material
+  favicon: assets/logo.svg
+  logo: assets/logo.svg
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+      
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.sections
+    - content.code.copy
+
+plugins:
+  - search
+  - with-pdf:
+      output_path: onyx-client.pdf
+      cover_subtitle: ""
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.magiclink
+  - toc:
+      permalink: true
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Overview: index.md
+  - Graphical User Interface: 
+    - Getting started: gui/getting-started.md
+  - Onyx-client: https://climb-tre.github.io/onyx-client/
+  - CLIMB-TRE: https://climb-tre.github.io
