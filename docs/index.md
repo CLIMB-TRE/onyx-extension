@@ -1,6 +1,7 @@
 ---
 hide:
   - navigation
+  - footer
 ---
 
 # JupyterLab Extension for Onyx

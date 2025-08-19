@@ -33,7 +33,8 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.sections
-    # - navigation.indexes
+    - navigation.indexes
+    - navigation.footer
     - content.code.copy
 
 plugins:
@@ -66,12 +67,11 @@ nav:
   - Overview: index.md
   - Graphical User Interface:
     - Documentation:
-      - Contents: gui/documentation/contents.md
-      - Launching the Interface: gui/documentation/launching-the-interface.md
-      - Profiles & Sites: gui/documentation/profiles-and-sites.md
+      - gui/documentation/index.md
+      - Quick Start: gui/documentation/quick-start.md
       - Querying Data: gui/documentation/querying-data.md
-      - Records: gui/documentation/records.md
-      - Analyses: gui/documentation/analyses.md
+      - Inspecting Data: gui/documentation/inspecting-data.md
       - Graphing Data: gui/documentation/graphing-data.md
+      - Profiles & Sites: gui/documentation/profiles-and-sites.md
   - Onyx-client: https://climb-tre.github.io/onyx-client/
   - CLIMB-TRE: https://climb-tre.github.io
