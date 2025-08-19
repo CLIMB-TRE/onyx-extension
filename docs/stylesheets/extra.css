@@ -11,3 +11,7 @@
 .pink {
     color: #d63384;
 }
+
+.md-grid {
+    max-width: 1440px;
+}
