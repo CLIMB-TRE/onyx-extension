@@ -66,12 +66,12 @@ nav:
   - Overview: index.md
   - Graphical User Interface:
     - Documentation:
-      - Contents: gui/contents.md
-      - Launching the Interface: gui/launching-the-interface.md
-      - Profiles & Sites: gui/profiles-and-sites.md
-      - Querying Data: gui/querying-data.md
-      - Records: gui/records.md
-      - Analyses: gui/analyses.md
-      - Graphing Data: gui/graphing-data.md
+      - Contents: gui/documentation/contents.md
+      - Launching the Interface: gui/documentation/launching-the-interface.md
+      - Profiles & Sites: gui/documentation/profiles-and-sites.md
+      - Querying Data: gui/documentation/querying-data.md
+      - Records: gui/documentation/records.md
+      - Analyses: gui/documentation/analyses.md
+      - Graphing Data: gui/documentation/graphing-data.md
   - Onyx-client: https://climb-tre.github.io/onyx-client/
   - CLIMB-TRE: https://climb-tre.github.io
