@@ -33,6 +33,7 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.sections
+    # - navigation.indexes
     - content.code.copy
 
 plugins:
@@ -52,6 +53,9 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.magiclink
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - toc:
       permalink: true
 
@@ -60,7 +64,8 @@ extra_css:
 
 nav:
   - Overview: index.md
-  - Graphical User Interface: 
+  - Graphical User Interface:
+    - Documentation:
       - Contents: gui/contents.md
       - Launching the Interface: gui/launching-the-interface.md
       - Profiles & Sites: gui/profiles-and-sites.md

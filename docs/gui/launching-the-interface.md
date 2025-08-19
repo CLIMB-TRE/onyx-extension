@@ -1,7 +1,7 @@
 # Launching the Interface
 
-![](../img/gui/launcher.png)
+![](../img/launcher.png)
 
 ## Project Selection
 
-![](../img/gui/projects.png)
+![](../img/projects.png)

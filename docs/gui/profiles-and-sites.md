@@ -2,12 +2,12 @@
 
 ## Profile & Activity
 
-![](../img/gui/profile_button.png)
+![](../img/profile_button.png)
 
-![](../img/gui/profile.png)
+![](../img/profile.png)
 
 ## Site Users
 
-![](../img/gui/site_button.png)
+![](../img/site_button.png)
 
-![](../img/gui/site.png)
+![](../img/site.png)

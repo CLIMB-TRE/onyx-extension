@@ -9,13 +9,13 @@ hide:
 
 This site documents [Onyx-extension](https://github.com/CLIMB-TRE/onyx-extension), an extension to [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/index.html) that provides:
 
-- ![Onyx](img/inner_join.svg): Access to the [Onyx GUI](https://github.com/CLIMB-TRE/onyx-gui), a graphical user interface for interacting with the [Onyx](https://github.com/CLIMB-TRE/onyx/) database.
-- ![S3](img/open_file.svg): An S3 download utility.
-- ![Docs](img/dna.svg): Links to the [CLIMB-TRE documentation](https://climb-tre.github.io/).
+- :material-set-center:{ .pink }: Access to the [Onyx GUI](https://github.com/CLIMB-TRE/onyx-gui), a graphical user interface for interacting with the [Onyx](https://github.com/CLIMB-TRE/onyx/) database.
+- :material-file-plus:{ .pink }: An S3 download utility.
+- :material-dna:{ .pink }: Links to the [CLIMB-TRE documentation](https://climb-tre.github.io/).
 
 Onyx is being developed as part of the [CLIMB-TRE](https://climb-tre.github.io/) project.
 
-![Onyx Records in JupyterLab](img/gui/record_list.png)
+![Onyx Records in JupyterLab](img/record_list.png)
 
 ## Installation
 
