@@ -33,6 +33,8 @@ This query can be broken down into the following criteria:
      
 ### Building the query
 
+#### Adding a Filter
+
 To add a new filter, click the :material-pencil: icon on the `Filter` panel:
 
 ![](../../img/filter.png)
@@ -41,15 +43,15 @@ This creates an empty filter with the title `Click to Edit`.
 
 ![](../../img/empty_filter.png)
 
-Clicking on the filter will open its settings:
+Clicking on this filter will open its settings:
 
 ![](../../img/edit_filter.png)
 
-We will edit the filter as following;
+We will edit the filter as following:
 
-- Set the `field` to `published_date`.
-- Set the `lookup` to `gte` (greater than or equal).
-- Set the `value` to `2025-01-01`.
+- Set the field to `published_date`.
+- Set the lookup to `gte` (greater than or equal).
+- Set the value to `2025-01-01`.
 
 ![](../../img/published_date_filter.png)
 
@@ -61,6 +63,8 @@ As we can see, the dataset has been filtered to records with a `published_date` 
 
 !!! tip
     In this example, we have used the `gte` (greater than or equal) lookup for `published_date`. However, we could also use the `iso_year` lookup and set this to `2025` instead. 
+
+#### More Filters
 
 To add the second filter, we create another filter with:
 
@@ -76,7 +80,9 @@ And to add the third filter, we create another filter with:
 
 The dataset has now been filtered further:
 
-![](../../img/1_to_3_filters.png)
+![](../../img/almost_all_filters.png)
+
+#### Nested Filters
 
 To match the final requirement, we need to create two **nested filters**:
 
@@ -98,7 +104,15 @@ When we apply the first nested filter to this `classifier_calls` table, Onyx wil
 
 When we apply both nested filters, Onyx will return all records which have _at least_ one `classifier_calls` entry matching **both** `taxon_id == 11320` and `count_descendents >= 100`. 
 
+### Query Results
 
+![](../../img/all_filters.png)
+
+As we can see, we have now filtered the dataset from the initial 8310 records down to just 388 records that match the target query.
+
+We can click on the first record, `C-DCF8C67DDF`, and navigate down to the `Classifier Calls` table and confirm over 100 reads matching `Influenza A Virus`:
+
+![](../../img/record_classifier_calls.png)
 
 ## Aggregating Data
 
