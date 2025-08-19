@@ -21,7 +21,7 @@ We will now learn how to filter, aggregate and export data using this interface.
 We are going to add filters on the `synthSCAPE` dataset to solve the following problem:
 
 !!! quote "Query"
-    Match all synthSCAPE records from 2025 that have a sequence purpose, a run ID of either `R-14EC71EBA7` or `R-F42A056185`, and contain more than 100 reads of `Influenza A Virus`.
+    Match all synthSCAPE records from 2025 that have a sequence purpose, a run ID of either `R-14EC71EBA7` or `R-F42A056185`, and contain at least 100 reads of `Influenza A Virus` (taxon ID `11320`).
 
 This query can be broken down into the following criteria:
 
@@ -29,7 +29,7 @@ This query can be broken down into the following criteria:
 2. The `sequence_purpose` must not be blank.
 3. The `run_id` must be either `R-14EC71EBA7` or `R-F42A056185`.
 4. Each record's `classifier_calls` must contain _at least_ one entry matching the condition:
-    - `(human_readable == 'Influenza A Virus') AND (count_descendants >= 100)`
+    - `(taxon_id == 11320) AND (count_descendants >= 100)`
      
 ### Building the query
 
@@ -61,6 +61,44 @@ As we can see, the dataset has been filtered to records with a `published_date` 
 
 !!! tip
     In this example, we have used the `gte` (greater than or equal) lookup for `published_date`. However, we could also use the `iso_year` lookup and set this to `2025` instead. 
+
+To add the second filter, we create another filter with:
+
+- Field: `sequence_purpose`
+- Lookup: `isnull`
+- Value: `false`
+
+And to add the third filter, we create another filter with:
+
+- Field: `run_id`
+- Lookup: `in`
+- Values: `R-14EC71EBA7`, `R-F42A056185`
+
+The dataset has now been filtered further:
+
+![](../../img/1_to_3_filters.png)
+
+To match the final requirement, we need to create two **nested filters**:
+
+Nested filter 1:
+
+- Field: `classifier_calls__taxon_id`
+- Lookup: `exact`
+- Value: `11320`
+
+Nested filter 2:
+
+- Field: `classifier_calls__count_descendents`
+- Lookup: `gte`
+- Value: `100`
+
+Each record in `synthSCAPE` contains multiple `classifier_calls` entries, that correspond to the taxa identified by [Kraken2](https://github.com/DerrickWood/kraken2) within the sample. These `classifier_calls` entries also contain information such as the number of reads matched to each taxon, as well as the [taxonomic rank](https://en.wikipedia.org/wiki/Taxonomic_rank).
+
+When we apply the first nested filter to this `classifier_calls` table, Onyx will return all records which have _at least_ one `classifier_call` with `taxon_id == 11320`. 
+
+When we apply both nested filters, Onyx will return all records which have _at least_ one `classifier_calls` entry matching **both** `taxon_id == 11320` and `count_descendents >= 100`. 
+
+
 
 ## Aggregating Data
 
