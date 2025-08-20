@@ -22,6 +22,8 @@ Onyx is being developed as part of the [CLIMB-TRE](https://climb-tre.github.io/)
 [Installation](installation.md)<br>
 Learn how to install the extension, or build it manually for development.
 
+### Graphical User Interface
+
 [Quick Start](gui/documentation/quick-start.md)<br>
 Learn how to launch and navigate the Onyx interface.
 
