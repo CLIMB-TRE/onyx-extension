@@ -119,11 +119,45 @@ We can click on the first record, `C-DCF8C67DDF`, and navigate down to the `Clas
 
 ![](../../img/record_classifier_calls.png)
 
-#### Editing Columns
+### Editing Columns
 
-#### Exporting Results
+Going back to the results view, we may want to fix the columns that get returned from filtering. This will also speed up any later exports, as we are only exporting the columns that we need.
+
+We can open the columns editor by clicking the :material-land-rows-horizontal: `Edit Columns` button:
+
+![](../../img/edit_columns.png)
+
+We will select the columns `climb_id`, `site`, `published_date`, `sequence_purpose` and `ingest_report`:
+
+![](../../img/edit_columns_selected.png)
+
+Then hit `Apply`, and only the columns we are interested in are returned:
+
+![](../../img/columns_edited.png)
+
+### Exporting Results
+
+#### Exporting to CSV/TSV
+
+We have our filtered records and the columns we are interested in. Now, we want to export this data to a CSV or TSV within JupyterLab for continued analysis.
+
+Navigate down to the `Options` menu at the bottom-right of the results table, and select `Export to CSV/TSV`:
+
+![](../../img/export.png)
+
+Here, we can see a default generated name for the file, and options to switch between CSV and TSV formats:
+
+![](../../img/nearly_export.png)
+
+We will keep the default name and choose `.csv`.
+
+Clicking `Export` will then pull the requested data, and create a CSV file in JupyterLab:
+
+![](../../img/export_finished.png)
+
+#### Copying to the Onyx CLI
+
 
 ## Aggregating Data
 
-## Transferring to the Onyx CLI
 
