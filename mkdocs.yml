@@ -76,4 +76,7 @@ nav:
       # - Inspecting Data: gui/documentation/inspecting-data.md
       # - Graphing Data: gui/documentation/graphing-data.md
       - Profiles & Sites: gui/documentation/profiles-and-sites.md
+  - Types & Lookups:
+      - Types: https://climb-tre.github.io/onyx/fields/types/
+      - Lookups: https://climb-tre.github.io/onyx/fields/lookups/
   - CLIMB-TRE: https://climb-tre.github.io
