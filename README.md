@@ -10,6 +10,8 @@ A JupyterLab extension for the [Onyx Graphical User Interface](https://github.co
 
 This extension is composed of a Python package named `climb-onyx-gui` (available on PyPI [here](https://pypi.org/project/climb-onyx-gui/)) that wraps an NPM package (of the same name [here](https://www.npmjs.com/package/climb-onyx-gui)) which provides the frontend logic from the Onyx GUI.
 
+Documentation can be found [here](https://climb-tre.github.io/onyx-extension/).
+
 ![Records in JupyterLab](images/gui/record_list.png)
 ![Graphs in JupyterLab](images/gui/record_detail.png)
 ![Record in JupyterLab](images/gui/graphs.png)
