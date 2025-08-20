@@ -157,6 +157,20 @@ Clicking `Export` will then pull the requested data, and create a CSV file in Ju
 
 #### Copying to the Onyx CLI
 
+If we wish to transfer our filters to the Onyx command-line interface, we can click :material-content-copy: `Copy CLI Command`:
+
+![](../../img/copy_cli_command.png)
+
+Then paste this into a terminal:
+
+![](../../img/terminal_paste.png)
+
+!!! note
+    :material-content-copy: `Copy CLI Command` only copies filters and summary fields; it does **not** transfer column and format settings.
+
+We can edit the fields/format with the `--include` and `--format` arguments, and filter the dataset:
+
+![](../../img/terminal_filter.png)
 
 ## Aggregating Data
 
