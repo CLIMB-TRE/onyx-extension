@@ -1,8 +1,10 @@
-site_name: Onyx-extension
+site_name: Onyx | JupyterLab Extension
 site_url: https://climb-tre.github.io/onyx-extension/
 repo_url: https://github.com/CLIMB-TRE/onyx-extension/
 repo_name: CLIMB-TRE/onyx-extension
 site_author: CLIMB-TRE
+extra:
+  homepage: https://climb-tre.github.io/onyx/
 
 theme:
   name: material
@@ -33,14 +35,13 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.sections
-    - navigation.indexes
     - navigation.footer
     - content.code.copy
 
 plugins:
   - search
   - with-pdf:
-      output_path: onyx-client.pdf
+      output_path: onyx-extension.pdf
       cover_subtitle: ""
 
 markdown_extensions:
@@ -64,14 +65,15 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - Overview: index.md
-  - Graphical User Interface:
-    - Documentation:
-      - gui/documentation/index.md
+  - Overview: https://climb-tre.github.io/onyx/
+  - CLI & Python API: https://climb-tre.github.io/onyx-client/
+  - JupyterLab Extension:
+    - Overview: index.md
+    - Installation: gui/documentation/installation.md
+    - Graphical User Interface:
       - Quick Start: gui/documentation/quick-start.md
       - Querying Data: gui/documentation/querying-data.md
       - Inspecting Data: gui/documentation/inspecting-data.md
       - Graphing Data: gui/documentation/graphing-data.md
       - Profiles & Sites: gui/documentation/profiles-and-sites.md
-  - Onyx-client: https://climb-tre.github.io/onyx-client/
   - CLIMB-TRE: https://climb-tre.github.io
