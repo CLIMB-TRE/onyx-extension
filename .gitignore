@@ -120,6 +120,9 @@ dmypy.json
 # Yarn cache
 .yarn/
 
+# Virtual envs
+.venv
+
 # Local development files and outputs
 .env
 *.csv

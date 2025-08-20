@@ -1,0 +1,79 @@
+site_name: Onyx | JupyterLab Extension
+site_url: https://climb-tre.github.io/onyx-extension/
+repo_url: https://github.com/CLIMB-TRE/onyx-extension/
+repo_name: CLIMB-TRE/onyx-extension
+site_author: CLIMB-TRE
+extra:
+  homepage: https://climb-tre.github.io/onyx/
+
+theme:
+  name: material
+  favicon: assets/logo.svg
+  logo: assets/logo.svg
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+      
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.sections
+    - navigation.footer
+    - content.code.copy
+
+plugins:
+  - search
+  - with-pdf:
+      output_path: onyx-extension.pdf
+      cover_subtitle: ""
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.magiclink
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: true
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Overview: https://climb-tre.github.io/onyx/
+  - CLI & Python API: https://climb-tre.github.io/onyx-client/
+  - JupyterLab Extension:
+    - Overview: index.md
+    - Installation: installation.md
+    - Graphical User Interface:
+      - Quick Start: gui/documentation/quick-start.md
+      - Querying Data: gui/documentation/querying-data.md
+      # - Inspecting Data: gui/documentation/inspecting-data.md
+      # - Graphing Data: gui/documentation/graphing-data.md
+      - Profiles & Sites: gui/documentation/profiles-and-sites.md
+  - CLIMB-TRE: https://climb-tre.github.io
