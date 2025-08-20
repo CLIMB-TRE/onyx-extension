@@ -30,11 +30,11 @@ Learn how to launch and navigate the Onyx interface.
 [Querying Data](gui/documentation/querying-data.md)<br>
 Learn how to filter, summarise and export records and analyses.
 
-[Inspecting Data](gui/documentation/inspecting-data.md)<br>
+<!-- [Inspecting Data](gui/documentation/inspecting-data.md)<br>
 Learn more about inspecting and exporting individual records and analyses.
 
 [Graphing Data](gui/documentation/graphing-data.md)<br>
-Learn how to create a custom dashboard of graphs.
+Learn how to create a custom dashboard of graphs. -->
 
 [Profiles & Sites](gui/documentation/profiles-and-sites.md)<br>
 Learn how to view your profile, project permissions, latest activity, and other users from your site.

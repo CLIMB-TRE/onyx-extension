@@ -69,11 +69,11 @@ nav:
   - CLI & Python API: https://climb-tre.github.io/onyx-client/
   - JupyterLab Extension:
     - Overview: index.md
-    - Installation: gui/documentation/installation.md
+    - Installation: installation.md
     - Graphical User Interface:
       - Quick Start: gui/documentation/quick-start.md
       - Querying Data: gui/documentation/querying-data.md
-      - Inspecting Data: gui/documentation/inspecting-data.md
-      - Graphing Data: gui/documentation/graphing-data.md
+      # - Inspecting Data: gui/documentation/inspecting-data.md
+      # - Graphing Data: gui/documentation/graphing-data.md
       - Profiles & Sites: gui/documentation/profiles-and-sites.md
   - CLIMB-TRE: https://climb-tre.github.io

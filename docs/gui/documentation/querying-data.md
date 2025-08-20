@@ -172,6 +172,6 @@ We can edit the fields/format with the `--include` and `--format` arguments, and
 
 ![](../../img/terminal_filter.png)
 
-## Aggregating Data
+<!-- ## Aggregating Data -->
 
 
