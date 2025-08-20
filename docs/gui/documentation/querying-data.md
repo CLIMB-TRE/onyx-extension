@@ -16,6 +16,11 @@ We will now learn how to filter, aggregate and export data using this interface.
 
 ## Filtering Data
 
+!!! info
+    `synthSCAPE` is an Onyx project within [CLIMB-TRE](https://climb-tre.github.io/) for hosting simulated metagenomic data as part of [mSCAPE](https://mscape.climb.ac.uk/), a world-leading initiative trialling the use of metagenomic data for public health surveillance.
+
+    You can find the metadata schema for the synthSCAPE Onyx project [here](https://climb-tre.github.io/synthscape-analysis/).
+
 ### Defining the query
 
 We are going to add filters on the `synthSCAPE` dataset to solve the following problem:
@@ -59,7 +64,7 @@ Then hit `Apply` to filter to the dataset:
 
 ![](../../img/published_date_results.png)
 
-As we can see, the dataset has been filtered to records with a `published_date` greater than `2025-01-01`.
+As we can see, the dataset has been filtered to return only records with a `published_date` greater than or equal to `2025-01-01`.
 
 !!! tip
     In this example, we have used the `gte` (greater than or equal) lookup for `published_date`. However, we could also use the `iso_year` lookup and set this to `2025` instead. 
@@ -114,9 +119,11 @@ We can click on the first record, `C-DCF8C67DDF`, and navigate down to the `Clas
 
 ![](../../img/record_classifier_calls.png)
 
-## Aggregating Data
+#### Editing Columns
 
-## Exporting Data
+#### Exporting Results
+
+## Aggregating Data
 
 ## Transferring to the Onyx CLI
 
