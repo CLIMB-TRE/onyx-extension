@@ -8,7 +8,8 @@ import {
   MainAreaWidget,
   WidgetTracker,
   showDialog,
-  Dialog
+  Dialog,
+  IThemeManager
 } from '@jupyterlab/apputils';
 import { IStateDB } from '@jupyterlab/statedb';
 import { IDocumentManager } from '@jupyterlab/docmanager';
@@ -29,13 +30,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: PLUGIN_ID,
   description: 'JupyterLab extension for the Onyx Graphical User Interface',
   autoStart: true,
-  requires: [ICommandPalette, IDocumentManager, IStateDB],
+  requires: [ICommandPalette, IDocumentManager, IStateDB, IThemeManager],
   optional: [ILauncher, ILayoutRestorer, IHTMLViewerTracker],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     documentManager: IDocumentManager,
     stateDB: IStateDB,
+    themeManager: IThemeManager,
     launcher: ILauncher | null,
     restorer: ILayoutRestorer | null,
     htmlTracker: IHTMLViewerTracker | null
@@ -248,6 +250,25 @@ const plugin: JupyterFrontEndPlugin<void> = {
         panel.trusted = true;
       });
     }
+
+    const getBSTheme = (theme: string | null) => {
+      return theme && !themeManager.isLight(theme) ? 'dark' : 'light';
+    };
+
+    // Set initial theme
+    document.documentElement.setAttribute(
+      'data-bs-theme',
+      getBSTheme(themeManager.theme)
+    );
+
+    // Update theme on change
+    themeManager.themeChanged.connect(theme => {
+      document.documentElement.setAttribute(
+        'data-bs-theme',
+        getBSTheme(theme.theme)
+      );
+      tracker.forEach(w => w.content.update());
+    });
   }
 };
 
