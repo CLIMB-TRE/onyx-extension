@@ -126,6 +126,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         httpPathHandler,
         s3PathHandler,
         fileWriteHandler,
+        themeManager,
         version,
         name,
         stateDB,
@@ -251,23 +252,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
       });
     }
 
-    const getBSTheme = (theme: string | null) => {
-      return theme && !themeManager.isLight(theme) ? 'dark' : 'light';
-    };
-
-    // Set initial theme
-    document.documentElement.setAttribute(
-      'data-bs-theme',
-      getBSTheme(themeManager.theme)
-    );
-
     // Update theme on change
     themeManager.themeChanged.connect(theme => {
-      document.documentElement.setAttribute(
-        'data-bs-theme',
-        getBSTheme(theme.theme)
-      );
-      tracker.forEach(w => w.content.update());
+      tracker.forEach(w => w.content.updateTheme());
     });
   }
 };

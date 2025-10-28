@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactWidget } from '@jupyterlab/apputils';
+import { IThemeManager, ReactWidget } from '@jupyterlab/apputils';
 import { IStateDB } from '@jupyterlab/statedb';
 import { PLUGIN_NAMESPACE } from '.';
 import Onyx from 'climb-onyx-gui';
@@ -9,6 +9,7 @@ export class OnyxWidget extends ReactWidget {
     httpPathHandler: (route: string) => Promise<Response>,
     s3PathHandler: (path: string) => Promise<void>,
     fileWriter: (path: string, content: string) => Promise<void>,
+    themeManager: IThemeManager,
     version: string,
     name: string,
     stateDB: IStateDB,
@@ -19,6 +20,8 @@ export class OnyxWidget extends ReactWidget {
     this.httpPathHandler = httpPathHandler;
     this.s3PathHandler = s3PathHandler;
     this.fileWriter = fileWriter;
+    this.themeManager = themeManager;
+    this.theme = this.setTheme();
     this.version = version;
     this.name = name;
     this._stateDB = stateDB;
@@ -32,6 +35,8 @@ export class OnyxWidget extends ReactWidget {
   httpPathHandler: (route: string) => Promise<Response>;
   s3PathHandler: (path: string) => Promise<void>;
   fileWriter: (path: string, content: string) => Promise<void>;
+  themeManager: IThemeManager;
+  theme: string;
   version: string;
   name: string;
 
@@ -74,9 +79,26 @@ export class OnyxWidget extends ReactWidget {
   }
 
   // Set the title of the widget
-  setTitle = (title: string): void => {
+  setTitle(title: string): void {
     this.title.label = title;
-  };
+  }
+
+  // Set the theme
+  setTheme(): string {
+    this.theme =
+      this.themeManager.theme &&
+      !this.themeManager.isLight(this.themeManager.theme)
+        ? 'dark'
+        : 'light';
+    document.documentElement.setAttribute('data-bs-theme', this.theme);
+    return this.theme;
+  }
+
+  // Update the theme and re-render widget
+  updateTheme(): void {
+    this.setTheme();
+    this.update();
+  }
 
   render(): JSX.Element {
     return (
@@ -84,6 +106,7 @@ export class OnyxWidget extends ReactWidget {
         httpPathHandler={this.httpPathHandler}
         s3PathHandler={this.s3PathHandler}
         fileWriter={this.fileWriter}
+        extTheme={this.theme}
         extVersion={this.version}
         getItem={this.getItem.bind(this)}
         setItem={this.setItem.bind(this)}
