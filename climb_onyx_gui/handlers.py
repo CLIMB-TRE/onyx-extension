@@ -17,14 +17,21 @@ from .validators import validate_s3_uri, validate_filename, validate_content
 from .decorators import handle_api_errors, async_handle_api_errors
 
 
+PLUGIN_NAME = "climb-onyx-gui"
+ONYX_DOMAIN = os.environ.get("ONYX_DOMAIN")
+ONYX_TOKEN = os.environ.get("ONYX_TOKEN")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+JUPYTERLAB_S3_ENDPOINT = os.environ.get("JUPYTERLAB_S3_ENDPOINT")
+S3_DOWNLOADS_DIR = Path.home() / "s3_downloads"
+
+
 class WidgetEnabledHandler(APIHandler):
     @tornado.web.authenticated
     @handle_api_errors
     def get(self):
         # Check for credentials to determine access to Onyx
-        domain = os.environ.get("ONYX_DOMAIN")
-        token = os.environ.get("ONYX_TOKEN")
-        enabled = True if domain and token else False
+        enabled = True if ONYX_DOMAIN and ONYX_TOKEN else False
 
         # Return whether Onyx is enabled
         self.finish(json.dumps({"enabled": enabled}))
@@ -38,11 +45,7 @@ class S3ViewHandler(APIHandler):
         bucket_name, key = validate_s3_uri(self.get_query_argument("uri"))
 
         # Validate credentials
-        aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
-        aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
-        endpoint_url = os.environ.get("JUPYTERLAB_S3_ENDPOINT")
-
-        if not aws_access_key_id or not aws_secret_access_key or not endpoint_url:
+        if not (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and JUPYTERLAB_S3_ENDPOINT):
             raise AuthenticationError(
                 "Cannot connect to S3: JupyterLab environment does not have credentials"
             )
@@ -50,17 +53,17 @@ class S3ViewHandler(APIHandler):
         # Retrieve S3 object
         s3 = boto3.resource(
             "s3",
-            aws_access_key_id=aws_access_key_id,
-            aws_secret_access_key=aws_secret_access_key,
-            endpoint_url=endpoint_url,
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            endpoint_url=JUPYTERLAB_S3_ENDPOINT,
         )
         s3_object = s3.Object(bucket_name=bucket_name, key=key)  # type: ignore
 
         # Create s3_downloads directory to store objects (if it doesn't exist)
-        Path("./s3_downloads").mkdir(parents=True, exist_ok=True)
+        Path(S3_DOWNLOADS_DIR).mkdir(parents=True, exist_ok=True)
 
         # Download the object
-        path = f"./s3_downloads/{key}"
+        path = S3_DOWNLOADS_DIR / key
         with open(path, "wb") as fp:
             s3_object.download_fileobj(fp)
 
@@ -73,10 +76,7 @@ class RedirectingRouteHandler(APIHandler):
     @async_handle_api_errors
     async def get(self):
         # Validate credentials
-        domain = os.environ.get("ONYX_DOMAIN")
-        token = os.environ.get("ONYX_TOKEN")
-
-        if not domain or not token:
+        if not (ONYX_DOMAIN and ONYX_TOKEN):
             raise AuthenticationError(
                 "Cannot connect to Onyx: JupyterLab environment does not have credentials"
             )
@@ -88,7 +88,7 @@ class RedirectingRouteHandler(APIHandler):
             raise ValidationError("Route is required")
 
         # Request for the Onyx API
-        request = url_path_join(domain, route)
+        request = url_path_join(ONYX_DOMAIN, route)
 
         # Usage of the AsyncHTTPClient is necessary to avoid blocking tornado event loop
         # https://www.tornadoweb.org/en/stable/guide/async.html
@@ -97,7 +97,7 @@ class RedirectingRouteHandler(APIHandler):
             response = await client.fetch(
                 request,
                 raise_error=False,
-                headers={"Authorization": f"Token {token}"},
+                headers={"Authorization": f"Token {ONYX_TOKEN}"},
             )
         except ConnectionRefusedError:
             raise BadGatewayError("Failed to connect to Onyx: Connection refused")
@@ -135,22 +135,22 @@ def setup_handlers(web_app):
     host_pattern = ".*$"
     base_url = web_app.settings["base_url"]
 
-    route_pattern = url_path_join(base_url, "climb-onyx-gui", "widget-enabled")
+    route_pattern = url_path_join(base_url, PLUGIN_NAME, "widget-enabled")
     handlers = [(route_pattern, WidgetEnabledHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
-    route_pattern = url_path_join(base_url, "climb-onyx-gui", "s3")
+    route_pattern = url_path_join(base_url, PLUGIN_NAME, "s3")
     handlers = [(route_pattern, S3ViewHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
-    route_pattern = url_path_join(base_url, "climb-onyx-gui", "reroute")
+    route_pattern = url_path_join(base_url, PLUGIN_NAME, "reroute")
     handlers = [(route_pattern, RedirectingRouteHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
-    route_pattern = url_path_join(base_url, "climb-onyx-gui", "version")
+    route_pattern = url_path_join(base_url, PLUGIN_NAME, "version")
     handlers = [(route_pattern, VersionHandler)]
     web_app.add_handlers(host_pattern, handlers)
 
-    route_pattern = url_path_join(base_url, "climb-onyx-gui", "file-write")
+    route_pattern = url_path_join(base_url, PLUGIN_NAME, "file-write")
     handlers = [(route_pattern, FileWriteHandler)]
     web_app.add_handlers(host_pattern, handlers)

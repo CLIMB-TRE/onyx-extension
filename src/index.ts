@@ -17,8 +17,13 @@ import { requestAPI, requestAPIResponse } from './handler';
 import { OnyxWidget } from './onyxWidget';
 import { docsIcon, onyxIcon } from './icon';
 
-export const PLUGIN_NAMESPACE = '@climb-onyx-gui-extension';
+export const PLUGIN_NAME = 'climb-onyx-gui';
+export const PLUGIN_NAMESPACE = `@${PLUGIN_NAME}`;
 const PLUGIN_ID = `${PLUGIN_NAMESPACE}:plugin`;
+
+const tracker = new WidgetTracker<MainAreaWidget<OnyxWidget>>({
+  namespace: PLUGIN_NAMESPACE
+});
 
 /**
  * Initialization data for the climb-onyx-gui extension.
@@ -39,7 +44,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     restorer: ILayoutRestorer | null,
     htmlTracker: IHTMLViewerTracker | null
   ) => {
-    console.log('JupyterLab extension @climb-onyx-gui is activated!');
+    console.log(`JupyterLab extension ${PLUGIN_NAMESPACE} is activated!`);
 
     // Define command IDs and categories
     const docsCommandID = 'docs_extension';
@@ -51,10 +56,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
     requestAPI<any>('version')
       .then(data => {
         version = data['version'];
-        console.log(`JupyterLab extension @climb-onyx-gui version: ${version}`);
+        console.log(
+          `JupyterLab extension ${PLUGIN_NAMESPACE} version: ${version}`
+        );
       })
       .catch(error =>
-        console.error(`Failed to fetch @climb-onyx-gui version: ${error}`)
+        console.error(`Failed to fetch ${PLUGIN_NAMESPACE} version: ${error}`)
       );
 
     // Handler for determining if the Onyx Widget is enabled
@@ -64,7 +71,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return data['enabled'];
         })
         .catch(error => {
-          console.error(`Failed to fetch Onyx widget status: ${error}`);
+          console.error(`Failed to fetch ${PLUGIN_NAMESPACE} status: ${error}`);
           return false;
         });
     };
@@ -238,9 +245,5 @@ const plugin: JupyterFrontEndPlugin<void> = {
     });
   }
 };
-
-const tracker = new WidgetTracker<MainAreaWidget<OnyxWidget>>({
-  namespace: 'climb-onyx-gui'
-});
 
 export default plugin;
