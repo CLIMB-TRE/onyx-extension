@@ -6,7 +6,7 @@
 
 ## Overview
 
-A JupyterLab extension for the [Onyx Graphical User Interface](https://github.com/CLIMB-TRE/onyx-gui), additionally with an S3 download utility and links to the [CLIMB-TRE documentation](https://climb-tre.github.io/).
+A JupyterLab extension for the [Onyx Graphical User Interface](https://github.com/CLIMB-TRE/onyx-gui), with links to the [CLIMB-TRE documentation](https://climb-tre.github.io/).
 
 This extension is composed of a Python package named `climb-onyx-gui` (available on PyPI [here](https://pypi.org/project/climb-onyx-gui/)) that wraps an NPM package (of the same name [here](https://www.npmjs.com/package/climb-onyx-gui)) which provides the frontend logic from the Onyx GUI.
 

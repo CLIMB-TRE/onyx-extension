@@ -17,6 +17,23 @@ from .exceptions import (
 from .validators import validate_s3_uri, validate_filename, validate_content
 
 
+class WidgetEnabledHandler(APIHandler):
+    @tornado.web.authenticated
+    def get(self):
+        try:
+            # Check for credentials to determine access to Onyx
+            domain = os.environ.get("ONYX_DOMAIN")
+            token = os.environ.get("ONYX_TOKEN")
+            enabled = True if domain and token else False
+
+            # Return whether Onyx is enabled
+            self.finish(json.dumps({"enabled": enabled}))
+
+        except APIError as e:
+            self.set_status(e.STATUS_CODE)
+            self.finish(json.dumps({"message": str(e)}))
+
+
 class S3ViewHandler(APIHandler):
     @tornado.web.authenticated
     def get(self):
@@ -137,6 +154,10 @@ class FileWriteHandler(APIHandler):
 def setup_handlers(web_app):
     host_pattern = ".*$"
     base_url = web_app.settings["base_url"]
+
+    route_pattern = url_path_join(base_url, "climb-onyx-gui", "widget-enabled")
+    handlers = [(route_pattern, WidgetEnabledHandler)]
+    web_app.add_handlers(host_pattern, handlers)
 
     route_pattern = url_path_join(base_url, "climb-onyx-gui", "s3")
     handlers = [(route_pattern, S3ViewHandler)]

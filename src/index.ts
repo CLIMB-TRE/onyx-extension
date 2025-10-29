@@ -6,10 +6,7 @@ import {
 import {
   ICommandPalette,
   MainAreaWidget,
-  WidgetTracker,
-  showDialog,
-  Dialog,
-  IThemeManager
+  WidgetTracker
 } from '@jupyterlab/apputils';
 import { IStateDB } from '@jupyterlab/statedb';
 import { IDocumentManager } from '@jupyterlab/docmanager';
@@ -17,8 +14,7 @@ import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 import { ILauncher } from '@jupyterlab/launcher';
 import { requestAPI, requestAPIResponse } from './handler';
 import { OnyxWidget } from './onyxWidget';
-import { dnaIcon, innerJoinIcon, openFileIcon } from './icon';
-import { OpenS3FileWidget } from './openS3FileWidget';
+import { docsIcon, onyxIcon } from './icon';
 
 export const PLUGIN_NAMESPACE = '@climb-onyx-gui-extension';
 const PLUGIN_ID = `${PLUGIN_NAMESPACE}:plugin`;
@@ -47,7 +43,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
     // Define command IDs and categories
     const docsCommandID = 'docs_extension';
     const onyxCommandID = 'onyx_extension';
-    const s3CommandID = 's3_onyx_extension';
     const category = 'CLIMB-TRE';
 
     // Retrieve extension version and log to the console
@@ -60,6 +55,18 @@ const plugin: JupyterFrontEndPlugin<void> = {
       .catch(error =>
         console.error(`Failed to fetch @climb-onyx-gui version: ${error}`)
       );
+
+    // Handler for determining if the Onyx Widget is enabled
+    const widgetEnabledHandler = async (): Promise<boolean> => {
+      return requestAPI<any>('widget-enabled')
+        .then(data => {
+          return data['enabled'];
+        })
+        .catch(error => {
+          console.error(`Failed to fetch Onyx widget status: ${error}`);
+          return false;
+        });
+    };
 
     // Handler for rerouting requests to the Onyx API
     const httpPathHandler = async (route: string): Promise<Response> => {
@@ -121,8 +128,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
         }
       });
 
+      // Determine if the widget is enabled
+      const widgetEnabled = await widgetEnabledHandler();
+
       // Create the OnyxWidget instance
       const content = new OnyxWidget(
+        widgetEnabled,
         httpPathHandler,
         s3PathHandler,
         fileWriteHandler,
@@ -141,7 +152,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       const widget = new MainAreaWidget({ content });
       widget.id = `onyx-widget-${name}`;
       widget.title.label = 'Onyx';
-      widget.title.icon = innerJoinIcon;
+      widget.title.icon = onyxIcon;
       widget.title.closable = true;
 
       return widget;
@@ -152,7 +163,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     app.commands.addCommand(docsCommandID, {
       label: 'CLIMB-TRE Documentation',
       caption: 'CLIMB-TRE Documentation',
-      icon: dnaIcon,
+      icon: docsIcon,
       execute: () => {
         // Open link in new tab
         window.open('https://climb-tre.github.io/');
@@ -163,7 +174,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     app.commands.addCommand(onyxCommandID, {
       label: 'Onyx',
       caption: 'Onyx | API for Pathogen Metadata',
-      icon: innerJoinIcon,
+      icon: onyxIcon,
       execute: async args => {
         const name = args['name'] as string;
         let widget: MainAreaWidget<OnyxWidget>;
@@ -197,36 +208,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    // Command to open an S3 document
-    app.commands.addCommand(s3CommandID, {
-      label: 'Open S3 Document',
-      caption: 'Open S3 Document',
-      icon: openFileIcon,
-      execute: () => {
-        showDialog({
-          body: new OpenS3FileWidget(),
-          buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'Open' })],
-          focusNodeSelector: 'input',
-          title: 'Open S3 Document'
-        })
-          .then(result => {
-            if (result.button.label === 'Cancel') {
-              return;
-            }
-            if (!result.value) {
-              return;
-            }
-            const s3_link = result.value;
-            s3PathHandler(s3_link).catch(reason => console.error(reason));
-          })
-          .catch(reason => console.error(reason));
-      }
-    });
-
     // Add commands to the command palette
     palette.addItem({ command: docsCommandID, category: category });
     palette.addItem({ command: onyxCommandID, category: category });
-    palette.addItem({ command: s3CommandID, category: category });
 
     // Add commands to the launcher
     if (launcher) {
@@ -237,11 +221,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
       launcher.add({
         command: onyxCommandID,
-        category: category
-      });
-
-      launcher.add({
-        command: s3CommandID,
         category: category
       });
     }

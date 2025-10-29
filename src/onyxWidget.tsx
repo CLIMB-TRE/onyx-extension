@@ -6,6 +6,7 @@ import Onyx from 'climb-onyx-gui';
 
 export class OnyxWidget extends ReactWidget {
   constructor(
+    widgetEnabled: boolean,
     httpPathHandler: (route: string) => Promise<Response>,
     s3PathHandler: (path: string) => Promise<void>,
     fileWriter: (path: string, content: string) => Promise<void>,
@@ -17,6 +18,7 @@ export class OnyxWidget extends ReactWidget {
     initialState?: Map<string, any>
   ) {
     super();
+    this.widgetEnabled = widgetEnabled;
     this.httpPathHandler = httpPathHandler;
     this.s3PathHandler = s3PathHandler;
     this.fileWriter = fileWriter;
@@ -32,6 +34,7 @@ export class OnyxWidget extends ReactWidget {
     this.disposed.connect(this._cleanup, this);
   }
 
+  widgetEnabled: boolean;
   httpPathHandler: (route: string) => Promise<Response>;
   s3PathHandler: (path: string) => Promise<void>;
   fileWriter: (path: string, content: string) => Promise<void>;
@@ -103,6 +106,7 @@ export class OnyxWidget extends ReactWidget {
   render(): JSX.Element {
     return (
       <Onyx
+        enabled={this.widgetEnabled}
         httpPathHandler={this.httpPathHandler}
         s3PathHandler={this.s3PathHandler}
         fileWriter={this.fileWriter}
