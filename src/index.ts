@@ -55,6 +55,18 @@ const plugin: JupyterFrontEndPlugin<void> = {
         console.error(`Failed to fetch @climb-onyx-gui version: ${error}`)
       );
 
+    // Handler for determining if the Onyx Widget is enabled
+    const widgetEnabledHandler = async (): Promise<boolean> => {
+      return requestAPI<any>('widget-enabled')
+        .then(data => {
+          return data['enabled'];
+        })
+        .catch(error => {
+          console.error(`Failed to fetch Onyx widget status: ${error}`);
+          return false;
+        });
+    };
+
     // Handler for rerouting requests to the Onyx API
     const httpPathHandler = async (route: string): Promise<Response> => {
       return requestAPIResponse('reroute', {}, ['route', route]);
@@ -115,8 +127,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
         }
       });
 
+      // Determine if the widget is enabled
+      const widgetEnabled = await widgetEnabledHandler();
+
       // Create the OnyxWidget instance
       const content = new OnyxWidget(
+        widgetEnabled,
         httpPathHandler,
         s3PathHandler,
         fileWriteHandler,
