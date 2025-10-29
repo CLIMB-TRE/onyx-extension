@@ -1,7 +1,6 @@
 import os
 import json
 from pathlib import Path
-import functools
 import boto3
 import tornado
 from tornado.httpclient import AsyncHTTPClient
@@ -9,31 +8,19 @@ from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 from ._version import __version__
 from .exceptions import (
-    APIError,
     ValidationError,
     AuthenticationError,
     BadGatewayError,
     GatewayTimeoutError,
 )
 from .validators import validate_s3_uri, validate_filename, validate_content
-
-
-def handle_api_errors(func):
-    @functools.wraps(func)
-    async def wrapper(self, *args, **kwargs):
-        try:
-            return await func(self, *args, **kwargs)
-        except APIError as e:
-            self.set_status(e.STATUS_CODE)
-            self.finish(json.dumps({"message": str(e)}))
-
-    return wrapper
+from .decorators import handle_api_errors, async_handle_api_errors
 
 
 class WidgetEnabledHandler(APIHandler):
     @tornado.web.authenticated
     @handle_api_errors
-    async def get(self):
+    def get(self):
         # Check for credentials to determine access to Onyx
         domain = os.environ.get("ONYX_DOMAIN")
         token = os.environ.get("ONYX_TOKEN")
@@ -46,7 +33,7 @@ class WidgetEnabledHandler(APIHandler):
 class S3ViewHandler(APIHandler):
     @tornado.web.authenticated
     @handle_api_errors
-    async def get(self):
+    def get(self):
         # Validate S3 URI
         bucket_name, key = validate_s3_uri(self.get_query_argument("uri"))
 
@@ -83,7 +70,7 @@ class S3ViewHandler(APIHandler):
 
 class RedirectingRouteHandler(APIHandler):
     @tornado.web.authenticated
-    @handle_api_errors
+    @async_handle_api_errors
     async def get(self):
         # Validate credentials
         domain = os.environ.get("ONYX_DOMAIN")
@@ -123,7 +110,7 @@ class RedirectingRouteHandler(APIHandler):
 class VersionHandler(APIHandler):
     @tornado.web.authenticated
     @handle_api_errors
-    async def get(self):
+    def get(self):
         # Return the version of the package
         self.finish(json.dumps({"version": __version__}))
 
@@ -131,7 +118,7 @@ class VersionHandler(APIHandler):
 class FileWriteHandler(APIHandler):
     @tornado.web.authenticated
     @handle_api_errors
-    async def post(self):
+    def post(self):
         # Validate path and content
         path = validate_filename(self.get_query_argument("path"))
         content = validate_content(self.get_json_body())
