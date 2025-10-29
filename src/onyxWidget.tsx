@@ -23,7 +23,7 @@ export class OnyxWidget extends ReactWidget {
     this.s3PathHandler = s3PathHandler;
     this.fileWriter = fileWriter;
     this.themeManager = themeManager;
-    this.theme = this.setTheme();
+    this.bsTheme = this.setBSTheme(this.themeManager.theme);
     this.version = version;
     this.name = name;
     this._stateDB = stateDB;
@@ -39,7 +39,7 @@ export class OnyxWidget extends ReactWidget {
   s3PathHandler: (path: string) => Promise<void>;
   fileWriter: (path: string, content: string) => Promise<void>;
   themeManager: IThemeManager;
-  theme: string;
+  bsTheme: string;
   version: string;
   name: string;
 
@@ -86,20 +86,17 @@ export class OnyxWidget extends ReactWidget {
     this.title.label = title;
   }
 
-  // Set the theme
-  setTheme(): string {
-    this.theme =
-      this.themeManager.theme &&
-      !this.themeManager.isLight(this.themeManager.theme)
-        ? 'dark'
-        : 'light';
-    document.documentElement.setAttribute('data-bs-theme', this.theme);
-    return this.theme;
+  // Set the bootstrap theme from JupyterLab theme
+  setBSTheme(theme: string | null): string {
+    this.bsTheme =
+      theme && !this.themeManager.isLight(theme) ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-bs-theme', this.bsTheme);
+    return this.bsTheme;
   }
 
-  // Update the theme and re-render widget
-  updateTheme(): void {
-    this.setTheme();
+  // Update the bootstrap theme and re-render widget
+  updateTheme(theme: string | null): void {
+    this.setBSTheme(theme);
     this.update();
   }
 
@@ -110,7 +107,7 @@ export class OnyxWidget extends ReactWidget {
         httpPathHandler={this.httpPathHandler}
         s3PathHandler={this.s3PathHandler}
         fileWriter={this.fileWriter}
-        extTheme={this.theme}
+        extTheme={this.bsTheme}
         extVersion={this.version}
         getItem={this.getItem.bind(this)}
         setItem={this.setItem.bind(this)}

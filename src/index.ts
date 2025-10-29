@@ -5,6 +5,7 @@ import {
 } from '@jupyterlab/application';
 import {
   ICommandPalette,
+  IThemeManager,
   MainAreaWidget,
   WidgetTracker
 } from '@jupyterlab/apputils';
@@ -233,7 +234,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     // Update theme on change
     themeManager.themeChanged.connect(theme => {
-      tracker.forEach(w => w.content.updateTheme());
+      tracker.forEach(w => w.content.updateTheme(theme.theme));
     });
   }
 };
