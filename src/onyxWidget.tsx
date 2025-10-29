@@ -1,14 +1,16 @@
 import React from 'react';
-import { ReactWidget } from '@jupyterlab/apputils';
+import { IThemeManager, ReactWidget } from '@jupyterlab/apputils';
 import { IStateDB } from '@jupyterlab/statedb';
 import { PLUGIN_NAMESPACE } from '.';
 import Onyx from 'climb-onyx-gui';
 
 export class OnyxWidget extends ReactWidget {
   constructor(
+    widgetEnabled: boolean,
     httpPathHandler: (route: string) => Promise<Response>,
     s3PathHandler: (path: string) => Promise<void>,
     fileWriter: (path: string, content: string) => Promise<void>,
+    themeManager: IThemeManager,
     version: string,
     name: string,
     stateDB: IStateDB,
@@ -16,9 +18,12 @@ export class OnyxWidget extends ReactWidget {
     initialState?: Map<string, any>
   ) {
     super();
+    this.widgetEnabled = widgetEnabled;
     this.httpPathHandler = httpPathHandler;
     this.s3PathHandler = s3PathHandler;
     this.fileWriter = fileWriter;
+    this.themeManager = themeManager;
+    this.bsTheme = this.setBSTheme(this.themeManager.theme);
     this.version = version;
     this.name = name;
     this._stateDB = stateDB;
@@ -29,9 +34,12 @@ export class OnyxWidget extends ReactWidget {
     this.disposed.connect(this._cleanup, this);
   }
 
+  widgetEnabled: boolean;
   httpPathHandler: (route: string) => Promise<Response>;
   s3PathHandler: (path: string) => Promise<void>;
   fileWriter: (path: string, content: string) => Promise<void>;
+  themeManager: IThemeManager;
+  bsTheme: string;
   version: string;
   name: string;
 
@@ -74,16 +82,32 @@ export class OnyxWidget extends ReactWidget {
   }
 
   // Set the title of the widget
-  setTitle = (title: string): void => {
+  setTitle(title: string): void {
     this.title.label = title;
-  };
+  }
+
+  // Set the bootstrap theme from JupyterLab theme
+  setBSTheme(theme: string | null): string {
+    this.bsTheme =
+      theme && !this.themeManager.isLight(theme) ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-bs-theme', this.bsTheme);
+    return this.bsTheme;
+  }
+
+  // Update the bootstrap theme and re-render widget
+  updateTheme(theme: string | null): void {
+    this.setBSTheme(theme);
+    this.update();
+  }
 
   render(): JSX.Element {
     return (
       <Onyx
+        enabled={this.widgetEnabled}
         httpPathHandler={this.httpPathHandler}
         s3PathHandler={this.s3PathHandler}
         fileWriter={this.fileWriter}
+        extTheme={this.bsTheme}
         extVersion={this.version}
         getItem={this.getItem.bind(this)}
         setItem={this.setItem.bind(this)}
