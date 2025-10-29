@@ -5,6 +5,7 @@ import {
 } from '@jupyterlab/application';
 import {
   ICommandPalette,
+  IThemeManager,
   MainAreaWidget,
   WidgetTracker
 } from '@jupyterlab/apputils';
@@ -26,13 +27,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: PLUGIN_ID,
   description: 'JupyterLab extension for the Onyx Graphical User Interface',
   autoStart: true,
-  requires: [ICommandPalette, IDocumentManager, IStateDB],
+  requires: [ICommandPalette, IDocumentManager, IStateDB, IThemeManager],
   optional: [ILauncher, ILayoutRestorer, IHTMLViewerTracker],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     documentManager: IDocumentManager,
     stateDB: IStateDB,
+    themeManager: IThemeManager,
     launcher: ILauncher | null,
     restorer: ILayoutRestorer | null,
     htmlTracker: IHTMLViewerTracker | null
@@ -136,6 +138,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         httpPathHandler,
         s3PathHandler,
         fileWriteHandler,
+        themeManager,
         version,
         name,
         stateDB,
@@ -228,6 +231,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
         panel.trusted = true;
       });
     }
+
+    // Update theme on change
+    themeManager.themeChanged.connect(theme => {
+      tracker.forEach(w => w.content.updateTheme(theme.theme));
+    });
   }
 };
 

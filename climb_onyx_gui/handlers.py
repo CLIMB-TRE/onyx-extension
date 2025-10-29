@@ -19,7 +19,7 @@ from .validators import validate_s3_uri, validate_filename, validate_content
 
 class WidgetEnabledHandler(APIHandler):
     @tornado.web.authenticated
-    def get(self):
+    async def get(self):
         try:
             # Check for credentials to determine access to Onyx
             domain = os.environ.get("ONYX_DOMAIN")
