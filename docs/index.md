@@ -10,7 +10,6 @@ hide:
 This is the documentation for [Onyx-extension](https://github.com/CLIMB-TRE/onyx-extension), an extension to [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/index.html) that provides:
 
 - :material-set-center:{ .pink }: Access to the [Onyx GUI](https://github.com/CLIMB-TRE/onyx-gui), a graphical user interface for interacting with the [Onyx](https://github.com/CLIMB-TRE/onyx/) database.
-- :material-file-plus:{ .pink }: An S3 download utility.
 - :material-dna:{ .pink }: Links to the [CLIMB-TRE documentation](https://climb-tre.github.io/).
 
 Onyx is being developed as part of the [CLIMB-TRE](https://climb-tre.github.io/) project.
