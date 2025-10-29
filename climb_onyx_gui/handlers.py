@@ -68,7 +68,7 @@ class S3ViewHandler(APIHandler):
             s3_object.download_fileobj(fp)
 
         # Return the path to the file
-        self.finish(json.dumps({"path": path}))
+        self.finish(json.dumps({"path": path.as_posix()}))
 
 
 class RedirectingRouteHandler(APIHandler):
