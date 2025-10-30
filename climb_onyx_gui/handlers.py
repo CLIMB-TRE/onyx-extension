@@ -23,7 +23,7 @@ ONYX_TOKEN = os.environ.get("ONYX_TOKEN")
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 JUPYTERLAB_S3_ENDPOINT = os.environ.get("JUPYTERLAB_S3_ENDPOINT")
-S3_DOWNLOADS_DIR = Path.home() / "s3_downloads"
+S3_DOWNLOADS_DIR = "./s3_downloads"
 
 
 class WidgetEnabledHandler(APIHandler):
@@ -63,12 +63,12 @@ class S3ViewHandler(APIHandler):
         Path(S3_DOWNLOADS_DIR).mkdir(parents=True, exist_ok=True)
 
         # Download the object
-        path = S3_DOWNLOADS_DIR / key
+        path = os.path.join(S3_DOWNLOADS_DIR, key)
         with open(path, "wb") as fp:
             s3_object.download_fileobj(fp)
 
         # Return the path to the file
-        self.finish(json.dumps({"path": path.as_posix()}))
+        self.finish(json.dumps({"path": path}))
 
 
 class RedirectingRouteHandler(APIHandler):
