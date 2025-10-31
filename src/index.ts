@@ -18,11 +18,13 @@ import { OnyxWidget } from './onyxWidget';
 import { docsIcon, onyxIcon } from './icon';
 
 export const PLUGIN_NAME = 'climb-onyx-gui';
-export const PLUGIN_NAMESPACE = `@${PLUGIN_NAME}`;
+// Namespace still includes '-extension' suffix
+// This is to enable continuation of pre-existing saved states
+export const PLUGIN_NAMESPACE = `@${PLUGIN_NAME}-extension`;
 const PLUGIN_ID = `${PLUGIN_NAMESPACE}:plugin`;
 
 const tracker = new WidgetTracker<MainAreaWidget<OnyxWidget>>({
-  namespace: PLUGIN_NAMESPACE
+  namespace: PLUGIN_NAME // Maintain consistency with existing tracker namespace
 });
 
 /**
@@ -44,7 +46,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     restorer: ILayoutRestorer | null,
     htmlTracker: IHTMLViewerTracker | null
   ) => {
-    console.log(`JupyterLab extension ${PLUGIN_NAMESPACE} is activated!`);
+    console.log(`JupyterLab extension ${PLUGIN_NAME} is activated!`);
 
     // Define command IDs and categories
     const docsCommandID = 'docs_extension';
@@ -56,12 +58,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
     requestAPI<any>('version')
       .then(data => {
         version = data['version'];
-        console.log(
-          `JupyterLab extension ${PLUGIN_NAMESPACE} version: ${version}`
-        );
+        console.log(`JupyterLab extension ${PLUGIN_NAME} version: ${version}`);
       })
       .catch(error =>
-        console.error(`Failed to fetch ${PLUGIN_NAMESPACE} version: ${error}`)
+        console.error(`Failed to fetch ${PLUGIN_NAME} version: ${error}`)
       );
 
     // Handler for determining if the Onyx Widget is enabled
@@ -71,7 +71,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return data['enabled'];
         })
         .catch(error => {
-          console.error(`Failed to fetch ${PLUGIN_NAMESPACE} status: ${error}`);
+          console.error(`Failed to fetch ${PLUGIN_NAME} status: ${error}`);
           return false;
         });
     };
