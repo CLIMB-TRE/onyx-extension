@@ -442,13 +442,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/ibm-plex-sans@npm:^5.1.1":
-  version: 5.2.5
-  resolution: "@fontsource/ibm-plex-sans@npm:5.2.5"
-  checksum: 68a2cad3db34900d5f6ef3327188e7db3d7b38c37afb96d5e6f2245b969c337e43f9d513dc700508f89c71c0a64292e2b6334f502911427b5a7707d2e643560c
-  languageName: node
-  linkType: hard
-
 "@fortawesome/fontawesome-free@npm:^5.12.0":
   version: 5.15.4
   resolution: "@fortawesome/fontawesome-free@npm:5.15.4"
@@ -2193,6 +2186,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"climb-jupyter-base-component@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "climb-jupyter-base-component@npm:0.2.1"
+  dependencies:
+    bootstrap: ^5.3.7
+  peerDependencies:
+    react: ^17.0.2
+    react-dom: ^17.0.2
+  checksum: 03625639f2d098c046cd6f361f81d62a2767a6696fb9000e2930d4a422c134c0733534e9711f5e06705a1d6115a9373365267471623e06e7121be707c77af7ff
+  languageName: node
+  linkType: hard
+
 "climb-onyx-gui-extension@workspace:.":
   version: 0.0.0-use.local
   resolution: "climb-onyx-gui-extension@workspace:."
@@ -2210,7 +2215,8 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-onyx-gui: ^0.16.4
+    climb-jupyter-base-component: ^0.2.1
+    climb-onyx-gui: 0.16.4-dev
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -2234,16 +2240,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.16.4":
-  version: 0.16.4
-  resolution: "climb-onyx-gui@npm:0.16.4"
+"climb-onyx-gui@npm:0.16.4-dev":
+  version: 0.16.4-dev
+  resolution: "climb-onyx-gui@npm:0.16.4-dev"
   dependencies:
     "@ag-grid-community/client-side-row-model": ^32.2.0
     "@ag-grid-community/core": ^32.2.0
     "@ag-grid-community/csv-export": ^32.2.0
     "@ag-grid-community/react": ^32.2.0
     "@ag-grid-community/styles": ^32.2.0
-    "@fontsource/ibm-plex-sans": ^5.1.1
     "@tanstack/react-query": ^4.36.1
     bootstrap: ^5.3.7
     export-to-csv: ^1.3.0
@@ -2255,9 +2260,10 @@ __metadata:
     react-plotly.js: ^2.6.0
     react-select: ^5.8.0
   peerDependencies:
+    climb-jupyter-base-component: ^0.2.1
     react: ^17.0.2
     react-dom: ^17.0.2
-  checksum: 8f621086026b97cb4ebd13393927c139c46c17fc3fdc21edcad86c0ef2190414c7f210c74f38bcb308bd3a33d632392af69f58e83890271f2209759a7a1355bc
+  checksum: f6ff03a40d2e1f317e905a5029c0716b99313a6f8d93b82112cdb85b80ff9904bdf1c25a570d23e043b986c440cbfe8f02740a7bba870b7f43755b00e955d5e5
   languageName: node
   linkType: hard
 
