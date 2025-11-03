@@ -1,15 +1,15 @@
 import React from 'react';
 import { IThemeManager, ReactWidget } from '@jupyterlab/apputils';
+import { IDocumentManager } from '@jupyterlab/docmanager';
 import { IStateDB } from '@jupyterlab/statedb';
 import { PLUGIN_NAMESPACE } from '.';
+import { requestAPI, requestAPIResponse } from './handler';
 import Onyx from 'climb-onyx-gui';
 
 export class OnyxWidget extends ReactWidget {
   constructor(
     widgetEnabled: boolean,
-    httpPathHandler: (route: string) => Promise<Response>,
-    s3PathHandler: (path: string) => Promise<void>,
-    fileWriter: (path: string, content: string) => Promise<void>,
+    documentManager: IDocumentManager,
     themeManager: IThemeManager,
     version: string,
     name: string,
@@ -19,9 +19,7 @@ export class OnyxWidget extends ReactWidget {
   ) {
     super();
     this.widgetEnabled = widgetEnabled;
-    this.httpPathHandler = httpPathHandler;
-    this.s3PathHandler = s3PathHandler;
-    this.fileWriter = fileWriter;
+    this.documentManager = documentManager;
     this.themeManager = themeManager;
     this.bsTheme = this.setBSTheme(this.themeManager.theme);
     this.version = version;
@@ -30,18 +28,48 @@ export class OnyxWidget extends ReactWidget {
     this._stateKeyPrefix = stateKeyPrefix;
     this._cache = initialState ?? new Map<string, any>();
 
+    // Handler for rerouting requests to the Onyx API
+    this.httpPathHandler = async (route: string): Promise<Response> => {
+      return requestAPIResponse('reroute', {}, ['route', route]);
+    };
+
+    // Handler for opening S3 documents
+    this.s3PathHandler = async (uri: string): Promise<void> => {
+      return requestAPI<any>('s3', {}, ['uri', uri]).then(data => {
+        this.documentManager.open(data['path']);
+      });
+    };
+
+    // Handler for writing files
+    this.fileWriter = async (path: string, content: string): Promise<void> => {
+      return requestAPI<any>(
+        'file-write',
+        {
+          body: JSON.stringify({ content: content }),
+          method: 'POST'
+        },
+        ['path', path]
+      ).then(data => {
+        this.documentManager.open(data['path']);
+      });
+    };
+
+    // Add class for the widget
+    this.addClass('onyx-Widget');
+
     // Cleanup stateDB on widget disposal
     this.disposed.connect(this._cleanup, this);
   }
 
   widgetEnabled: boolean;
-  httpPathHandler: (route: string) => Promise<Response>;
-  s3PathHandler: (path: string) => Promise<void>;
-  fileWriter: (path: string, content: string) => Promise<void>;
+  documentManager: IDocumentManager;
   themeManager: IThemeManager;
   bsTheme: string;
   version: string;
   name: string;
+  httpPathHandler: (route: string) => Promise<Response>;
+  s3PathHandler: (path: string) => Promise<void>;
+  fileWriter: (path: string, content: string) => Promise<void>;
 
   private _stateDB: IStateDB;
   private _stateKeyPrefix: string;
