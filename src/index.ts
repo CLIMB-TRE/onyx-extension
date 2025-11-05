@@ -14,7 +14,7 @@ import { IDocumentManager } from '@jupyterlab/docmanager';
 import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 import { ILauncher } from '@jupyterlab/launcher';
 import { requestAPI } from './handler';
-import { OnyxWidget } from './OnyxWidget';
+import { OnyxWidget } from './onyxWidget';
 import { docsIcon, onyxIcon } from './icon';
 
 export const PLUGIN_NAME = 'climb-onyx-gui';
