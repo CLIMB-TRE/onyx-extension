@@ -75,7 +75,7 @@
         "@jupyterlab/launcher": "^3.6.1 || ^4.0.0",
         "@jupyterlab/services": "^6.6.1 || ^7.0.0",
         "climb-jupyter-base-component": "^0.2.1",
-        "climb-onyx-gui": "0.16.4-dev",
+        "climb-onyx-gui": "^0.16.6",
         "react": "^17.0.1 || ^18.2.0",
         "react-dom": "^17.0.1 || ^18.2.0",
         "webpack": "^5.92.0"
