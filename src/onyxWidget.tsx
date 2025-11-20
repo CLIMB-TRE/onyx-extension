@@ -28,32 +28,6 @@ export class OnyxWidget extends ReactWidget {
     this._stateKeyPrefix = stateKeyPrefix;
     this._cache = initialState ?? new Map<string, any>();
 
-    // Handler for rerouting requests to the Onyx API
-    this.httpPathHandler = async (route: string): Promise<Response> => {
-      return requestAPIResponse('reroute', {}, ['route', route]);
-    };
-
-    // Handler for opening S3 documents
-    this.s3PathHandler = async (uri: string): Promise<void> => {
-      return requestAPI<any>('s3', {}, ['uri', uri]).then(data => {
-        this.documentManager.open(data['path']);
-      });
-    };
-
-    // Handler for writing files
-    this.fileWriter = async (path: string, content: string): Promise<void> => {
-      return requestAPI<any>(
-        'file-write',
-        {
-          body: JSON.stringify({ content: content }),
-          method: 'POST'
-        },
-        ['path', path]
-      ).then(data => {
-        this.documentManager.open(data['path']);
-      });
-    };
-
     // Add class for the widget
     this.addClass('onyx-Widget');
 
@@ -67,10 +41,6 @@ export class OnyxWidget extends ReactWidget {
   bsTheme: string;
   version: string;
   name: string;
-  httpPathHandler: (route: string) => Promise<Response>;
-  s3PathHandler: (path: string) => Promise<void>;
-  fileWriter: (path: string, content: string) => Promise<void>;
-
   private _stateDB: IStateDB;
   private _stateKeyPrefix: string;
   private _cache: Map<string, any>;
@@ -96,24 +66,6 @@ export class OnyxWidget extends ReactWidget {
     });
   }
 
-  // Get item from the cache
-  getItem(key: string) {
-    const stateKey = `${this._stateKeyPrefix}:${key}`;
-    return this._cache.get(stateKey);
-  }
-
-  // Set item in the cache and save to stateDB
-  setItem(key: string, value: any) {
-    const stateKey = `${this._stateKeyPrefix}:${key}`;
-    this._cache.set(stateKey, value);
-    this._save(stateKey, value);
-  }
-
-  // Set the title of the widget
-  setTitle(title: string): void {
-    this.title.label = title;
-  }
-
   // Set the bootstrap theme from JupyterLab theme
   setBSTheme(theme: string | null): string {
     this.bsTheme =
@@ -128,18 +80,60 @@ export class OnyxWidget extends ReactWidget {
     this.update();
   }
 
+  // Handler for rerouting requests to the Onyx API
+  httpPathHandler = async (route: string): Promise<Response> => {
+    return requestAPIResponse('reroute', {}, ['route', route]);
+  };
+
+  // Handler for opening S3 documents
+  s3PathHandler = async (uri: string): Promise<void> => {
+    const data = await requestAPI<any>('s3', {}, ['uri', uri]);
+    this.documentManager.open(data['path']);
+  };
+
+  // Handler for writing files
+  fileWriter = async (path: string, content: string): Promise<void> => {
+    const data = await requestAPI<any>(
+      'file-write',
+      {
+        body: JSON.stringify({ content: content }),
+        method: 'POST'
+      },
+      ['path', path]
+    );
+    this.documentManager.open(data['path']);
+  };
+
+  // Get item from the cache
+  getItem = (key: string) => {
+    const stateKey = `${this._stateKeyPrefix}:${key}`;
+    return this._cache.get(stateKey);
+  };
+
+  // Set item in the cache and save to stateDB
+  setItem = (key: string, value: any) => {
+    const stateKey = `${this._stateKeyPrefix}:${key}`;
+    this._cache.set(stateKey, value);
+    this._save(stateKey, value);
+  };
+
+  // Set the title of the widget
+  setTitle = (title: string): void => {
+    this.title.label = title;
+  };
+
   render(): JSX.Element {
     return (
       <Onyx
         enabled={this.widgetEnabled}
+        extTheme={this.bsTheme}
+        extVersion={this.version}
         httpPathHandler={this.httpPathHandler}
         s3PathHandler={this.s3PathHandler}
         fileWriter={this.fileWriter}
-        extTheme={this.bsTheme}
-        extVersion={this.version}
-        getItem={this.getItem.bind(this)}
-        setItem={this.setItem.bind(this)}
-        setTitle={this.setTitle.bind(this)}
+        getItem={this.getItem}
+        setItem={this.setItem}
+        setTitle={this.setTitle}
       />
     );
   }
