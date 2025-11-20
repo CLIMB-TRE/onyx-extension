@@ -2186,15 +2186,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"climb-jupyter-base-component@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "climb-jupyter-base-component@npm:0.2.1"
+"climb-jupyter-base-component@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "climb-jupyter-base-component@npm:0.2.2"
   dependencies:
     bootstrap: ^5.3.7
   peerDependencies:
-    react: ^17.0.2
-    react-dom: ^17.0.2
-  checksum: 03625639f2d098c046cd6f361f81d62a2767a6696fb9000e2930d4a422c134c0733534e9711f5e06705a1d6115a9373365267471623e06e7121be707c77af7ff
+    react: ^17.0.1 || ^18.2.0
+    react-dom: ^17.0.1 || ^18.2.0
+  checksum: f574f66856e9bcb5e5a8f9a0d6aa40a3035e344499a464c0a5908b4a56c2df571fa43923af1c309d5588ef38fa6011e49f26d4fffb1535fdd654f6e96077c165
   languageName: node
   linkType: hard
 
@@ -2215,8 +2215,8 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-jupyter-base-component: ^0.2.1
-    climb-onyx-gui: ^0.16.6
+    climb-jupyter-base-component: ^0.2.2
+    climb-onyx-gui: ^0.16.7
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -2237,15 +2237,15 @@ __metadata:
     webpack: ^5.92.0
     yjs: ^13.5.0
   peerDependencies:
-    climb-jupyter-base-component: ^0.2.1
+    climb-jupyter-base-component: ^0.2.2
     react: ^17.0.1 || ^18.2.0
     react-dom: ^17.0.1 || ^18.2.0
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.16.6":
-  version: 0.16.6
-  resolution: "climb-onyx-gui@npm:0.16.6"
+"climb-onyx-gui@npm:^0.16.7":
+  version: 0.16.7
+  resolution: "climb-onyx-gui@npm:0.16.7"
   dependencies:
     "@ag-grid-community/client-side-row-model": ^32.2.0
     "@ag-grid-community/core": ^32.2.0
@@ -2263,9 +2263,9 @@ __metadata:
     react-select: ^5.8.0
   peerDependencies:
     climb-jupyter-base-component: ^0.2.1
-    react: ^17.0.2
-    react-dom: ^17.0.2
-  checksum: 7eb041d93e5a77e67c2047c37ceecebf5a76f05a0beb90211d0c3708927ac7960bef45110cd1cc1f1657a29347ae2448a05f9c25f0e0a9ee07e2898de0e37f90
+    react: ^17.0.1 || ^18.2.0
+    react-dom: ^17.0.1 || ^18.2.0
+  checksum: d4ef4388f61f5d2a5bd53e2b8b6d08ad731cd4c90186768d730386b1e13134bf3d99893dfff12d7c94debeab112f407f8ca55fa88124b042a427b083e241f80f
   languageName: node
   linkType: hard
 
