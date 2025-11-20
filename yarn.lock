@@ -2221,7 +2221,6 @@ __metadata:
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
     eslint-plugin-prettier: ^5.0.0
-    mkdirp: ^1.0.3
     npm-run-all: ^4.1.5
     prettier: ^3.0.0
     react: ^17.0.1 || ^18.2.0
@@ -2237,6 +2236,10 @@ __metadata:
     typescript: ~5.7.0
     webpack: ^5.92.0
     yjs: ^13.5.0
+  peerDependencies:
+    climb-jupyter-base-component: ^0.2.1
+    react: ^17.0.1 || ^18.2.0
+    react-dom: ^17.0.1 || ^18.2.0
   languageName: unknown
   linkType: soft
 
@@ -4452,15 +4455,6 @@ __metadata:
   version: 7.1.2
   resolution: "minipass@npm:7.1.2"
   checksum: 2bfd325b95c555f2b4d2814d49325691c7bee937d753814861b0b49d5edcda55cbbf22b6b6a60bb91eddac8668771f03c5ff647dcd9d0f798e9548b9cdc46ee3
-  languageName: node
-  linkType: hard
-
-"mkdirp@npm:^1.0.3":
-  version: 1.0.4
-  resolution: "mkdirp@npm:1.0.4"
-  bin:
-    mkdirp: bin/cmd.js
-  checksum: a96865108c6c3b1b8e1d5e9f11843de1e077e57737602de1b82030815f311be11f96f09cce59bd5b903d0b29834733e5313f9301e3ed6d6f6fba2eae0df4298f
   languageName: node
   linkType: hard
 
