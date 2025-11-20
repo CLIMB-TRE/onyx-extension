@@ -1,6 +1,6 @@
 import re
 from typing import Optional, Tuple, Dict, Any
-from .exceptions import ValidationError
+from climb_jupyter_base.exceptions import ValidationError
 
 
 def validate_s3_uri(uri: Optional[str]) -> Tuple[str, str]:

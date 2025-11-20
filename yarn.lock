@@ -442,13 +442,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/ibm-plex-sans@npm:^5.1.1":
-  version: 5.2.5
-  resolution: "@fontsource/ibm-plex-sans@npm:5.2.5"
-  checksum: 68a2cad3db34900d5f6ef3327188e7db3d7b38c37afb96d5e6f2245b969c337e43f9d513dc700508f89c71c0a64292e2b6334f502911427b5a7707d2e643560c
-  languageName: node
-  linkType: hard
-
 "@fortawesome/fontawesome-free@npm:^5.12.0":
   version: 5.15.4
   resolution: "@fortawesome/fontawesome-free@npm:5.15.4"
@@ -2055,11 +2048,11 @@ __metadata:
   linkType: hard
 
 "bootstrap@npm:^5.3.7":
-  version: 5.3.7
-  resolution: "bootstrap@npm:5.3.7"
+  version: 5.3.8
+  resolution: "bootstrap@npm:5.3.8"
   peerDependencies:
     "@popperjs/core": ^2.11.8
-  checksum: ac3ebcbdd37caed60cf515953a007af31265548271471ab1aff070cd4ad2aa3ec215b25144b3172882953ad107fe04548fe0bb6c71fcde95153b8605c564173c
+  checksum: 6813254a1140646ca53f33f2d0c5fbf7cf544dabba06cddc061243acf4ec71fadff348860ed4623e1b486c05c151d7807da017dc473e748add0926d2cf9f1a04
   languageName: node
   linkType: hard
 
@@ -2193,6 +2186,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"climb-jupyter-base-component@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "climb-jupyter-base-component@npm:0.2.2"
+  dependencies:
+    bootstrap: ^5.3.7
+  peerDependencies:
+    react: ^17.0.1 || ^18.2.0
+    react-dom: ^17.0.1 || ^18.2.0
+  checksum: f574f66856e9bcb5e5a8f9a0d6aa40a3035e344499a464c0a5908b4a56c2df571fa43923af1c309d5588ef38fa6011e49f26d4fffb1535fdd654f6e96077c165
+  languageName: node
+  linkType: hard
+
 "climb-onyx-gui-extension@workspace:.":
   version: 0.0.0-use.local
   resolution: "climb-onyx-gui-extension@workspace:."
@@ -2210,12 +2215,12 @@ __metadata:
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
-    climb-onyx-gui: ^0.16.4
+    climb-jupyter-base-component: ^0.2.2
+    climb-onyx-gui: ^0.16.7
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
     eslint-plugin-prettier: ^5.0.0
-    mkdirp: ^1.0.3
     npm-run-all: ^4.1.5
     prettier: ^3.0.0
     react: ^17.0.1 || ^18.2.0
@@ -2231,21 +2236,23 @@ __metadata:
     typescript: ~5.7.0
     webpack: ^5.92.0
     yjs: ^13.5.0
+  peerDependencies:
+    climb-jupyter-base-component: ^0.2.2
+    react: ^17.0.1 || ^18.2.0
+    react-dom: ^17.0.1 || ^18.2.0
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.16.4":
-  version: 0.16.4
-  resolution: "climb-onyx-gui@npm:0.16.4"
+"climb-onyx-gui@npm:^0.16.7":
+  version: 0.16.7
+  resolution: "climb-onyx-gui@npm:0.16.7"
   dependencies:
     "@ag-grid-community/client-side-row-model": ^32.2.0
     "@ag-grid-community/core": ^32.2.0
     "@ag-grid-community/csv-export": ^32.2.0
     "@ag-grid-community/react": ^32.2.0
     "@ag-grid-community/styles": ^32.2.0
-    "@fontsource/ibm-plex-sans": ^5.1.1
     "@tanstack/react-query": ^4.36.1
-    bootstrap: ^5.3.7
     export-to-csv: ^1.3.0
     http-status-codes: ^2.3.0
     json-edit-react: ^1.22.6
@@ -2255,9 +2262,10 @@ __metadata:
     react-plotly.js: ^2.6.0
     react-select: ^5.8.0
   peerDependencies:
-    react: ^17.0.2
-    react-dom: ^17.0.2
-  checksum: 8f621086026b97cb4ebd13393927c139c46c17fc3fdc21edcad86c0ef2190414c7f210c74f38bcb308bd3a33d632392af69f58e83890271f2209759a7a1355bc
+    climb-jupyter-base-component: ^0.2.1
+    react: ^17.0.1 || ^18.2.0
+    react-dom: ^17.0.1 || ^18.2.0
+  checksum: d4ef4388f61f5d2a5bd53e2b8b6d08ad731cd4c90186768d730386b1e13134bf3d99893dfff12d7c94debeab112f407f8ca55fa88124b042a427b083e241f80f
   languageName: node
   linkType: hard
 
@@ -4447,15 +4455,6 @@ __metadata:
   version: 7.1.2
   resolution: "minipass@npm:7.1.2"
   checksum: 2bfd325b95c555f2b4d2814d49325691c7bee937d753814861b0b49d5edcda55cbbf22b6b6a60bb91eddac8668771f03c5ff647dcd9d0f798e9548b9cdc46ee3
-  languageName: node
-  linkType: hard
-
-"mkdirp@npm:^1.0.3":
-  version: 1.0.4
-  resolution: "mkdirp@npm:1.0.4"
-  bin:
-    mkdirp: bin/cmd.js
-  checksum: a96865108c6c3b1b8e1d5e9f11843de1e077e57737602de1b82030815f311be11f96f09cce59bd5b903d0b29834733e5313f9301e3ed6d6f6fba2eae0df4298f
   languageName: node
   linkType: hard
 

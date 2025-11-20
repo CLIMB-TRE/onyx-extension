@@ -7,14 +7,14 @@ from tornado.httpclient import AsyncHTTPClient
 from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 from ._version import __version__
-from .exceptions import (
+from climb_jupyter_base.exceptions import (
     ValidationError,
     AuthenticationError,
     BadGatewayError,
     GatewayTimeoutError,
 )
+from climb_jupyter_base.decorators import handle_api_errors, async_handle_api_errors
 from .validators import validate_s3_uri, validate_filename, validate_content
-from .decorators import handle_api_errors, async_handle_api_errors
 
 
 PLUGIN_NAME = "climb-onyx-gui"
