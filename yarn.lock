@@ -2216,7 +2216,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^6.1.0
     "@typescript-eslint/parser": ^6.1.0
     climb-jupyter-base-component: ^0.2.2
-    climb-onyx-gui: ^0.16.7
+    climb-onyx-gui: ^0.17.1
     css-loader: ^6.7.1
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -2243,9 +2243,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"climb-onyx-gui@npm:^0.16.7":
-  version: 0.16.7
-  resolution: "climb-onyx-gui@npm:0.16.7"
+"climb-onyx-gui@npm:^0.17.1":
+  version: 0.17.1
+  resolution: "climb-onyx-gui@npm:0.17.1"
   dependencies:
     "@ag-grid-community/client-side-row-model": ^32.2.0
     "@ag-grid-community/core": ^32.2.0
@@ -2265,7 +2265,7 @@ __metadata:
     climb-jupyter-base-component: ^0.2.1
     react: ^17.0.1 || ^18.2.0
     react-dom: ^17.0.1 || ^18.2.0
-  checksum: d4ef4388f61f5d2a5bd53e2b8b6d08ad731cd4c90186768d730386b1e13134bf3d99893dfff12d7c94debeab112f407f8ca55fa88124b042a427b083e241f80f
+  checksum: a7927620dd8fd8b94b8611353dc73af8f7dcc3da769f748683da92335b8c8e26cb8c88563cc1d73fd8fc054aaf5d0f552c23f2ec65636a53abce275f6cc3418a
   languageName: node
   linkType: hard
 

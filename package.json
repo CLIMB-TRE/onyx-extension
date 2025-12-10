@@ -74,7 +74,7 @@
         "@jupyterlab/htmlviewer": "^3.6.1 || ^4.2.1",
         "@jupyterlab/launcher": "^3.6.1 || ^4.0.0",
         "@jupyterlab/services": "^6.6.1 || ^7.0.0",
-        "climb-onyx-gui": "^0.16.7"
+        "climb-onyx-gui": "^0.17.1"
     },
     "peerDependencies": {
         "climb-jupyter-base-component": "^0.2.2",
