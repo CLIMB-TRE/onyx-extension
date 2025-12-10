@@ -4,6 +4,7 @@ from pathlib import Path
 import boto3
 import tornado
 from tornado.httpclient import AsyncHTTPClient
+from tornado.simple_httpclient import HTTPStreamClosedError
 from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 from ._version import __version__
@@ -103,7 +104,10 @@ class RedirectingRouteHandler(APIHandler):
             raise BadGatewayError("Failed to connect to Onyx: Connection refused")
         except TimeoutError:
             raise GatewayTimeoutError("Failed to connect to Onyx: Gateway timeout")
+        except HTTPStreamClosedError:
+            raise BadGatewayError("Failed to connect to Onyx: Stream forcibly closed")
         else:
+            self.set_status(response.code)
             self.finish(response.body)
 
 
