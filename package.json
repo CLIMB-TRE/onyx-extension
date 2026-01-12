@@ -1,6 +1,6 @@
 {
     "name": "climb-onyx-gui-extension",
-    "version": "0.12.8",
+    "version": "0.12.9",
     "description": "JupyterLab extension for the Onyx Graphical User Interface",
     "keywords": [
         "gui",
@@ -74,10 +74,12 @@
         "@jupyterlab/htmlviewer": "^3.6.1 || ^4.2.1",
         "@jupyterlab/launcher": "^3.6.1 || ^4.0.0",
         "@jupyterlab/services": "^6.6.1 || ^7.0.0",
-        "climb-onyx-gui": "^0.16.4",
+        "climb-onyx-gui": "^0.17.2"
+    },
+    "peerDependencies": {
+        "climb-jupyter-base-component": "^0.2.2",
         "react": "^17.0.1 || ^18.2.0",
-        "react-dom": "^17.0.1 || ^18.2.0",
-        "webpack": "^5.92.0"
+        "react-dom": "^17.0.1 || ^18.2.0"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^3.6.1 || ^4.0.0",
@@ -86,13 +88,15 @@
         "@types/react-addons-linked-state-mixin": "^0.14.22",
         "@typescript-eslint/eslint-plugin": "^6.1.0",
         "@typescript-eslint/parser": "^6.1.0",
+        "climb-jupyter-base-component": "^0.2.2",
         "css-loader": "^6.7.1",
         "eslint": "^8.36.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^5.0.0",
-        "mkdirp": "^1.0.3",
         "npm-run-all": "^4.1.5",
         "prettier": "^3.0.0",
+        "react": "^17.0.1 || ^18.2.0",
+        "react-dom": "^17.0.1 || ^18.2.0",
         "rimraf": "^5.0.1",
         "source-map-loader": "^1.0.2",
         "style-loader": "^3.3.1",
@@ -102,6 +106,7 @@
         "stylelint-csstree-validator": "^3.0.0",
         "stylelint-prettier": "^4.0.0",
         "typescript": "~5.7.0",
+        "webpack": "^5.92.0",
         "yjs": "^13.5.0"
     },
     "sideEffects": [

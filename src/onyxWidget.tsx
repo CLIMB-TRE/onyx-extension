@@ -1,15 +1,15 @@
 import React from 'react';
 import { IThemeManager, ReactWidget } from '@jupyterlab/apputils';
+import { IDocumentManager } from '@jupyterlab/docmanager';
 import { IStateDB } from '@jupyterlab/statedb';
 import { PLUGIN_NAMESPACE } from '.';
+import { requestAPI, requestAPIResponse } from './handler';
 import Onyx from 'climb-onyx-gui';
 
 export class OnyxWidget extends ReactWidget {
   constructor(
     widgetEnabled: boolean,
-    httpPathHandler: (route: string) => Promise<Response>,
-    s3PathHandler: (path: string) => Promise<void>,
-    fileWriter: (path: string, content: string) => Promise<void>,
+    documentManager: IDocumentManager,
     themeManager: IThemeManager,
     version: string,
     name: string,
@@ -19,9 +19,7 @@ export class OnyxWidget extends ReactWidget {
   ) {
     super();
     this.widgetEnabled = widgetEnabled;
-    this.httpPathHandler = httpPathHandler;
-    this.s3PathHandler = s3PathHandler;
-    this.fileWriter = fileWriter;
+    this.documentManager = documentManager;
     this.themeManager = themeManager;
     this.bsTheme = this.setBSTheme(this.themeManager.theme);
     this.version = version;
@@ -30,19 +28,19 @@ export class OnyxWidget extends ReactWidget {
     this._stateKeyPrefix = stateKeyPrefix;
     this._cache = initialState ?? new Map<string, any>();
 
+    // Add class for the widget
+    this.addClass('onyx-Widget');
+
     // Cleanup stateDB on widget disposal
     this.disposed.connect(this._cleanup, this);
   }
 
   widgetEnabled: boolean;
-  httpPathHandler: (route: string) => Promise<Response>;
-  s3PathHandler: (path: string) => Promise<void>;
-  fileWriter: (path: string, content: string) => Promise<void>;
+  documentManager: IDocumentManager;
   themeManager: IThemeManager;
   bsTheme: string;
   version: string;
   name: string;
-
   private _stateDB: IStateDB;
   private _stateKeyPrefix: string;
   private _cache: Map<string, any>;
@@ -68,24 +66,6 @@ export class OnyxWidget extends ReactWidget {
     });
   }
 
-  // Get item from the cache
-  getItem(key: string) {
-    const stateKey = `${this._stateKeyPrefix}:${key}`;
-    return this._cache.get(stateKey);
-  }
-
-  // Set item in the cache and save to stateDB
-  setItem(key: string, value: any) {
-    const stateKey = `${this._stateKeyPrefix}:${key}`;
-    this._cache.set(stateKey, value);
-    this._save(stateKey, value);
-  }
-
-  // Set the title of the widget
-  setTitle(title: string): void {
-    this.title.label = title;
-  }
-
   // Set the bootstrap theme from JupyterLab theme
   setBSTheme(theme: string | null): string {
     this.bsTheme =
@@ -100,18 +80,60 @@ export class OnyxWidget extends ReactWidget {
     this.update();
   }
 
+  // Handler for rerouting requests to the Onyx API
+  httpPathHandler = async (route: string): Promise<Response> => {
+    return requestAPIResponse('reroute', {}, ['route', route]);
+  };
+
+  // Handler for opening S3 documents
+  s3PathHandler = async (uri: string): Promise<void> => {
+    const data = await requestAPI<any>('s3', {}, ['uri', uri]);
+    this.documentManager.open(data['path']);
+  };
+
+  // Handler for writing files
+  fileWriter = async (path: string, content: string): Promise<void> => {
+    const data = await requestAPI<any>(
+      'file-write',
+      {
+        body: JSON.stringify({ content: content }),
+        method: 'POST'
+      },
+      ['path', path]
+    );
+    this.documentManager.open(data['path']);
+  };
+
+  // Get item from the cache
+  getItem = (key: string) => {
+    const stateKey = `${this._stateKeyPrefix}:${key}`;
+    return this._cache.get(stateKey);
+  };
+
+  // Set item in the cache and save to stateDB
+  setItem = (key: string, value: any) => {
+    const stateKey = `${this._stateKeyPrefix}:${key}`;
+    this._cache.set(stateKey, value);
+    this._save(stateKey, value);
+  };
+
+  // Set the title of the widget
+  setTitle = (title: string): void => {
+    this.title.label = title;
+  };
+
   render(): JSX.Element {
     return (
       <Onyx
         enabled={this.widgetEnabled}
+        extTheme={this.bsTheme}
+        extVersion={this.version}
         httpPathHandler={this.httpPathHandler}
         s3PathHandler={this.s3PathHandler}
         fileWriter={this.fileWriter}
-        extTheme={this.bsTheme}
-        extVersion={this.version}
-        getItem={this.getItem.bind(this)}
-        setItem={this.setItem.bind(this)}
-        setTitle={this.setTitle.bind(this)}
+        getItem={this.getItem}
+        setItem={this.setItem}
+        setTitle={this.setTitle}
       />
     );
   }
