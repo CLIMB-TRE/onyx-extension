@@ -18,80 +18,88 @@ Documentation can be found [here](https://climb-tre.github.io/onyx-extension/).
 
 ## Setup
 
-This extension requires `JupyterLab >= 3.0.0, <5.0.0`.
+### Install from [PyPI](https://pypi.org/project/climb-onyx-gui/)
 
-To install the extension, execute:
+Assuming you have JupyterLab installed:
 
-```bash
-pip install climb-onyx-gui
+```
+$ pip install climb-onyx-gui
 ```
 
-To remove the extension, execute:
+Otherwise:
 
-```bash
-pip uninstall climb-onyx-gui
+```
+$ pip install "jupyterlab>=3" climb-onyx-gui
 ```
 
-## Troubleshooting
+### Build from source
 
-If you are seeing the frontend extension, but it is not working, check that the server extension is enabled:
+Clone the repository:
 
-```bash
+```
+$ git clone https://github.com/CLIMB-TRE/onyx-extension.git
+$ cd onyx-extension/
+```
+
+Ensure you have Miniconda (or an alternative conda installer) available. Installation instructions for Conda can be found [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html).
+
+Create and activate a conda environment with JupyterLab and NodeJS:
+
+```
+$ conda create -n jupyterlab-ext -c conda-forge jupyterlab=4 nodejs=20
+$ conda activate jupyterlab-ext
+```
+
+Install the extension dependencies with the JupyterLab package manager `jlpm`:
+
+```
+$ jlpm install
+```
+
+Build the extension and install it:
+
+```
+$ jlpm run build
+$ pip install -ve .
+```
+
+Optionally, copy and edit `.env.example` with `ONYX_DOMAIN` and `ONYX_TOKEN` for your development instance of Onyx:
+
+```
+$ cp .env.example .env
+$ source .env # After editing
+```
+
+You can now launch JupyterLab with:
+
+```
+$ jupyter lab
+```
+
+And the Onyx extension will be ready on the launcher.
+
+### Local development
+
+If you wish to develop the extension, ensure you have followed the above steps to build, install and run the extension from source.
+
+From there, you can simply modify the extension code and dependencies, and reinstall/rebuild the extension by executing:
+
+```
+$ jlpm install && jlpm run build && pip install -ve .
+```
+
+and then relaunching JupyterLab.
+
+### Troubleshooting
+
+If you are seeing the frontend extension, but it is not working, check that the server extension is enabled with:
+
+```
 jupyter server extension list
 ```
 
-If the server extension is installed and enabled, but you are not seeing the frontend extension, check the frontend extension is installed:
+If the server extension is installed and enabled, but you are not seeing the frontend extension, check the frontend extension is installed with:
 
-```bash
+```
 jupyter labextension list
 ```
-
-## Contributing
-
-### Development install
-
-Note: You will need NodeJS to build the extension package.
-
-The `jlpm` command is JupyterLab's pinned version of [yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use `yarn` or `npm` in lieu of `jlpm` below.
-
-```bash
-# Clone the repo to your local environment
-# Change directory to the extension directory
-# Install package in development mode
-pip install -e "."
-# Link your development version of the extension with JupyterLab
-jupyter labextension develop . --overwrite
-# Server extension must be manually installed in develop mode
-jupyter server extension enable climb-onyx-gui
-# Rebuild extension Typescript source after making changes
-jlpm build
-```
-
-You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
-
-```bash
-# Watch the source directory in one terminal, automatically rebuilding when needed
-jlpm watch
-# Run JupyterLab in another terminal
-jupyter lab
-```
-
-With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
-
-By default, the `jlpm build` command generates the source maps for this extension to make it easier to debug using the browser dev tools. To also generate source maps for the JupyterLab core extensions, you can run the following command:
-
-```bash
-jupyter lab build --minimize=False
-```
-
-### Development uninstall
-
-```bash
-# Server extension must be manually disabled in develop mode
-jupyter server extension disable climb-onyx-gui
-pip uninstall climb-onyx-gui
-```
-
-### Packaging the extension
-
-See [RELEASE.md](RELEASE.md)
