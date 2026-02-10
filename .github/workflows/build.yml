@@ -23,7 +23,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade setuptools
           python -m pip install -U "jupyterlab>=${{ matrix.version-bounds[0] }},<${{ matrix.version-bounds[1] }}"
           jlpm install
 
