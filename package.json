@@ -1,6 +1,6 @@
 {
     "name": "climb-onyx-gui-extension",
-    "version": "0.12.10",
+    "version": "0.12.11",
     "description": "JupyterLab extension for the Onyx Graphical User Interface",
     "keywords": [
         "gui",
