@@ -96,9 +96,9 @@ export class OnyxWidget extends ReactWidget {
   s3PathHandler = async (uri: string): Promise<void> => {
     const data = await requestAPI<any>('s3', {}, ['uri', uri]);
     const widget = this.documentManager.open(data['path']);
-    // Trust HTML documents opened by this extension
-    if (widget && data['path'].endsWith('.html')) {
-      (widget.content as any).trusted = true;
+    // Trust documents opened by this extension
+    if (widget && 'trusted' in widget.content) {
+      widget.content.trusted = true;
     }
   };
 
@@ -112,11 +112,7 @@ export class OnyxWidget extends ReactWidget {
       },
       ['path', path]
     );
-    const widget = this.documentManager.open(data['path']);
-    // Trust HTML documents opened by this extension
-    if (widget && data['path'].endsWith('.html')) {
-      (widget.content as any).trusted = true;
-    }
+    this.documentManager.open(data['path']);
   };
 
   // Get item from the cache
