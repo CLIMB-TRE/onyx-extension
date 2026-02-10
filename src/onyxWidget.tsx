@@ -95,11 +95,7 @@ export class OnyxWidget extends ReactWidget {
   // Handler for opening S3 documents
   s3PathHandler = async (uri: string): Promise<void> => {
     const data = await requestAPI<any>('s3', {}, ['uri', uri]);
-    const widget = this.documentManager.open(data['path']);
-    // Trust documents opened by this extension
-    if (widget && 'trusted' in widget.content) {
-      widget.content.trusted = true;
-    }
+    this.documentManager.open(data['path']);
   };
 
   // Handler for writing files
