@@ -11,7 +11,6 @@ import {
 } from '@jupyterlab/apputils';
 import { IStateDB } from '@jupyterlab/statedb';
 import { IDocumentManager } from '@jupyterlab/docmanager';
-import { HTMLViewer, IHTMLViewerTracker } from '@jupyterlab/htmlviewer';
 import { ILauncher } from '@jupyterlab/launcher';
 import { requestAPI } from './handler';
 import { OnyxWidget } from './onyxWidget';
@@ -40,7 +39,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   description: 'JupyterLab extension for the Onyx Graphical User Interface',
   autoStart: true,
   requires: [ICommandPalette, IDocumentManager, IStateDB, IThemeManager],
-  optional: [ILauncher, ILayoutRestorer, IHTMLViewerTracker],
+  optional: [ILauncher, ILayoutRestorer],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
@@ -48,8 +47,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     stateDB: IStateDB,
     themeManager: IThemeManager,
     launcher: ILauncher | null,
-    restorer: ILayoutRestorer | null,
-    htmlTracker: IHTMLViewerTracker | null
+    restorer: ILayoutRestorer | null
   ) => {
     console.log(`JupyterLab extension ${PLUGIN_NAME} is activated!`);
 
@@ -194,12 +192,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
         command: onyxCommandID,
         args: widget => ({ name: widget.content.name }),
         name: widget => widget.content.name
-      });
-    }
-
-    if (htmlTracker) {
-      htmlTracker.widgetAdded.connect((sender, panel: HTMLViewer) => {
-        panel.trusted = true;
       });
     }
 

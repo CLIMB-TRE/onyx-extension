@@ -1,6 +1,7 @@
 import React from 'react';
 import { IThemeManager, ReactWidget } from '@jupyterlab/apputils';
 import { IDocumentManager } from '@jupyterlab/docmanager';
+import { HTMLViewer } from '@jupyterlab/htmlviewer';
 import { IStateDB } from '@jupyterlab/statedb';
 import { Widget } from '@lumino/widgets';
 import { PLUGIN_NAMESPACE } from '.';
@@ -95,7 +96,11 @@ export class OnyxWidget extends ReactWidget {
   // Handler for opening S3 documents
   s3PathHandler = async (uri: string): Promise<void> => {
     const data = await requestAPI<any>('s3', {}, ['uri', uri]);
-    this.documentManager.open(data['path']);
+    const widget = this.documentManager.open(data['path']);
+    // Trust HTMLViewer panels opened by this extension
+    if (widget && widget.content instanceof HTMLViewer) {
+      widget.content.trusted = true;
+    }
   };
 
   // Handler for writing files
@@ -108,7 +113,11 @@ export class OnyxWidget extends ReactWidget {
       },
       ['path', path]
     );
-    this.documentManager.open(data['path']);
+    const widget = this.documentManager.open(data['path']);
+    // Trust HTMLViewer panels opened by this extension
+    if (widget && widget.content instanceof HTMLViewer) {
+      widget.content.trusted = true;
+    }
   };
 
   // Get item from the cache
