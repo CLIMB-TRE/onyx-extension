@@ -2,6 +2,7 @@ import React from 'react';
 import { IThemeManager, ReactWidget } from '@jupyterlab/apputils';
 import { IDocumentManager } from '@jupyterlab/docmanager';
 import { IStateDB } from '@jupyterlab/statedb';
+import { Widget } from '@lumino/widgets';
 import { PLUGIN_NAMESPACE } from '.';
 import { requestAPI, requestAPIResponse } from './handler';
 import Onyx from 'climb-onyx-gui';
@@ -44,6 +45,12 @@ export class OnyxWidget extends ReactWidget {
   private _stateDB: IStateDB;
   private _stateKeyPrefix: string;
   private _cache: Map<string, any>;
+
+  // Resize Onyx on widget resize
+  protected onResize(msg: Widget.ResizeMessage): void {
+    super.onResize(msg);
+    window.dispatchEvent(new Event('resize'));
+  }
 
   // Save value to stateDB
   private _save(stateKey: string, value: any) {
