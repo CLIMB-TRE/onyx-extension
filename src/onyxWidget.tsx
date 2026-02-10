@@ -1,7 +1,6 @@
 import React from 'react';
 import { IThemeManager, ReactWidget } from '@jupyterlab/apputils';
 import { IDocumentManager } from '@jupyterlab/docmanager';
-import { HTMLViewer } from '@jupyterlab/htmlviewer';
 import { IStateDB } from '@jupyterlab/statedb';
 import { Widget } from '@lumino/widgets';
 import { PLUGIN_NAMESPACE } from '.';
